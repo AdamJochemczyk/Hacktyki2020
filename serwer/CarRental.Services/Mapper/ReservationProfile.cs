@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using CarRental.DAL.Entities;
 using CarRental.Services.Models.Reservation;
-using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;

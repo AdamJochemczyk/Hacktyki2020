@@ -13,5 +13,7 @@ namespace CarRental.Services.Interfaces
         Task<ReservationDto> GetReservationByIdAsync(int id);
         Task<ReservationDto> UpdateReservationAsync(ReservationUpdateDto reservationDto);
         Task DeleteReservationAsync(int id);
+        Task<bool> CarCanBeReservedAsync(ReservationCreateDto reservationDto);
+        Task<bool> CarCanBeUpdatedAsync(ReservationUpdateDto reservationDto);
     }
 }

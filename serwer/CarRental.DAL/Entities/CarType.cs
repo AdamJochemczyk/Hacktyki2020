@@ -4,10 +4,10 @@ using System.Text;
 
 namespace CarRental.DAL.Entities
 {
-    public enum Status
+    public enum CarType
     {
-        Reported, 
-        InRepair, 
-        Finished
+        SportCar,
+        ClassicCar,
+        RetroCar
     }
 }

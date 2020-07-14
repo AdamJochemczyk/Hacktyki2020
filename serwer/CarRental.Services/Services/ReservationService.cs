@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Reservation;
-using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,7 +25,7 @@ namespace CarRental.Services.Services
         {
             var entity = new Reservation()
             {
-                UserId = reservationCreateDto.UserId,
+                UserId = 1,
                 CarId = reservationCreateDto.CarId,
                 RentalDate = reservationCreateDto.RentalDate,
                 ReturnDate = reservationCreateDto.ReturnDate
@@ -58,11 +58,33 @@ namespace CarRental.Services.Services
         public async Task<ReservationDto> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
         {
             var entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
-            entity.Update(reservationUpdateDto.RentalDate, reservationUpdateDto.ReturnDate, reservationUpdateDto.CarId, reservationUpdateDto.UserId);
+            entity.Update(reservationUpdateDto.RentalDate, reservationUpdateDto.ReturnDate, reservationUpdateDto.CarId);
             repository.Update(entity);
             await repository.SaveChangesAsync();
             entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
             return mapper.Map<ReservationDto>(entity);
+        }
+
+        public async Task<bool> CarCanBeReservedAsync(ReservationCreateDto reservationDto)
+        {
+            var entity = new Reservation() {
+                RentalDate = reservationDto.RentalDate,
+                ReturnDate = reservationDto.ReturnDate,
+                CarId = reservationDto.CarId
+            };
+            return await repository.CarCanBeReservedAsync(entity);
+        }
+
+        public async Task<bool> CarCanBeUpdatedAsync(ReservationUpdateDto reservationDto)
+        {
+            var entity = new Reservation()
+            {
+                ReservationId = reservationDto.ReservationId,
+                RentalDate = reservationDto.RentalDate,
+                ReturnDate = reservationDto.ReturnDate, 
+                CarId = reservationDto.CarId
+            };
+            return await repository.CarCanBeUpdatedAsync(entity);
         }
     }
 }

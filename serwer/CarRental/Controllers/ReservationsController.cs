@@ -35,8 +35,12 @@ namespace CarRental.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
-            var result = await service.CreateReservationAsync(reservationCreateDto);
-            return Ok(result);
+            if (await service.CarCanBeReservedAsync(reservationCreateDto))
+            {
+                var result = await service.CreateReservationAsync(reservationCreateDto);
+                return Ok(result);
+            }
+            return BadRequest();
         }
 
         [HttpPut("{id}")]
@@ -44,16 +48,25 @@ namespace CarRental.API.Controllers
         {
             if (id != reservationUpdateDto.ReservationId)
                 return BadRequest();
-            await service.UpdateReservationAsync(reservationUpdateDto);
-            var entity = await service.GetReservationByIdAsync(id);
-            return Ok(entity);
+            if (await service.CarCanBeUpdatedAsync(reservationUpdateDto))
+            {
+                await service.UpdateReservationAsync(reservationUpdateDto);
+                var entity = await service.GetReservationByIdAsync(id);
+                return Ok(entity);
+            }
+            return BadRequest();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservationAsync(int id)
         {
-            await service.DeleteReservationAsync(id);
-            return Ok();
+            var entity = await service.GetReservationByIdAsync(id);
+            if (entity.RentalDate > DateTime.Now)
+            {
+                await service.DeleteReservationAsync(id);
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

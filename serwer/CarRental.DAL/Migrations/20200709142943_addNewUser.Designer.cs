@@ -4,14 +4,16 @@ using CarRental.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarRental.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200709142943_addNewUser")]
+    partial class addNewUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,43 +21,7 @@ namespace CarRental.DAL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("CarRental.DAL.Entities.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            DateCreated = new DateTime(2020, 7, 13, 15, 33, 33, 849, DateTimeKind.Local).AddTicks(2850),
-                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "John",
-                            LastName = "Doe"
-                        });
-                });
-            modelBuilder.Entity("CarRental.DAL.Entities.Car", b =>
+            modelBuilder.Entity("Domain.Models.Car", b =>
                 {
                     b.Property<int>("CarId")
                         .ValueGeneratedOnAdd()
@@ -80,18 +46,6 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NumberOfDoor")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfSits")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RegistrationNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TypeOfCar")
-                        .HasColumnType("int");
-
                     b.Property<int>("YearOfProduction")
                         .HasColumnType("int");
 
@@ -104,18 +58,15 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 7, 13, 15, 33, 33, 842, DateTimeKind.Local).AddTicks(9297),
+                            DateCreated = new DateTime(2020, 7, 9, 16, 29, 42, 174, DateTimeKind.Local).AddTicks(3864),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             Model = "Q5",
-                            NumberOfDoor = 0,
-                            NumberOfSits = 0,
-                            TypeOfCar = 0,
                             YearOfProduction = 2019
                         });
                 });
 
-            modelBuilder.Entity("CarRental.DAL.Entities.Defect", b =>
+            modelBuilder.Entity("Domain.Models.Defect", b =>
                 {
                     b.Property<int>("DefectId")
                         .ValueGeneratedOnAdd()
@@ -152,7 +103,7 @@ namespace CarRental.DAL.Migrations
                     b.ToTable("Defects");
                 });
 
-            modelBuilder.Entity("CarRental.DAL.Entities.Location", b =>
+            modelBuilder.Entity("Domain.Models.Location", b =>
                 {
                     b.Property<int>("LocationId")
                         .ValueGeneratedOnAdd()
@@ -181,7 +132,7 @@ namespace CarRental.DAL.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("CarRental.DAL.Entities.Reservation", b =>
+            modelBuilder.Entity("Domain.Models.Reservation", b =>
                 {
                     b.Property<int>("ReservationId")
                         .ValueGeneratedOnAdd()
@@ -196,9 +147,6 @@ namespace CarRental.DAL.Migrations
 
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsFinished")
-                        .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -221,7 +169,7 @@ namespace CarRental.DAL.Migrations
                     b.ToTable("Reservations");
                 });
 
-            modelBuilder.Entity("CarRental.DAL.Entities.User", b =>
+            modelBuilder.Entity("Domain.Models.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -234,25 +182,13 @@ namespace CarRental.DAL.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EncodePassword")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MobileNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumberIdentificate")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
@@ -263,7 +199,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 7, 11, 11, 26, 57, 964, DateTimeKind.Local).AddTicks(8048),
+                            DateCreated = new DateTime(2020, 7, 9, 16, 29, 42, 180, DateTimeKind.Local).AddTicks(2434),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
                             LastName = "Doe"
@@ -271,46 +207,46 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 2,
-                            DateCreated = new DateTime(2020, 7, 11, 11, 26, 57, 964, DateTimeKind.Local).AddTicks(8193),
+                            DateCreated = new DateTime(2020, 7, 9, 16, 29, 42, 180, DateTimeKind.Local).AddTicks(2643),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "James",
                             LastName = "Doe"
                         });
                 });
 
-            modelBuilder.Entity("CarRental.DAL.Entities.Defect", b =>
+            modelBuilder.Entity("Domain.Models.Defect", b =>
                 {
-                    b.HasOne("CarRental.DAL.Entities.Car", "Car")
+                    b.HasOne("Domain.Models.Car", "Car")
                         .WithMany()
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRental.DAL.Entities.User", "User")
+                    b.HasOne("Domain.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CarRental.DAL.Entities.Location", b =>
+            modelBuilder.Entity("Domain.Models.Location", b =>
                 {
-                    b.HasOne("CarRental.DAL.Entities.Car", "Car")
+                    b.HasOne("Domain.Models.Car", "Car")
                         .WithMany()
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CarRental.DAL.Entities.Reservation", b =>
+            modelBuilder.Entity("Domain.Models.Reservation", b =>
                 {
-                    b.HasOne("CarRental.DAL.Entities.Car", "Car")
+                    b.HasOne("Domain.Models.Car", "Car")
                         .WithMany()
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRental.DAL.Entities.User", "User")
+                    b.HasOne("Domain.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -9,7 +9,7 @@ namespace CarRental.DAL.Repositories
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        private readonly ApplicationDbContext context;
+        public ApplicationDbContext context;
         private DbSet<T> entities;
         public RepositoryBase(ApplicationDbContext context)
         {

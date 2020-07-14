@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Models
+namespace CarRental.DAL.Entities
 {
     public class Location : BaseEntity
     {

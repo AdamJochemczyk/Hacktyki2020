@@ -1,9 +1,8 @@
-﻿using CarRental.DAL.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Domain.Models
+namespace CarRental.DAL.Entities
 {
     public class Defect : BaseEntity
     {
