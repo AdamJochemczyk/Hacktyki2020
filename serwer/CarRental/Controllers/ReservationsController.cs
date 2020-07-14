@@ -35,7 +35,7 @@ namespace CarRental.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
-            if (await service.CarCanBeReservedAsync(reservationCreateDto))
+            if (await service.ReservationCanBeCreatedAsync(reservationCreateDto))
             {
                 var result = await service.CreateReservationAsync(reservationCreateDto);
                 return Ok(result);
@@ -48,7 +48,7 @@ namespace CarRental.API.Controllers
         {
             if (id != reservationUpdateDto.ReservationId)
                 return BadRequest();
-            if (await service.CarCanBeUpdatedAsync(reservationUpdateDto))
+            if (await service.ReservationCanBeUpdatedAsync(reservationUpdateDto))
             {
                 await service.UpdateReservationAsync(reservationUpdateDto);
                 var entity = await service.GetReservationByIdAsync(id);

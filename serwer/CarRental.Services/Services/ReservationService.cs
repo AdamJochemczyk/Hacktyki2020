@@ -25,7 +25,7 @@ namespace CarRental.Services.Services
         {
             var entity = new Reservation()
             {
-                UserId = 1,
+                UserId = reservationCreateDto.UserId,
                 CarId = reservationCreateDto.CarId,
                 RentalDate = reservationCreateDto.RentalDate,
                 ReturnDate = reservationCreateDto.ReturnDate
@@ -65,17 +65,17 @@ namespace CarRental.Services.Services
             return mapper.Map<ReservationDto>(entity);
         }
 
-        public async Task<bool> CarCanBeReservedAsync(ReservationCreateDto reservationDto)
+        public async Task<bool> ReservationCanBeCreatedAsync(ReservationCreateDto reservationDto)
         {
             var entity = new Reservation() {
                 RentalDate = reservationDto.RentalDate,
                 ReturnDate = reservationDto.ReturnDate,
                 CarId = reservationDto.CarId
             };
-            return await repository.CarCanBeReservedAsync(entity);
+            return await repository.ReservationCanBeCreatedAsync(entity);
         }
 
-        public async Task<bool> CarCanBeUpdatedAsync(ReservationUpdateDto reservationDto)
+        public async Task<bool> ReservationCanBeUpdatedAsync(ReservationUpdateDto reservationDto)
         {
             var entity = new Reservation()
             {
@@ -84,7 +84,7 @@ namespace CarRental.Services.Services
                 ReturnDate = reservationDto.ReturnDate, 
                 CarId = reservationDto.CarId
             };
-            return await repository.CarCanBeUpdatedAsync(entity);
+            return await repository.ReservationCanBeUpdatedAsync(entity);
         }
     }
 }
