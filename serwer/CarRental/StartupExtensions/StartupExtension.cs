@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using CarRental.DAL;
+using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.DAL.Repositories;
 using CarRental.Services.Interfaces;
 using CarRental.Services.MapperProfiles;
 using CarRental.Services.Models.Email_Templates;
+using CarRental.Services.Models.Reservation;
 using CarRental.Services.Services;
+using CarRental.Services.Validators;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -19,7 +23,7 @@ namespace CarRental.API.StartupExtensions
     {
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services, string connectionString)
         {
-            return services.AddDbContext<ApplicationDbContext>(options => 
+            return services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString));
         }
 
@@ -43,8 +47,15 @@ namespace CarRental.API.StartupExtensions
 
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-             services.AddScoped<IReservationRepository, ReservationRepository>();
+            services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            return services;
+        }
+
+        public static IServiceCollection AddValidators(this IServiceCollection services)
+        {
+            services.AddTransient<IValidator<ReservationCreateDto>, ReservationCreateDtoValidator>();
+            services.AddTransient<IValidator<ReservationUpdateDto>, ReservationUpdateDtoValidator>();
             return services;
         }
     }

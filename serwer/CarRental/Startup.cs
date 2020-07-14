@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CarRental.API.StartupExtensions;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,14 +29,16 @@ namespace CarRental
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddMvc();
+            services.AddMvc()
+                .AddFluentValidation();
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services
                 .AddDataAccessServices(Configuration.GetConnectionString("DefaultConnection"))
                 .AddMappingServices()
                 .AddServices()
-                .AddRepositories();
+                .AddRepositories()
+                .AddValidators();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
