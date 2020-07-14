@@ -1,0 +1,15 @@
+.top {
+    margin: 15%;
+    text-align: center;
+}
+.center{
+    text-align: center;
+}
+
+@media (max-width: 768px){
+    .image {
+        margin-left: 5%;
+        width: 90%;
+        height: 90%;
+    }
+}

@@ -1,0 +1,8 @@
+Form {
+    text-align: center;
+    width: 300px;
+    border-radius: 3%;
+    box-shadow: 0 0 21px 7px rgba(0,0,0,0.25);
+    padding: 1%;
+    margin: 3% auto;
+ }
