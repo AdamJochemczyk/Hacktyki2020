@@ -1,76 +1,81 @@
-import React, { useMemo } from "react"
-import {Button} from "reactstrap"
-import UserManagerTable from '../UserManagerTable/UserManagerTable'
-import {Link} from "react-router-dom"
+import React, { useMemo, useState, useEffect } from "react";
+import { Button } from "reactstrap";
+import UserManagerTable from "../UserManagerTable/UserManagerTable";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
-export default function UserManager(){
+export default function UserManager() {
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("https://localhost:44390/api/users");
+        setData(response.data);
+      } catch (e) {
+        console.log(e);
+        setData(data);
+      }
+    };
+    fetchUsers();
+  }, []);
 
-     /* const [data, setData] = useState([]);
+  async function deleteUser(id) {
+    await axios({
+            url: 'https://localhost:44390/api/users/'+id,
+            method: 'DELETE'
+          }).then((res) => {
+            if(res.status===200){
+              alert("Deleted")
+              window.location.reload(false)
+            }
+            }).catch(error => {
+              console.log(error.response)
+          });
+  }
 
-// Using useEffect to call the API once mounted and set the data
-useEffect(() => {
-(async () => {
-  const result = await axios("https://api.tvmaze.com/search/shows?q=snow");
-  setData(result.data);
-})();
-}, []);*/
-
-    async function deleteUser(id){
-        /*await axios({
-            url: '',
-            method: 'DELETE',
-            headers: {
-              Authorization: `${token}`,
-            },
-          });*/
-    }
-
-    const data = [{
-        userId: '1',
-        name: 'Adam',
-        surname: 'Aa',
-        phone: '33',
-        mail: '44',
-    }]
-
-    const columns = useMemo(
-        ()=>[
-            {
-                Header: "User ID",
-                accessor: "userId"
-            },
-            {
-                Header: "Name",
-                accessor: "name",
-            },
-            {
-                Header: "Surname",
-                accessor: "surname",
-            },
-            {
-                Header: "Phone",
-                accessor: "phone"
-            },
-            {
-                Header: "Mail",
-                accessor: "mail"
-            },
-            {
-                Header: "Actions",
-                Cell: ({row}) =>(
-                    <div>
-                    <Link to={'/UserManager/Edit/'+row.original.userId} >Edit</Link>
-                    <Button color="danger" onClick={()=>deleteUser(row.original.userId)}> Delete </Button>
-                    </div>  
-                ),
-            },
-        ],
-        []
-    );
-
-return (<div>
-    <UserManagerTable columns={columns} data={data} />  
+  const columns = useMemo(
+    () => [
+      {
+        Header: "User ID",
+        accessor: "userId",
+      },
+      {
+        Header: "Name",
+        accessor: "firstName",
+      },
+      {
+        Header: "Surname",
+        accessor: "lastName",
+      },
+      {
+        Header: "Phone",
+        accessor: "mobileNumber",
+      },
+      {
+        Header: "Mail",
+        accessor: "email",
+      },
+      {
+        Header: "Actions",
+        Cell: ({ row }) => (
+          <div>
+            <Link to={"/UserManager/Edit/" + row.original.userId}>Edit</Link>
+            <Button
+              color="danger"
+              onClick={() => deleteUser(row.original.userId)}
+            >
+              Delete
+            </Button>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+  return (
+    <div>
+      <UserManagerTable columns={columns} data={data} />
     </div>
-    );
+  );
 }
