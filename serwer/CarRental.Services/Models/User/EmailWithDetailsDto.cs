@@ -9,8 +9,6 @@ namespace CarRental.Services.Models.User
         public int RecipientId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public string Footer { get; set; }
-        
-
+        public string Footer { get; set; }    
     }
 }

@@ -24,7 +24,8 @@ namespace CarRental.API.StartupExtensions
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services, string connectionString)
         {
             return services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString)
+            .EnableSensitiveDataLogging());
         }
 
         public static IServiceCollection AddMappingServices(this IServiceCollection services)

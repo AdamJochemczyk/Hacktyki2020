@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarRental.DAL.Migrations
 {
-    public partial class FirstMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,11 @@ namespace CarRental.DAL.Migrations
                     DateModified = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: true),
                     Brand = table.Column<string>(nullable: true),
+                    RegistrationNumber = table.Column<string>(nullable: true),
                     Model = table.Column<string>(nullable: true),
+                    TypeOfCar = table.Column<int>(nullable: false),
+                    NumberOfDoor = table.Column<int>(nullable: false),
+                    NumberOfSits = table.Column<int>(nullable: false),
                     YearOfProduction = table.Column<int>(nullable: false),
                     ImagePath = table.Column<string>(nullable: true)
                 },
@@ -27,7 +31,7 @@ namespace CarRental.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false)
@@ -36,11 +40,15 @@ namespace CarRental.DAL.Migrations
                     DateModified = table.Column<DateTime>(nullable: false),
                     ModifiedBy = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    NumberIdentificate = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    MobileNumber = table.Column<string>(nullable: true),
+                    EncodePassword = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.UserId);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,9 +98,9 @@ namespace CarRental.DAL.Migrations
                         principalColumn: "CarId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Defects_User_UserId",
+                        name: "FK_Defects_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -108,6 +116,7 @@ namespace CarRental.DAL.Migrations
                     ModifiedBy = table.Column<string>(nullable: true),
                     RentalDate = table.Column<DateTime>(nullable: false),
                     ReturnDate = table.Column<DateTime>(nullable: false),
+                    IsFinished = table.Column<bool>(nullable: false),
                     CarId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },
@@ -121,12 +130,22 @@ namespace CarRental.DAL.Migrations
                         principalColumn: "CarId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reservations_User_UserId",
+                        name: "FK_Reservations_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Cars",
+                columns: new[] { "CarId", "Brand", "DateCreated", "DateModified", "ImagePath", "Model", "ModifiedBy", "NumberOfDoor", "NumberOfSits", "RegistrationNumber", "TypeOfCar", "YearOfProduction" },
+                values: new object[] { 1, "Audi", new DateTime(2020, 7, 16, 12, 14, 31, 523, DateTimeKind.Local).AddTicks(4634), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "https://pngimg.com/uploads/audi/audi_PNG1737.png", "Q5", null, 0, 0, null, 0, 2019 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "UserId", "DateCreated", "DateModified", "Email", "EncodePassword", "FirstName", "LastName", "MobileNumber", "ModifiedBy", "NumberIdentificate" },
+                values: new object[] { 1, new DateTime(2020, 7, 16, 12, 14, 31, 527, DateTimeKind.Local).AddTicks(9218), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, null, "John", "Doe", null, null, null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Defects_CarId",
@@ -169,7 +188,7 @@ namespace CarRental.DAL.Migrations
                 name: "Cars");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

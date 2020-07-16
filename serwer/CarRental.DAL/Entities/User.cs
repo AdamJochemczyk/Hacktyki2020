@@ -12,10 +12,10 @@ namespace CarRental.DAL.Entities
         public string NumberIdentificate { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
-
         public string EncodePassword { get; set; }
-        public User(string firstName, string lastName,string numberIdentificate,string email,
-            string mobileNumber,string encodePassword)
+
+        public User(string firstName, string lastName, string numberIdentificate, string email,
+            string mobileNumber, string encodePassword)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -37,8 +37,6 @@ namespace CarRental.DAL.Entities
             Email = user.Email;
             MobileNumber = user.MobileNumber;
             DateModified = DateTime.Now;
-
-
         }
     }
 }
