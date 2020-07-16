@@ -90,7 +90,6 @@ namespace CarRental.Services.Services
             await _userRepository.SaveChangesAsync();
             user = await _userRepository.FindByIdAsync(usersDto.UserId);
             return _mapper.Map<UsersDto>(user);
-
         }
 
 
