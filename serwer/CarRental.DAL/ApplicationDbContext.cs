@@ -19,8 +19,6 @@ namespace CarRental.DAL
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<User> Users { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Car>().HasData(
@@ -37,19 +35,20 @@ namespace CarRental.DAL
             builder.Entity<User>().HasData(
                 new User
                 {
-                    UserId =1,
+                    UserId = 1,
                     FirstName = "John",
                     LastName = "Doe",
                     DateCreated = DateTime.Now
-                },
-                new User
-                {
-                    UserId = 2,
-                    FirstName = "James",
-                    LastName = "Doe",
-                    DateCreated = DateTime.Now
                 }
-                );
+                //,
+            //    new User
+            //    {
+            //        UserId = 2,
+            //        FirstName = "James",
+            //        LastName = "Doe",
+            //        DateCreated = DateTime.Now
+            //    }
+               );
         }
     }
 }

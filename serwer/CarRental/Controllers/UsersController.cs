@@ -14,10 +14,7 @@ namespace CarRental.API.Controllers
     [ApiController]
     public class UsersController : Controller
     {
-
-
         private readonly IUsersService _usersService;
-
         public UsersController(IUsersService usersService)
         {
             _usersService = usersService;
@@ -36,28 +33,26 @@ namespace CarRental.API.Controllers
             var result = await _usersService.GetAllUsers();
             return Ok(result);
         }
-        [HttpGet("{Id}")]
 
+        [HttpGet("{Id}")]
         public async Task<IActionResult> GetUserAsync(int Id)
         {
             var user = await _usersService.GetUser(Id);
             return Ok(user);
         }
-        [HttpDelete("{id}")]
 
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserAsync(int Id)
         {
             await _usersService.DeleteUser(Id);
             return Ok();
         }
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync(int Id,UsersDto usersDto)
+        public async Task<IActionResult> UpdateUserAsync(int Id, UsersDto usersDto)
         {
             var result = await _usersService.UpdateUser(usersDto);
             return Ok(result);
         }
-
-
-
     }
 }

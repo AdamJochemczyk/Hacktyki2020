@@ -8,7 +8,7 @@ namespace CarRental.DAL.Interfaces
 {
     public interface IReservationRepository : IRepositoryBase<Reservation>
     {
-        Task<bool> CarCanBeReservedAsync(Reservation reservation);
-        Task<bool> CarCanBeUpdatedAsync(Reservation reservation);
+        Task<bool> ReservationCanBeCreatedAsync(Reservation reservation);
+        Task<bool> ReservationCanBeUpdatedAsync(Reservation reservation);
     }
 }

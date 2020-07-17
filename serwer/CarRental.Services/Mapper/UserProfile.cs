@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarRental.Services.MapperProfiles
+namespace CarRental.Services.Mapper
 {
    public class UserProfile:Profile
     {

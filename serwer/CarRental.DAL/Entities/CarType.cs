@@ -6,8 +6,8 @@ namespace CarRental.DAL.Entities
 {
     public enum CarType
     {
-        SportCar,
-        ClassicCar,
-        RetroCar
+        Sport,
+        Classic,
+        Retro
     }
 }
