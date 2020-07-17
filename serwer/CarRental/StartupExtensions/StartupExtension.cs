@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using CarRental.DAL;
-using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.DAL.Repositories;
 using CarRental.Services.Interfaces;
-using CarRental.Services.MapperProfiles;
 using CarRental.Services.Models.Email_Templates;
 using CarRental.Services.Models.Reservation;
 using CarRental.Services.Services;
 using CarRental.Services.Validators;
+using CarRental.Services.Mapper;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CarRental.Services.Models.Car;
 
 namespace CarRental.API.StartupExtensions
 {
@@ -33,6 +33,7 @@ namespace CarRental.API.StartupExtensions
             return services
                 .AddSingleton<Profile, ReservationProfile>()
                 .AddSingleton<Profile, UserProfile>()
+                .AddSingleton<Profile, CarProfile>()
                 .AddSingleton<IConfigurationProvider, AutoMapperConfiguration>(p =>
                     new AutoMapperConfiguration(p.GetServices<Profile>()))
                 .AddSingleton<IMapper, Mapper>();
@@ -43,6 +44,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IEmailServices, EmailService>();
+            services.AddScoped<ICarService, CarService>();
             return services;
         }
 
@@ -50,6 +52,7 @@ namespace CarRental.API.StartupExtensions
         {
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICarRepository, CarRepository>();
             return services;
         }
 
@@ -57,6 +60,8 @@ namespace CarRental.API.StartupExtensions
         {
             services.AddTransient<IValidator<ReservationCreateDto>, ReservationCreateDtoValidator>();
             services.AddTransient<IValidator<ReservationUpdateDto>, ReservationUpdateDtoValidator>();
+            services.AddTransient<IValidator<CarDto>, CarDtoValidator>();
+            services.AddTransient<IValidator<CarCreateDto>, CarCreateDtoValidator>();
             return services;
         }
     }
