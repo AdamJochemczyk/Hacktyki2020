@@ -22,7 +22,7 @@ namespace CarRental.Services.Models.Email_Templates
                            <h2>Dear " + createUserDto.FirstName + @",</h2> <p style='font-family: Arial,sans-serif'>You have been registered in the service where you can rent a car.
                           Please see the information below about your login and password<br></p>
                             <h2>Login: " + createUserDto.Email + @"<br>
-                            Password: " + createUserDto.EncodePassword + @"</h2>
+                             </h2>
                              <p>That's your temporary password, you can change your password followed this link.</p>
                               <a href='https://localhost:44390/api/users'style='text-align:center' data-method='post'>Change Password</a>
                               < p>We appreciate that you are with us and using service<br>Have a nice day,<br>Car Rental Service</p>
@@ -43,7 +43,7 @@ namespace CarRental.Services.Models.Email_Templates
                 smpt.UseDefaultCredentials = false;
                 smpt.Credentials = new NetworkCredential("kucherbogdan2000@gmail.com", "basket2009");
                 MailMessage message = new MailMessage();
-                message.To.Add("kucherbogdan2000@gmail.com");
+                message.To.Add(createUserDto.Email);
                 message.From = new MailAddress("kucherbogdan2000@gmail.com");
                 message.Subject = "Car Renting";
                 message.Body = "Something";

@@ -23,6 +23,7 @@ namespace CarRental.DAL.Entities
             Email = email;
             MobileNumber = mobileNumber;
             DateCreated = DateTime.Now;
+            StatusOfVerification = "Processing...";
         }
         public User()
         {
@@ -41,6 +42,8 @@ namespace CarRental.DAL.Entities
         public void SetPassword(string encodePassword)
         {
             EncodePassword = encodePassword;
+            StatusOfVerification = "Account has been registered.";
+
         }
     }
 }
