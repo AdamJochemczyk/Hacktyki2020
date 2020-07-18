@@ -13,30 +13,34 @@ namespace CarRental.DAL.Entities
         public string Email { get; set; }
         public string MobileNumber { get; set; }
         public string EncodePassword { get; set; }
-
+        public string StatusOfVerification { get; set; }
         public User(string firstName, string lastName, string numberIdentificate, string email,
-            string mobileNumber, string encodePassword)
+            string mobileNumber)
         {
             FirstName = firstName;
             LastName = lastName;
             NumberIdentificate = numberIdentificate;
             Email = email;
             MobileNumber = mobileNumber;
-            EncodePassword = encodePassword;
             DateCreated = DateTime.Now;
         }
         public User()
         {
 
         }
-        public void Update(User user)
+        public void Update(string firstName, string lastName, string numberIdentificate, string email,
+            string mobileNumber)
         {
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            NumberIdentificate = user.NumberIdentificate;
-            Email = user.Email;
-            MobileNumber = user.MobileNumber;
+            FirstName = firstName;
+            LastName = lastName;
+            NumberIdentificate = numberIdentificate;
+            Email = email;
+            MobileNumber = mobileNumber;
             DateModified = DateTime.Now;
+        }
+        public void SetPassword(string encodePassword)
+        {
+            EncodePassword = encodePassword;
         }
     }
 }

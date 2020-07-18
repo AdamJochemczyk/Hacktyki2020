@@ -15,6 +15,7 @@ namespace CarRental.Services.Models.Email_Templates
         {
             string subject = "Rent Car Service";
             string data = createUserDto.FirstName;
+            var id = createUserDto.UserId;
             string htmlBody = @"
                         <html lang=""en"">    
                          <body style='width:720px'>  
@@ -23,14 +24,14 @@ namespace CarRental.Services.Models.Email_Templates
                             <h2>Login: " + createUserDto.Email + @"<br>
                             Password: " + createUserDto.EncodePassword + @"</h2>
                              <p>That's your temporary password, you can change your password followed this link.</p>
-                              <a style='text-align:center'>Change Password</a>
-                            <p>We appreciate that you are with us and using service<br>Have a nice day,<br>Car Rental Service</p>
+                              <a href='https://localhost:44390/api/users'style='text-align:center' data-method='post'>Change Password</a>
+                              < p>We appreciate that you are with us and using service<br>Have a nice day,<br>Car Rental Service</p>
                             <img src=""cid:WinLogo"" />
                                     </body>
                                          </html>";
             string messageBody = string.Format(htmlBody, data);
             AlternateView alternateViewHtml = AlternateView.CreateAlternateViewFromString(htmlBody, Encoding.UTF8, MediaTypeNames.Text.Html);
-            LinkedResource windowsLogo = new LinkedResource(@"C:\Users\kuche\Desktop\Hacktyki_new\Hacktyki\CarRental\assets\Image\rsz_logo.png", MediaTypeNames.Image.Jpeg);
+            LinkedResource windowsLogo = new LinkedResource(@"C:\Users\kuche\zespol3-laczone-samochody\serwer\CarRental\assets\Image\rsz_logo.png", MediaTypeNames.Image.Jpeg);
             windowsLogo.ContentId = "WinLogo";
             alternateViewHtml.LinkedResources.Add(windowsLogo);
             MailMessage mailMessage = new MailMessage("kucherbogdan2000@gmail.com", "kucherbogdan2000@gmail.com", subject, messageBody);

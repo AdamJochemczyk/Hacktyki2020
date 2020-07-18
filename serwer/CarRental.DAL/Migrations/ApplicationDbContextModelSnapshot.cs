@@ -68,7 +68,7 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 7, 16, 12, 14, 31, 523, DateTimeKind.Local).AddTicks(4634),
+                            DateCreated = new DateTime(2020, 7, 16, 23, 38, 37, 913, DateTimeKind.Local).AddTicks(6391),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             Model = "Q5",
@@ -219,6 +219,9 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("NumberIdentificate")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StatusOfVerification")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
@@ -227,7 +230,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 7, 16, 12, 14, 31, 527, DateTimeKind.Local).AddTicks(9218),
+                            DateCreated = new DateTime(2020, 7, 16, 23, 38, 37, 921, DateTimeKind.Local).AddTicks(3337),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
                             LastName = "Doe"
