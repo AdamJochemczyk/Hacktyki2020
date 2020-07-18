@@ -24,7 +24,7 @@ export default function EditUser() {
       }
     };
     fetchUsers();
-  }, []);
+  },);
 
   const handleFormInput = e => {
         setUser({
