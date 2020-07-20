@@ -20,12 +20,13 @@ namespace CarRental.Services.Models.Email_Templates
                         <html lang=""en"">    
                          <body style='width:720px'>  
                            <h2>Dear " + createUserDto.FirstName + @",</h2> <p style='font-family: Arial,sans-serif'>You have been registered in the service where you can rent a car.
-                          Please see the information below about your login and password<br></p>
-                            <h2>Login: " + createUserDto.Email + @"<br>
+                             <br>
+                             Please see the information below about your login</p>
+                            <h2>Login: " + createUserDto.Email + @"
                              </h2>
                              <p>That's your temporary password, you can change your password followed this link.</p>
-                              <a href='https://localhost:44390/api/users'style='text-align:center' data-method='post'>Change Password</a>
-                              < p>We appreciate that you are with us and using service<br>Have a nice day,<br>Car Rental Service</p>
+                              <div style='text-align:center'><a href='https://localhost:44390/api/users' style='font-size:30px'>Change Password</a></div>
+                              <p style='font-family: Arial,sans-serif'>We appreciate that you are with us and using service<br>Have a nice day,<br>Car Rental Service</p>
                             <img src=""cid:WinLogo"" />
                                     </body>
                                          </html>";
@@ -34,7 +35,7 @@ namespace CarRental.Services.Models.Email_Templates
             LinkedResource windowsLogo = new LinkedResource(@"C:\Users\kuche\zespol3-laczone-samochody\serwer\CarRental\assets\Image\rsz_logo.png", MediaTypeNames.Image.Jpeg);
             windowsLogo.ContentId = "WinLogo";
             alternateViewHtml.LinkedResources.Add(windowsLogo);
-            MailMessage mailMessage = new MailMessage("kucherbogdan2000@gmail.com", "kucherbogdan2000@gmail.com", subject, messageBody);
+            MailMessage mailMessage = new MailMessage("kucherbogdan2000@gmail.com", createUserDto.Email, subject, messageBody);
             mailMessage.AlternateViews.Add(alternateViewHtml);
             using (SmtpClient smpt = new SmtpClient("smtp.gmail.com", 587))
             {

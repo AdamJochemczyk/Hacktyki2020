@@ -18,9 +18,10 @@ namespace CarRental.DAL.Repositories
         {
               return await context.Set<User>().FirstOrDefaultAsync(e => e.UserId == id);    
         }
-        public async Task<User> VerificateUser(string email,string password )
+
+        public async Task<User> FindByLogin(string email )
         {
-            return await context.Set<User>().FirstOrDefaultAsync(e => e.Email == email&&e.EncodePassword==password);
+            return await context.Set<User>().FirstOrDefaultAsync(e => e.Email == email);
         }
-    }
+    } 
 }
