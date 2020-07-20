@@ -15,7 +15,9 @@ import AddUser from './Components/AddUser/AddUser'
 import AddCar from './Components/AddCar/AddCar'
 import History from './Components/History/History'
 import EditUser from './Components/EditUser/EditUser';
-import EditCar from './Components/EditCar/EditCar'
+import EditCar from './Components/EditCar/EditCar';
+import GenericNotFound from './Components/GenericNotFound/GenericNotFound'
+import SetPassword from './Components/SetPassword/SetPassword';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path='/AddCar' component={AddCar} />
           <Route exact path='/History' component={History} />
           <Route path='/History/Edit/:id' component={UserReportFault} />
+          <Route path='/SetPassword' component={SetPassword} />
+          <Route component={GenericNotFound} />
         </Switch>    
     </Router>
     <Footer />

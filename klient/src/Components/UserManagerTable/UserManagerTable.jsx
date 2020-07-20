@@ -8,7 +8,8 @@ export default function UserManagerTable({columns,data}){
         name: '',
         surname: '',
         mail: '',
-        phone: ''
+        phone: '',
+        statusofverification: ''
     })
 
     const filterBy = e => {
@@ -87,6 +88,14 @@ export default function UserManagerTable({columns,data}){
                 onChange={filterBy}
                 placeholder={"Search by mail"}
                 name="mail"
+              />
+            </td>
+            <td>
+              <Input
+                value={filter.mail}
+                onChange={filterBy}
+                placeholder={"Search by varification"}
+                name="statusofverification"
               />
             </td>
           </tr>

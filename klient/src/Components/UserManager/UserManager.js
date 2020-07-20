@@ -18,7 +18,7 @@ export default function UserManager() {
       }
     };
     fetchUsers();
-  }, []);
+  });
 
   async function deleteUser(id) {
     await axios({
@@ -57,10 +57,15 @@ export default function UserManager() {
         accessor: "email",
       },
       {
+          Header: "Verification",
+          accessor: "statusofverification",
+      },
+      {
         Header: "Actions",
         Cell: ({ row }) => (
           <div>
-            <Link to={"/UserManager/Edit/" + row.original.userId}>Edit</Link>
+
+            <Link to={"/UserManager/Edit/" + row.original.userId}><Button color="success">Edit</Button></Link>
             <Button
               color="danger"
               onClick={() => deleteUser(row.original.userId)}
