@@ -8,6 +8,7 @@ namespace CarRental.Services.Models.User
     {
         public int UserId { get; set; }
         public string EncodePassword { get; set; }
+        public string ConfirmEncodePassword { get; set; }
         
     }
 }

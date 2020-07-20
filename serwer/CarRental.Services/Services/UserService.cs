@@ -24,17 +24,17 @@ namespace CarRental.Services.Services
             _email = email;
         }
         //For decode password @Zaneta
-        public string DecodeFrom64(string encodeddata)
-        {
-            System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
-            System.Text.Decoder utf8decode = encoder.GetDecoder();
-            byte[] todecode_byte = Convert.FromBase64String(encodeddata);
-            int charcount = utf8decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
-            char[] decoded_char = new char[charcount];
-            utf8decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
-            string result = new string(decoded_char);
-            return result;
-        }
+        //public string DecodeFrom64(string encodeddata)
+        //{
+        //    System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
+        //    System.Text.Decoder utf8decode = encoder.GetDecoder();
+        //    byte[] todecode_byte = Convert.FromBase64String(encodeddata);
+        //    int charcount = utf8decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
+        //    char[] decoded_char = new char[charcount];
+        //    utf8decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
+        //    string result = new string(decoded_char);
+        //    return result;
+        //}
         public async Task DeleteUser(int Id) 
         {
             var user = await _userRepository.FindByIdAsync(Id);

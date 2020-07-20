@@ -39,32 +39,58 @@ namespace CarRental.Services.Services
         }
         public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
         {
+            try {
+                if (createUserDto == null)
+                    throw new Exception("Model is empty");
             var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.NumberIdentificate,
                 createUserDto.Email, createUserDto.MobileNumber);
-            _userRepository.Create(new_user);
-            await _userRepository.SaveChangesAsync();
-            new_user = await _userRepository.FindByIdDetails(new_user.UserId);
-            createUserDto.UserId = new_user.UserId;
-            _email.EmailAfterRegistration(createUserDto);
-            return _mapper.Map<CreateUserDto>(new_user);
+                var check_user = await _userRepository.FindByLogin(createUserDto.Email);
+                if (check_user == null)
+                {
+                    _userRepository.Create(new_user);
+                    await _userRepository.SaveChangesAsync();
+                    _email.EmailAfterRegistration(createUserDto);
+                    return _mapper.Map<CreateUserDto>(new_user);
+                }
+               else
+                    throw new Exception("User with this email exists");
+            }
+            catch (InvalidCastException)
+            {
+                return createUserDto;
+            }
         }
         public async Task<CreateUserDto> SetPassword(UpdateUserPasswordDto updateUserDto)
         {
-            var user = await _userRepository.FindByIdDetails(updateUserDto.UserId);
-            user.SetPassword(EncodePasswordToBase64(updateUserDto.EncodePassword));
-            _userRepository.Update(user);
-            await _userRepository.SaveChangesAsync();
-            user = await _userRepository.FindByIdAsync(updateUserDto.UserId);
-            return _mapper.Map<CreateUserDto>(user);
+            var user = await _userRepository.FindByIdDetails(updateUserDto.UserId); ;   
+            try
+            {
+                if (updateUserDto.EncodePassword != updateUserDto.ConfirmEncodePassword)
+                    throw new Exception("Passwords isn't the same");
+                if (user == null)
+                    throw new Exception("This user does not exist");
+                user.SetPassword(EncodePasswordToBase64(updateUserDto.EncodePassword));
+                _userRepository.Update(user);
+                await _userRepository.SaveChangesAsync();
+                user = await _userRepository.FindByIdAsync(updateUserDto.UserId);
+                return _mapper.Map<CreateUserDto>(user);
+            }catch (InvalidCastException){
+                return _mapper.Map<CreateUserDto>(user);
+            }
         }
         public async Task<bool> SignIn(UserLoginDto userLoginDto)
         {
-            userLoginDto.EncodePassword = EncodePasswordToBase64(userLoginDto.EncodePassword);
-            var user = await _userRepository.VerificateUser(userLoginDto.Email, userLoginDto.EncodePassword);
-            if (user != null)
-                return true;
-
-            return false;
+            var password = EncodePasswordToBase64(userLoginDto.EncodePassword);
+            var user = await _userRepository.FindByLogin(userLoginDto.Email);
+            try
+            {
+                if (user.Email == null)
+                    throw new Exception("Email not correct");
+                if (user.EncodePassword != password)
+                    throw new Exception("Password not correct");
+            }
+            catch (InvalidCastException) { return false; }
+            return true;
         }
     }
 }

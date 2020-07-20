@@ -8,12 +8,9 @@ namespace CarRental.Services.Interfaces
 {
     public interface IUsersService
     {
-//        Task<CreateUserDto> CreateUserAsync(CreateUserDto createUserDto);
         Task<IEnumerable<UsersDto>> GetAllUsers();
         Task<UsersDto> GetUser(int Id);
         Task DeleteUser(int Id);
         Task<UsersDto> UpdateUser(UsersDto Id);
-        //Task<CreateUserDto> SetPassword(CreateUserDto createUserDto);
-        //Task<bool> SignIn(UserLoginDto userLogin);
     }
 }
