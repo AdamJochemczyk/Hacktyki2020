@@ -1,45 +1,58 @@
-import React from "react"
-import { useParams } from 'react-router-dom'
-import {Form,Input,Label} from "reactstrap"
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Form, Input, Label, Button } from "reactstrap";
+import {Link} from "react-router-dom"
+import axios from "axios";
 
-export default function EditUser(){
+export default function EditUser() {
+  let { id } = useParams();
 
-    let {id}=useParams()
+  const [user, setUser] = useState({
+    userId: id,
+    firstName: '',
+    lastName: '',
+    mobileNumber: '',
+    email: '',
+  })
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("https://localhost:44390/api/users/"+id);
+        setUser(response.data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchUsers();
+  },);
 
-   // const [data, setData] = useState();
+  const handleFormInput = e => {
+        setUser({
+            ...user,
+            [e.target.name]: e.target.value
+        })}
 
-/*// Using useEffect to call the API once mounted and set the data
-useEffect(() => {
-(async () => {
-  const result = await axios("api"+{id});
-  setData(result.data);
-})();
-}, data);
+  async function editUser() {
+    await axios({
+      url: "https://localhost:44390/api/users/"+user.userId,
+      method: "PUT",
+      data: {user}
+    });
+  }
 
-    async function editUser(){
-        await axios({
-        url: 'api',
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${tokenResponse.data.token}`,
-        },
-        data: {
-          email: 'qwe.asd@euvic.pl',
-        },
-      });
-    }
-*/
-
-    return (<h1>Edit</h1>)
-    /*<Form>
-        <h1>Edit user</h1>
-        <Label>Name</Label>
-        <Input type="text" name="name" value={data.name}/>
-        <Label>Surname</Label>
-        <Input type="text" name="name" value={data.surname}/>
-        <Label>Phone</Label>
-        <Input type="number" name="name" value={data.phone}/>
-        <Label>Mail</Label>
-        <Input type="mail" name="name" value={data.mail} onClick={editUser}/>
-    </Form>*/
+  return (
+    <Form>
+      <h1>Edit user</h1>
+      <Label>First name</Label>
+      <Input type="text" name="firstName" value={user.firstName} onChange={handleFormInput} />
+      <Label>Last name</Label>
+      <Input type="text" name="lastName" value={user.lastName} onChange={handleFormInput}/>
+      <Label>Phone number</Label>
+      <Input type="number" name="mobileNumber" value={user.mobileNumber} onChange={handleFormInput}/>
+      <Label>Mail</Label>
+      <Input type="mail" name="email" value={user.email} onChange={handleFormInput}/>
+      <Link to="/UserManager">Back</Link>
+      <Button color="success" onClick={editUser}>Edit</Button>
+    </Form>
+  );
 }

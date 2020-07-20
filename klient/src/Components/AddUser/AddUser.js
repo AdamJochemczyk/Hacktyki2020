@@ -1,42 +1,50 @@
 import React, { useState } from "react"
 import {Form, Input, Button, Label} from "reactstrap"
 import "../styles/componentsstyle.css"
+import axios from "axios"
 
 export default function AddUser(){
-    
-    const [User, setUser] = useState({
-        username: '',
-        surname: '',
+
+    const [user, setUser] = useState({
+        firstName: '',
+        lastName: '',
         email: '',
-        phone: ''
+        phone: '',
     })
     
     const handleFormInput = e => {
         setUser({
-            ...User,
+            ...user,
             [e.target.name]: e.target.value
         })
     }
-    const AddUser = e =>{
-        e.preventDefault()
-        console.log(User)
-        //send data to API
-
-        //after send alert and reload
+    async function AddUser(){
+        console.log(user)
+       await axios({
+            url: "https://localhost:44390/api/users/",
+            method: "POST",
+            data: {user}
+          }).then((res) => {
+            if(res.status===200){
+              alert("User added")
+              window.location.reload(false)
+            }
+            }).catch(error => {
+              console.log(error.response)
+          });
     }
 
     return (
-    <Form onSubmit={AddUser}>
-    <h4>Add User</h4>
+    <Form>
         <Label>Username</Label>
-        <Input type="text" name="username" placeholder="username" onChange={handleFormInput} value={User.username}/>
+        <Input type="text" name="username" placeholder="username" onChange={handleFormInput} value={user.username}/>
         <Label>Surname</Label>
-        <Input type="text" name="surname" placeholder="surname" onChange={handleFormInput} value={User.surname}/>
+        <Input type="text" name="surname" placeholder="surname" onChange={handleFormInput} value={user.surname}/>
         <Label>Email</Label>
-        <Input type="mail" name="email" placeholder="email" onChange={handleFormInput} value={User.email}/>
+        <Input type="mail" name="email" placeholder="email" onChange={handleFormInput} value={user.email}/>
         <Label>Phone</Label>
-        <Input type="number" name="phone" placeholder="phone" onChange={handleFormInput} value={User.phone}/>
-        <Button color="success" type="submit" onClick={AddUser}>Add user</Button>
+        <Input type="number" name="phone" placeholder="phone" onChange={handleFormInput} value={user.phone}/>
+        <Button color="success" onClick={AddUser}>Add user</Button>
     </Form>
     )
 }
