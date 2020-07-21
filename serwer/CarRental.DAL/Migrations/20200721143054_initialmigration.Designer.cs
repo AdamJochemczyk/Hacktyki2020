@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRental.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200716213838_UpdateUser")]
-    partial class UpdateUser
+    [Migration("20200721143054_initialmigration")]
+    partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,7 +70,7 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 7, 16, 23, 38, 37, 913, DateTimeKind.Local).AddTicks(6391),
+                            DateCreated = new DateTime(2020, 7, 21, 16, 30, 53, 802, DateTimeKind.Local).AddTicks(9455),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             Model = "Q5",
@@ -232,7 +232,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 7, 16, 23, 38, 37, 921, DateTimeKind.Local).AddTicks(3337),
+                            DateCreated = new DateTime(2020, 7, 21, 16, 30, 53, 807, DateTimeKind.Local).AddTicks(146),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
                             LastName = "Doe"
