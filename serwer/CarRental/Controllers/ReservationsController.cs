@@ -50,8 +50,8 @@ namespace CarRental.API.Controllers
                 return BadRequest();
             if (await service.ReservationCanBeUpdatedAsync(reservationUpdateDto))
             {
-                await service.UpdateReservationAsync(reservationUpdateDto);
-                var entity = await service.GetReservationByIdAsync(id);
+                var entity = await service.UpdateReservationAsync(reservationUpdateDto);
+                //var entity = await service.GetReservationByIdAsync(id);
                 return Ok(entity);
             }
             return BadRequest();

@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using CarRental.DAL.Entities;
-using CarRental.Services.Models.Reservation;
+using CarRental.Services.Models.Car;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace CarRental.Services.Mapper
 {
-    public class ReservationProfile : Profile
+    public class CarProfile : Profile
     {
-        public ReservationProfile()
+        public CarProfile()
         {
-            CreateMap<Reservation, ReservationDto>();
+            CreateMap<Car, CarDto>();
         }
     }
 }
