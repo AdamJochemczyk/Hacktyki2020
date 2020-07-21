@@ -45,11 +45,8 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IEmailServices, EmailService>();
-<<<<<<< HEAD
             services.AddScoped<IAuthorizationService, AuthorizationService>();
-=======
             services.AddScoped<ICarService, CarService>();
->>>>>>> master
             return services;
         }
 
@@ -65,14 +62,10 @@ namespace CarRental.API.StartupExtensions
         {
             services.AddTransient<IValidator<ReservationCreateDto>, ReservationCreateDtoValidator>();
             services.AddTransient<IValidator<ReservationUpdateDto>, ReservationUpdateDtoValidator>();
-<<<<<<< HEAD
             services.AddTransient<IValidator<CreateUserDto>, CreateUserDtoValidator>();
             services.AddTransient<IValidator<UpdateUserPasswordDto>, UpdateUserPasswordValidator>();
-
-=======
             services.AddTransient<IValidator<CarDto>, CarDtoValidator>();
             services.AddTransient<IValidator<CarCreateDto>, CarCreateDtoValidator>();
->>>>>>> master
             return services;
         }
     }
