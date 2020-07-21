@@ -11,7 +11,7 @@ namespace CarRental.Services.Validators
         public CreateUserDtoValidator()
         {
             RuleFor(u => u.Email).EmailAddress();
-            RuleFor(u => u.MobileNumber).NotNull();
+            RuleFor(u => u.MobileNumber).Length(9);
             RuleFor(u => u.NumberIdentificate).Length(6);
         }
     }

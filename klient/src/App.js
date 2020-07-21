@@ -8,16 +8,15 @@ import UserReportFault from './Components/UserReportFault/UserReportFault'
 import ReserveCar from './Components/ReserveCar/ReserveCar'
 import Home from './Components/Home/Home'
 import Login from './Components/Login/Login'
-import UserManager from './Components/UserManager/UserManager'
 import FaultManager from './Components/FaultManager/FaultManager'
 import CarManager from './Components/CarManager/CarManager'
-import AddUser from './Components/AddUser/AddUser'
 import AddCar from './Components/AddCar/AddCar'
 import History from './Components/History/History'
 import EditUser from './Components/EditUser/EditUser';
 import EditCar from './Components/EditCar/EditCar';
 import GenericNotFound from './Components/GenericNotFound/GenericNotFound'
 import SetPassword from './Components/SetPassword/SetPassword';
+import UserManager from './Components/UserManager/UserManager'
 
 function App() {
   return (
@@ -33,7 +32,7 @@ function App() {
           <Route exact path='/FaultManager' component={FaultManager} />
           <Route exact path='/CarManager' component={CarManager} />
           <Route path='/CarManager/Edit/:id' component={EditCar} />
-          <Route path='/AddUser' component={AddUser} />
+          <Route path='/AddUser' component={EditUser} />
           <Route path='/AddCar' component={AddCar} />
           <Route exact path='/History' component={History} />
           <Route path='/History/Edit/:id' component={UserReportFault} />

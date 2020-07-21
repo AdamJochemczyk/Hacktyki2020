@@ -90,14 +90,6 @@ export default function UserManagerTable({columns,data}){
                 name="mail"
               />
             </td>
-            <td>
-              <Input
-                value={filter.mail}
-                onChange={filterBy}
-                placeholder={"Search by varification"}
-                name="statusofverification"
-              />
-            </td>
           </tr>
         </thead>
         <tbody {...getTableBodyProps()}>

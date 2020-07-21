@@ -1,58 +1,212 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Form, Input, Label, Button } from "reactstrap";
-import {Link} from "react-router-dom"
+import { Link, useParams } from "react-router-dom";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
 
 export default function EditUser() {
-  let { id } = useParams();
+  const { id } = useParams();
+  const isAddMode = !id;
 
-  const [user, setUser] = useState({
-    userId: id,
-    firstName: '',
-    lastName: '',
-    mobileNumber: '',
-    email: '',
-  })
-  useEffect(() => {
-    const fetchUsers = async () => {
+  let initialValues = {
+    FirstName: "",
+    LastName: "",
+    Email: "",
+    NumberIdentificate: "",
+    MobileNumber: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    FirstName: Yup.string()
+      .min(3, "Too short!")
+      .max(20, "Too long!")
+      .required("Required"),
+    LastName: Yup.string()
+      .min(3, "Too short!")
+      .max(20, "Too long!")
+      .required("Required"),
+    NumberIdentificate: Yup.string()
+      .min(6, "Too short!")
+      .max(15, "Too long!")
+      .required("Required"),
+    Email: Yup.string().email("Invalid email").required("Required"),
+    MobileNumber: Yup.string()
+      .min(9, "Must contains at least 9 numers")
+      .max(15, "Too long number")
+      .required("Required"),
+  });
+
+  function onSubmit(fields, { setStatus, setSubmitting }) {
+    setStatus();
+    if (isAddMode) {
+      createUser(fields, setSubmitting);
+    } else {
+      updateUser(id, fields, setSubmitting);
+    }
+  }
+
+  function createUser(fields, setSubmitting) {
+    try {
+      axios({
+        url: "https://localhost:44390/api/authorization",
+        method: "POST",
+        data: fields,
+      });
+    } catch (e) {
+      console.log(e);
+      setSubmitting(false);
+    }
+  }
+
+  function updateUser(id, fields, setSubmitting) {
+    fields.UserId = parseInt(id);
+    console.log(fields);
+    try {
+      axios({
+        url: "https://localhost:44390/api/users/" + id,
+        method: "PUT",
+        data: fields,
+      });
+      alert("User edited");
+      setSubmitting(true);
+    } catch (e) {
+      console.log(e);
+      setSubmitting(false);
+    }
+  }
+  const [user, setUser] = useState();
+
+  const fetchUser = async () => {
+    if (!isAddMode) {
       try {
-        const response = await axios.get("https://localhost:44390/api/users/"+id);
-        setUser(response.data);
+        await axios.get(
+          "https://localhost:44390/api/users/" + id
+        ).then(res=> {
+          const myuser=res.data;
+          console.log("User from api:",myuser)
+          setUser(myuser)
+        });
+        console.log("User:",user)
+        /*setUser(response.data);
+        console.log("Response data:", response.data);
+        console.log("user:", user)
+        console.log("initialvalues:", initialValues);*/
       } catch (e) {
         console.log(e);
       }
-    };
-    fetchUsers();
-  },);
-
-  const handleFormInput = e => {
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value
-        })}
-
-  async function editUser() {
-    await axios({
-      url: "https://localhost:44390/api/users/"+user.userId,
-      method: "PUT",
-      data: {user}
-    });
-  }
+    }
+  };
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
-    <Form>
-      <h1>Edit user</h1>
-      <Label>First name</Label>
-      <Input type="text" name="firstName" value={user.firstName} onChange={handleFormInput} />
-      <Label>Last name</Label>
-      <Input type="text" name="lastName" value={user.lastName} onChange={handleFormInput}/>
-      <Label>Phone number</Label>
-      <Input type="number" name="mobileNumber" value={user.mobileNumber} onChange={handleFormInput}/>
-      <Label>Mail</Label>
-      <Input type="mail" name="email" value={user.email} onChange={handleFormInput}/>
-      <Link to="/UserManager">Back</Link>
-      <Button color="success" onClick={editUser}>Edit</Button>
-    </Form>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      enableReinitialize
+      onSubmit={onSubmit}
+    >
+      {({ errors, touched, isSubmitting }) => {
+        return (
+          <Form>
+            <h1>{isAddMode ? "Add User" : "Edit User"}</h1>
+
+            <label>First Name</label>
+            <Field
+              name="FirstName"
+              className={
+                "form-control" +
+                (errors.FirstName && touched.FirstName ? " is-invalid" : "")
+              }
+            />
+            <ErrorMessage
+              name="FirstName"
+              component="div"
+              className="invalid-feedback"
+            />
+
+            <label>Last Name</label>
+            <Field
+              name="LastName"
+              type="text"
+              className={
+                "form-control" +
+                (errors.LastName && touched.LastName ? " is-invalid" : "")
+              }
+            />
+            <ErrorMessage
+              name="LastName"
+              component="div"
+              className="invalid-feedback"
+            />
+
+            <label>Email</label>
+            <Field
+              name="Email"
+              type="text"
+              className={
+                "form-control" +
+                (errors.Email && touched.Email ? " is-invalid" : "")
+              }
+            />
+            <ErrorMessage
+              name="Email"
+              component="div"
+              className="invalid-feedback"
+            />
+
+            <label>Number Identificate</label>
+            <Field
+              name="NumberIdentificate"
+              type="text"
+              className={
+                "form-control" +
+                (errors.NumberIdentificate && touched.NumberIdentificate
+                  ? " is-invalid"
+                  : "")
+              }
+            />
+            <ErrorMessage
+              name="NumberIdentificate"
+              component="div"
+              className="invalid-feedback"
+            />
+
+            <label>Mobile Number</label>
+            <Field
+              name="MobileNumber"
+              className={
+                "form-control" +
+                (errors.MobileNumber && touched.MobileNumber
+                  ? " is-invalid"
+                  : "")
+              }
+            />
+            <ErrorMessage
+              name="MobileNumber"
+              component="div"
+              className="invalid-feedback"
+            />
+            <div className="pt-3">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-primary"
+              >
+                {isSubmitting && (
+                  <span className="spinner-border spinner-border-sm mr-1"></span>
+                )}
+                Save
+              </button>
+
+              <Link to={isAddMode ? "." : ".."} className="btn btn-link">
+                Cancel
+              </Link>
+            </div>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 }
