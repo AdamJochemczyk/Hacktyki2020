@@ -26,8 +26,8 @@ export default function EditUser() {
       .max(20, "Too long!")
       .required("Required"),
     NumberIdentificate: Yup.string()
-      .min(6, "Too short!")
-      .max(15, "Too long!")
+      .min(6)
+      .max(6, "Too long!")
       .required("Required"),
     Email: Yup.string().email("Invalid email").required("Required"),
     MobileNumber: Yup.string()

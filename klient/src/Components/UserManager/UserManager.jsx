@@ -62,7 +62,7 @@ export default function UserManager() {
         Header: "Actions",
         Cell: ({ row }) => (
           <div>
-            <Link to={"/UserManager/Edit/" + row.original.userId}>
+            <Link to={"/user-manager/edit/" + row.original.userId}>
               <Button color="success">Edit</Button>
             </Link>
             <Button

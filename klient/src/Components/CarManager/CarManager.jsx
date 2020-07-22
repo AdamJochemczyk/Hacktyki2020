@@ -1,19 +1,40 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import CarManagerTable from "../CarManagerTable/CarManagerTable";
+import axios from "axios";
 
 export default function CarManager() {
-  const data = [
-    {
-      carId: "1",
-      registrationNumber: "STA123456",
-      model: "X",
-      brand: "Tesla",
-      urlToImg: "https://costam",
-      yearOfProduction: "2020",
-    },
-  ];
+  const [data, setData] = useState([]);
+
+  const fetchCars = async () => {
+    try {
+      const response = await axios.get("https://localhost:44390/api/cars");
+      setData(response.data);
+    } catch (e) {
+      console.log(e);
+      setData(data);
+    }
+  };
+  useEffect(() => {
+    fetchCars();
+  }, []);
+
+  async function deleteCar(id) {
+    await axios({
+      url: "https://localhost:44390/api/cars/" + id,
+      method: "DELETE",
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          alert("Deleted");
+          window.location.reload(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  }
 
   const columns = useMemo(
     () => [
@@ -45,13 +66,17 @@ export default function CarManager() {
         Header: "Actions",
         Cell: ({ row }) => (
           <div>
-            <Button color="primary">
-              <Link
-                to={"/CarManager/Edit/" + row.original.carId}
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                Edit
-              </Link>
+            <Link
+              to={"/car-manager/edit/" + row.original.carId}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <Button color="success">Edit</Button>
+            </Link>
+            <Button
+              color="danger"
+              onClick={() => deleteCar(row.original.carId)}
+            >
+              Delete
             </Button>
           </div>
         ),
@@ -59,16 +84,6 @@ export default function CarManager() {
     ],
     []
   );
-
-  /* const [data, setData] = useState([]);
-
-// Using useEffect to call the API once mounted and set the data
-useEffect(() => {
-(async () => {
-  const result = await axios("https://api.tvmaze.com/search/shows?q=snow");
-  setData(result.data);
-})();
-}, []);*/
 
   return <CarManagerTable columns={columns} data={data} />;
 }

@@ -10,7 +10,6 @@ import Home from './Components/Home/Home'
 import Login from './Components/Login/Login'
 import FaultManager from './Components/FaultManager/FaultManager'
 import CarManager from './Components/CarManager/CarManager'
-import AddCar from './Components/AddCar/AddCar'
 import History from './Components/History/History'
 import EditUser from './Components/EditUser/EditUser';
 import EditCar from './Components/EditCar/EditCar';
@@ -25,18 +24,18 @@ function App() {
     <Router>  
         <Switch>
           <Route exact path='/' component={Home} />  
-          <Route path='/ReserveCar' component={ReserveCar} />  
-          <Route path='/Signin' component={Login}/>
-          <Route exact path='/UserManager' component={UserManager} />
-          <Route path='/UserManager/Edit/:id' component={EditUser}/>
-          <Route exact path='/FaultManager' component={FaultManager} />
-          <Route exact path='/CarManager' component={CarManager} />
-          <Route path='/CarManager/Edit/:id' component={EditCar} />
-          <Route path='/AddUser' component={EditUser} />
-          <Route path='/AddCar' component={AddCar} />
-          <Route exact path='/History' component={History} />
-          <Route path='/History/Edit/:id' component={UserReportFault} />
-          <Route path='/SetPassword' component={SetPassword} />
+          <Route path='/reserve-car' component={ReserveCar} />  
+          <Route path='/signin' component={Login}/>
+          <Route exact path='/user-manager' component={UserManager} />
+          <Route path='/user-manager/edit/:id' component={EditUser}/>
+          <Route exact path='/fault-manager' component={FaultManager} />
+          <Route exact path='/car-manager' component={CarManager} />
+          <Route path='/car-manager/edit/:id' component={EditCar} />
+          <Route path='/add-user' component={EditUser} />
+          <Route path='/add-car' component={EditCar} />
+          <Route exact path='/history' component={History} />
+          <Route path='/history/edit/:id' component={UserReportFault} />
+          <Route path='/set-password/:token' component={SetPassword} />
           <Route component={GenericNotFound} />
         </Switch>    
     </Router>

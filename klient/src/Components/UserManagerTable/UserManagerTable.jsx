@@ -60,34 +60,34 @@ export default function UserManagerTable({columns,data}){
             </td>
             <td>
               <Input
-                value={filter.name}
+                value={filter.firstName}
                 onChange={filterBy}
                 placeholder={"Search by name"}
-                name="name"
+                name="firstName"
               />
             </td>
             <td>
               <Input
-                value={filter.surname}
+                value={filter.lastName}
                 onChange={filterBy}
-                placeholder={"Search by surname"}
-                name="surname"
+                placeholder={"Search by lastName"}
+                name="lastName"
               />
             </td>
             <td>
               <Input
-                value={filter.phone}
+                value={filter.mobileNumber}
                 onChange={filterBy}
                 placeholder={"Search by phone"}
-                name="phone"
+                name="mobileNumber"
               />
             </td>
             <td>
               <Input
-                value={filter.mail}
+                value={filter.email}
                 onChange={filterBy}
                 placeholder={"Search by mail"}
-                name="mail"
+                name="email"
               />
             </td>
           </tr>
