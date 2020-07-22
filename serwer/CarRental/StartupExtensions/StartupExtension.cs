@@ -5,6 +5,7 @@ using CarRental.DAL.Repositories;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Email_Templates;
 using CarRental.Services.Models.Reservation;
+using CarRental.Services.Models.User;
 using CarRental.Services.Services;
 using CarRental.Services.Validators;
 using CarRental.Services.Mapper;
@@ -44,6 +45,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IEmailServices, EmailService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<ICarService, CarService>();
             return services;
         }
@@ -60,6 +62,8 @@ namespace CarRental.API.StartupExtensions
         {
             services.AddTransient<IValidator<ReservationCreateDto>, ReservationCreateDtoValidator>();
             services.AddTransient<IValidator<ReservationUpdateDto>, ReservationUpdateDtoValidator>();
+            services.AddTransient<IValidator<CreateUserDto>, CreateUserDtoValidator>();
+            services.AddTransient<IValidator<UpdateUserPasswordDto>, UpdateUserPasswordValidator>();
             services.AddTransient<IValidator<CarDto>, CarDtoValidator>();
             services.AddTransient<IValidator<CarCreateDto>, CarCreateDtoValidator>();
             return services;

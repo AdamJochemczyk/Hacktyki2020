@@ -7,13 +7,12 @@ namespace CarRental.Services.Models.User
     public class CreateUserDto
     {
         //Maybe i don't need this
-        //public int UserId { get; set; }
+        public int UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string NumberIdentificate { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
         public DateTime DateCreated { get; set; } 
-        public string EncodePassword { get; set; }
     }
 }

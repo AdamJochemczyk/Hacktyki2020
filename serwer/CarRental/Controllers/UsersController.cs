@@ -20,23 +20,18 @@ namespace CarRental.API.Controllers
             _usersService = usersService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUserAsync(CreateUserDto createUserDto)
-        {
-            var user = await _usersService.CreateUserAsync(createUserDto);
-            return Ok(user);
-        }
-
         [HttpGet]
         public async Task<IActionResult> GetUsersAsync()
         {
             var result = await _usersService.GetAllUsers();
+            if (result == null) return BadRequest("Database users is empty");
             return Ok(result);
         }
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetUserAsync(int Id)
         {
+            if (Id == 0) return BadRequest("This ID does not exist");
             var user = await _usersService.GetUser(Id);
             return Ok(user);
         }
@@ -44,13 +39,15 @@ namespace CarRental.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserAsync(int Id)
         {
+            if (Id == 0) return BadRequest("This ID does not exist");
             await _usersService.DeleteUser(Id);
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync(int Id, UsersDto usersDto)
+        public async Task<IActionResult> UpdateUserAsync(int Id,UsersDto usersDto)
         {
+            if (usersDto.UserId != Id||usersDto.UserId==0) return BadRequest("This user does not exist");
             var result = await _usersService.UpdateUser(usersDto);
             return Ok(result);
         }

@@ -1,28 +1,28 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Button } from "reactstrap";
+import UserManagerTable from "../UserManagerTable/UserManagerTable";
 import { Link } from "react-router-dom";
-import CarManagerTable from "../CarManagerTable/CarManagerTable";
 import axios from "axios";
 
-export default function CarManager() {
+export default function UserManager() {
   const [data, setData] = useState([]);
 
-  const fetchCars = async () => {
+  const fetchUsers = async () => {
     try {
-      const response = await axios.get("https://localhost:44390/api/cars");
+      const response = await axios.get("https://localhost:44390/api/users");
       setData(response.data);
     } catch (e) {
       console.log(e);
       setData(data);
     }
-  };
+  }
   useEffect(() => {
-    fetchCars();
-  }, []);
+    fetchUsers();
+    },[]);
 
-  async function deleteCar(id) {
+  async function deleteUser(id) {
     await axios({
-      url: "https://localhost:44390/api/cars/" + id,
+      url: "https://localhost:44390/api/users/" + id,
       method: "DELETE",
     })
       .then((res) => {
@@ -39,42 +39,35 @@ export default function CarManager() {
   const columns = useMemo(
     () => [
       {
-        Header: "Car ID",
-        accessor: "carId",
+        Header: "User ID",
+        accessor: "userId",
       },
       {
-        Header: "Registration Number",
-        accessor: "registrationNumber",
+        Header: "Name",
+        accessor: "firstName",
       },
       {
-        Header: "Brand",
-        accessor: "brand",
+        Header: "Surname",
+        accessor: "lastName",
       },
       {
-        Header: "Model",
-        accessor: "model",
+        Header: "Phone",
+        accessor: "mobileNumber",
       },
       {
-        Header: "Url to img",
-        accessor: "urlToImg",
-      },
-      {
-        Header: "Year Of Production",
-        accessor: "yearOfProduction",
+        Header: "Mail",
+        accessor: "email",
       },
       {
         Header: "Actions",
         Cell: ({ row }) => (
           <div>
-            <Link
-              to={"/car-manager/edit/" + row.original.carId}
-              style={{ textDecoration: "none", color: "white" }}
-            >
+            <Link to={"/user-manager/edit/" + row.original.userId}>
               <Button color="success">Edit</Button>
             </Link>
             <Button
               color="danger"
-              onClick={() => deleteCar(row.original.carId)}
+              onClick={() => deleteUser(row.original.userId)}
             >
               Delete
             </Button>
@@ -84,6 +77,9 @@ export default function CarManager() {
     ],
     []
   );
-
-  return <CarManagerTable columns={columns} data={data} />;
+  return (
+    <div>
+      <UserManagerTable columns={columns} data={data} />
+    </div>
+  );
 }

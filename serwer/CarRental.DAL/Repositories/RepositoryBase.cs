@@ -29,7 +29,8 @@ namespace CarRental.DAL.Repositories
 
         public async Task<IEnumerable<T>> FindAllAsync()
         {
-            return await entities.ToListAsync();
+            var result = await entities.ToListAsync();
+            return result;
         }
 
         public async Task<T> FindByIdAsync(int id)

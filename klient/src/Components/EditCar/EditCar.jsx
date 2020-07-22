@@ -1,26 +1,250 @@
-import React from "react"
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
 
-export default function EditCar(){
+export default function EditUser() {
+  const { id } = useParams();
+  const isAddMode = !id;
 
-    let {id}=useParams()
+  let initialValues = {
+    brand: "",
+    registrationNumber: "",
+    model: "",
+    typeOfCar: "",
+    numberOfDoor: "",
+    numberOfSits: "",
+    yearOfProduction: "",
+    imagePath: "",
+  };
+  const date = new Date();
 
-    // const [data, setData] = useState();
+  const validationSchema = Yup.object().shape({
+    registrationNumber: Yup.string()
+      .min(3, "Too short!")
+      .max(7, "Too long!")
+      .required("Required"),
+    brand: Yup.string()
+      .min(3, "Too short!")
+      .max(30, "Too long!")
+      .required("Required"),
+    model: Yup.string()
+      .min(1, "Too short!")
+      .max(20, "Too long!")
+      .required("Required"),
+    typeOfCar: Yup.string().required("Required"),
+    numberOfDoor: Yup.number().required("Required").min(1).max(5),
+    numberOfSits: Yup.number().required("Required").min(1).max(9),
+    yearOfProduction: Yup.number()
+      .required("Required")
+      .min(1950)
+      .max(date.getFullYear()),
+  });
 
-/*// Using useEffect to call the API once mounted and set the data
-useEffect(() => {
-(async () => {
-  const result = await axios("api"+{id});
-  setData(result.data);
-})();
-}, data);
-*/
-    return (<h1>Edit Car{id}</h1>)
-   /* <Form>
-        <h1>Edit car</h1>
-        <Label>Registration number</Label>
-        <Input type="text" name="registrationnumber" value={data.registrationnumber}/>
-        <Label>Url to img</Label>
-        <Input type="text" name="urltoimg" value={data.urlToImg}/>
-    </Form>*/
+  function onSubmit(fields, { setStatus, setSubmitting }) {
+    setStatus();
+    if (isAddMode) {
+      createCar(fields, setSubmitting);
+    } else {
+      updateCar(id, fields, setSubmitting);
+    }
+  }
+
+  function createCar(fields, setSubmitting) {
+    try {
+      let cartype = parseInt(fields.typeOfCar);
+      fields.typeOfCar = cartype;
+      console.log("typeofCar", cartype);
+      console.log("Create", fields);
+      axios({
+        url: "https://localhost:44390/api/cars",
+        method: "POST",
+        data: fields,
+      });
+    } catch (e) {
+      console.log(e);
+      setSubmitting(false);
+    }
+  }
+
+  function updateCar(id, fields, setSubmitting) {
+    fields.carId = parseInt(id);
+    let cartype = parseInt(fields.typeOfCar);
+    fields.typeOfCar = cartype;
+    console.log(fields);
+    try {
+      axios({
+        url: "https://localhost:44390/api/cars/" + id,
+        method: "PUT",
+        data: fields,
+      });
+      setSubmitting(true);
+      alert("Car edited");
+    } catch (error) {
+      if (error.response) {
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else if (error.message) {
+        console.log(error.message);
+      }
+      setSubmitting(false);
+    }
+  }
+  const [car, setCar] = useState();
+
+  const fetchCar = async () => {
+    if (!isAddMode) {
+      try {
+        await axios
+          .get("https://localhost:44390/api/cars/" + id)
+          .then((res) => {
+            setCar(res.data);
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchCar();
+  }, []);
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      enableReinitialize
+      onSubmit={onSubmit}
+    >
+      {({ errors, touched, isSubmitting }) => {
+        return (
+          <Form>
+            <h1>{isAddMode ? "Add Car" : "Edit Car"}</h1>
+
+            <label>Brand</label>
+            <Field
+              name="brand"
+              className={
+                "form-control" +
+                (errors.brand && touched.brand ? " is-invalid" : "")
+              }
+            />
+            <ErrorMessage
+              name="brand"
+              component="div"
+              className="invalid-feedback"
+            />
+
+            <label>Registration Number</label>
+            <Field
+              name="registrationNumber"
+              type="text"
+              className={
+                "form-control" +
+                (errors.registrationNumber && touched.registrationNumber
+                  ? " is-invalid"
+                  : "")
+              }
+            />
+            <ErrorMessage
+              name="registrationNumber"
+              component="div"
+              className="invalid-feedback"
+            />
+
+            <label>Model</label>
+            <Field
+              name="model"
+              type="text"
+              className={
+                "form-control" +
+                (errors.model && touched.model ? " is-invalid" : "")
+              }
+            />
+            <ErrorMessage
+              name="model"
+              component="div"
+              className="invalid-feedback"
+            />
+
+            <label>Type Of Car</label>
+            <Field
+              name="typeOfCar"
+              as="select"
+              className={
+                "form-control" +
+                (errors.typeOfCar && touched.typeOfCar ? " is-invalid" : "")
+              }
+            >
+              <option selected>Choose type...</option>
+              <option value="1">Classic</option>
+              <option value="0">Sport</option>
+              <option value="2">Retro</option>
+            </Field>
+
+            <label>Year Of Procuction</label>
+            <Field
+              type="number"
+              name="yearOfProduction"
+              className={
+                "form-control" +
+                (errors.yearOfProduction && touched.yearOfProduction
+                  ? " is-invalid"
+                  : "")
+              }
+            />
+            <label>Number of sits</label>
+            <Field
+              type="number"
+              name="numberOfSits"
+              className={
+                "form-control" +
+                (errors.numberOfSits && touched.numberOfSits
+                  ? " is-invalid"
+                  : "")
+              }
+            />
+            <label>Number of doors</label>
+            <Field
+              type="number"
+              name="numberOfDoor"
+              className={
+                "form-control" +
+                (errors.numberOfDoor && touched.numberOfDoor
+                  ? " is-invalid"
+                  : "")
+              }
+            />
+            <label>Img src</label>
+            <Field
+              name="imagePath"
+              className={
+                "form-control" +
+                (errors.imagePath && touched.imagePath ? " is-invalid" : "")
+              }
+            />
+            <div className="pt-3">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn btn-primary"
+              >
+                {isSubmitting && (
+                  <span className="spinner-border spinner-border-sm mr-1"></span>
+                )}
+                Save
+              </button>
+
+              <Link to={isAddMode ? "." : ".."} className="btn btn-link">
+                Cancel
+              </Link>
+            </div>
+          </Form>
+        );
+      }}
+    </Formik>
+  );
 }
