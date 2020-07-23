@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import Swal from 'sweetalert2'
 
 export default function EditUser() {
   const { id } = useParams();
   const isAddMode = !id;
+  let history=useHistory()
 
   let initialValues = {
     brand: "",
@@ -34,16 +36,15 @@ export default function EditUser() {
       .max(20, "Too long!")
       .required("Required"),
     typeOfCar: Yup.string().required("Required"),
-    numberOfDoor: Yup.number().required("Required").min(1).max(5),
-    numberOfSits: Yup.number().required("Required").min(1).max(9),
+    numberOfDoor: Yup.number().required("Required").min(2).max(5),
+    numberOfSits: Yup.number().required("Required").min(2).max(9),
     yearOfProduction: Yup.number()
       .required("Required")
       .min(1950)
       .max(date.getFullYear()),
   });
 
-  function onSubmit(fields, { setStatus, setSubmitting }) {
-    setStatus();
+  function onSubmit(fields, {setSubmitting} ) {
     if (isAddMode) {
       createCar(fields, setSubmitting);
     } else {
@@ -52,19 +53,28 @@ export default function EditUser() {
   }
 
   function createCar(fields, setSubmitting) {
-    try {
       let cartype = parseInt(fields.typeOfCar);
       fields.typeOfCar = cartype;
-      console.log("typeofCar", cartype);
-      console.log("Create", fields);
+      try{
       axios({
         url: "https://localhost:44390/api/cars",
         method: "POST",
         data: fields,
+      }).catch((error) =>{
+        if (error.response) {
+          Swal.fire("Oops...", error.response.headers, "error")
+        } else if (error.request) {
+          Swal.fire("Oops...", "Error request was made but no response was recived. Error request: "+error.request, 'error');
+        } else {
+          Swal.fire("Oops...", "Something happened in setting up the request that triggered an Error. Error massage: "+error.message, 'error');
+        }
+        setSubmitting(false);
       });
-    } catch (e) {
-      console.log(e);
-      setSubmitting(false);
+      Swal.fire("Good job!", 'You succesfully added new car!', 'success')
+      document.getElementById("carUpsert").reset()
+    }catch(error){
+      Swal.fire("Oops...", "Something went wrong...", "error")
+      console.log(error)
     }
   }
 
@@ -78,18 +88,21 @@ export default function EditUser() {
         url: "https://localhost:44390/api/cars/" + id,
         method: "PUT",
         data: fields,
+      }).catch((error) =>{
+        if (error.response) {
+          Swal.fire("Oops...", error.response.headers, "error")
+        } else if (error.request) {
+          Swal.fire("Oops...", "Error request was made but no response was recived. Error request: "+error.request, 'error');
+        } else {
+          Swal.fire("Oops...", "Something happened in setting up the request that triggered an Error. Error massage: "+error.message, 'error');
+        }
+        setSubmitting(false);
       });
+      Swal.fire("Good job!", 'You succesfully edited a car!', 'success')
       setSubmitting(true);
-      alert("Car edited");
+      setTimeout(()=>history.push('/car-manager'),2000)
     } catch (error) {
-      if (error.response) {
-        console.log(error.response);
-      } else if (error.request) {
-        console.log(error.request);
-      } else if (error.message) {
-        console.log(error.message);
-      }
-      setSubmitting(false);
+      Swal.fire("Oops...", "Something went wrong", "error")
     }
   }
   const [car, setCar] = useState();
@@ -100,10 +113,11 @@ export default function EditUser() {
         await axios
           .get("https://localhost:44390/api/cars/" + id)
           .then((res) => {
+            console.log(res.data)
             setCar(res.data);
           });
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        alert(error.message)
       }
     }
   };
@@ -114,14 +128,14 @@ export default function EditUser() {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={isAddMode ? initialValues : car}
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={onSubmit}
     >
       {({ errors, touched, isSubmitting }) => {
         return (
-          <Form>
+          <Form id="carUpsert">
             <h1>{isAddMode ? "Add Car" : "Edit Car"}</h1>
 
             <label>Brand</label>
