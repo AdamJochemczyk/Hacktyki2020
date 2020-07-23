@@ -3,6 +3,7 @@ using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,11 @@ namespace CarRental.Services.Services
             {
                 _userRepository.Create(new_user);
                 await _userRepository.SaveChangesAsync();
-                _email.EmailAfterRegistration(createUserDto);
+                if(!_email.EmailAfterRegistration(createUserDto))
+                {
+                    return BadRequestResult("Mail doesn't exsist");
+                }
+                
             }
             else
                 return createUserDto;
@@ -70,6 +75,12 @@ namespace CarRental.Services.Services
 
 
         }
+
+        private CreateUserDto BadRequestResult(string v)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> SetPassword(UpdateUserPasswordDto updateUserDto)
         {
             var user = await _userRepository.FindByIdDetails(updateUserDto.UserId); 

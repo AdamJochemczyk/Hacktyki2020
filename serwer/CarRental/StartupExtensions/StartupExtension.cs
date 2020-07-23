@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CarRental.Services.Models.Car;
+using CarRental.DAL.Entities;
 
 namespace CarRental.API.StartupExtensions
 {
@@ -77,24 +78,14 @@ namespace CarRental.API.StartupExtensions
              services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                              .AddJwtBearer(options =>
                              {
-                                 options.RequireHttpsMetadata = false;
+                                 options.RequireHttpsMetadata = true;
                                  options.TokenValidationParameters = new TokenValidationParameters
                                  {
-                            // укзывает, будет ли валидироваться издатель при валидации токена
                             ValidateIssuer = true,
-                            // строка, представляющая издателя
                             ValidIssuer = TokenOptions.ISSUER,
-
-                            // будет ли валидироваться потребитель токена
-                            ValidateAudience = true,
-                            // установка потребителя токена
                             ValidAudience = TokenOptions.AUDIENCE,
-                            // будет ли валидироваться время существования
                             ValidateLifetime = true,
-
-                            // установка ключа безопасности
                             IssuerSigningKey  = TokenOptions.GetSymmetricSecurityKey(),
-                            // валидация ключа безопасности
                             ValidateIssuerSigningKey = true,
                                  };
                              });
