@@ -35,6 +35,7 @@ namespace CarRental
             services.AddControllers();
             services
                 .AddDataAccessServices(Configuration.GetConnectionString("DefaultConnection"))
+                .AddJwtAuthentication()
                 .AddMappingServices()
                 .AddServices()
                 .AddRepositories()
@@ -51,6 +52,7 @@ namespace CarRental
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors(options =>
                 options

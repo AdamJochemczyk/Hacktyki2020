@@ -1,21 +1,37 @@
-﻿using CarRental.Services.Interfaces;
+﻿using CarRental.DAL.Entities;
+using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
+using System.Security.Claims;
 using System.Text;
 
 namespace CarRental.Services.Models.Email_Templates
 {
     public class EmailService : IEmailServices
     {
-        public void EmailAfterRegistration(CreateUserDto createUserDto)
+           public void EmailAfterRegistration(CreateUserDto createUserDto)
         {
+            var claims = new List<Claim> {
+                     new Claim(createUserDto.UserId.ToString(), createUserDto.FirstName,createUserDto.LastName,createUserDto.NumberIdentificate
+                                         ,createUserDto.RoleOfWorker.ToString())
+            };
+
+            var jwt = new JwtSecurityToken(
+                 issuer: TokenOptions.ISSUER,
+                 audience: TokenOptions.AUDIENCE,
+                 claims: claims,
+                 expires: DateTime.Now.AddMinutes(TokenOptions.LIFETIME),
+                 signingCredentials: new SigningCredentials(TokenOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+           
             string subject = "Rent Car Service";
             string data = createUserDto.FirstName;
-            var id = createUserDto.UserId;
             string htmlBody = @"
                         <html lang=""en"">    
                          <body style='width:720px'>  
@@ -25,7 +41,7 @@ namespace CarRental.Services.Models.Email_Templates
                             <h2>Login: " + createUserDto.Email + @"
                              </h2>
                              <p>That's your temporary password, you can change your password followed this link.</p>
-                              <div style='text-align:center'><a href='https://localhost:3000/setPassword' style='font-size:30px'>Change Password</a></div>
+                              <div style='text-align:center'><a href='https://localhost:44390/set-password/"+encodedJwt+@"' style='font-size:30px'>Change Password</a></div>
                               <p style='font-family: Arial,sans-serif'>We appreciate that you are with us and using service<br>Have a nice day,<br>Car Rental Service</p>
                             <img src=""cid:WinLogo"" />
                                     </body>
@@ -48,8 +64,13 @@ namespace CarRental.Services.Models.Email_Templates
                 message.From = new MailAddress("kucherbogdan2000@gmail.com");
                 message.Subject = "Car Renting";
                 message.Body = "Something";
-                smpt.Send(mailMessage);
+                try
+                {
+                    smpt.Send(mailMessage);
+                }catch(SmtpFailedRecipientException ex)
+                {
 
+                }
             }
         }
     }

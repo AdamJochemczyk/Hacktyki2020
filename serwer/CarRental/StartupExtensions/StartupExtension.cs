@@ -10,11 +10,14 @@ using CarRental.Services.Services;
 using CarRental.Services.Validators;
 using CarRental.Services.Mapper;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CarRental.Services.Models.Car;
 
@@ -42,6 +45,7 @@ namespace CarRental.API.StartupExtensions
 
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+
             services.AddScoped<IReservationService, ReservationService>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IEmailServices, EmailService>();
@@ -66,6 +70,34 @@ namespace CarRental.API.StartupExtensions
             services.AddTransient<IValidator<UpdateUserPasswordDto>, UpdateUserPasswordValidator>();
             services.AddTransient<IValidator<CarDto>, CarDtoValidator>();
             services.AddTransient<IValidator<CarCreateDto>, CarCreateDtoValidator>();
+            return services;
+        }
+        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
+        {
+             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                             .AddJwtBearer(options =>
+                             {
+                                 options.RequireHttpsMetadata = false;
+                                 options.TokenValidationParameters = new TokenValidationParameters
+                                 {
+                            // укзывает, будет ли валидироваться издатель при валидации токена
+                            ValidateIssuer = true,
+                            // строка, представляющая издателя
+                            ValidIssuer = TokenOptions.ISSUER,
+
+                            // будет ли валидироваться потребитель токена
+                            ValidateAudience = true,
+                            // установка потребителя токена
+                            ValidAudience = TokenOptions.AUDIENCE,
+                            // будет ли валидироваться время существования
+                            ValidateLifetime = true,
+
+                            // установка ключа безопасности
+                            IssuerSigningKey  = TokenOptions.GetSymmetricSecurityKey(),
+                            // валидация ключа безопасности
+                            ValidateIssuerSigningKey = true,
+                                 };
+                             });
             return services;
         }
     }
