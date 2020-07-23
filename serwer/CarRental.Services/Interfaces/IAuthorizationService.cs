@@ -9,7 +9,7 @@ namespace CarRental.Services.Interfaces
    public interface IAuthorizationService
     {
         Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto);
-        Task<CreateUserDto> SetPassword(UpdateUserPasswordDto updateUser);
-        Task<bool> SignIn(UserLoginDto userLogin);
+        Task<bool> SetPassword(UpdateUserPasswordDto updateUser);
+        Task<string> SignIn(UserLoginDto userLogin);
     }
 }

@@ -13,6 +13,8 @@ namespace CarRental.Services.Models.User
         public string NumberIdentificate { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
-        public DateTime DateCreated { get; set; } 
+        public DateTime DateCreated { get; set; }
+        public string EncdodePassword { get; set; }
+        public int RoleOfWorker { get; set; }
     }
 }

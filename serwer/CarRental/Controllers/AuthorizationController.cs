@@ -23,23 +23,27 @@ namespace CarRental.API.Controllers
         {
             if (createUserDto == null) return BadRequest("User is null");
             var user = await _authorizationService.RegistrationUserAsync(createUserDto);
+            if (user.UserId == 0)
+                return BadRequest("This Email already exists");
             return Ok(user);
         }
         [HttpGet]
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
-            if (!await _authorizationService.SignIn(userLoginDto))
-            {
-                return BadRequest("Failed Login");
-            }
-            return Ok(userLoginDto);
+            var cos = await _authorizationService.SignIn(userLoginDto);
+            //{
+                //return BadRequest("Failed Login");
+           // }
+            return Ok(cos);
         }
         [HttpPut("{id}")]
         public async Task<IActionResult> SetPassword(int id,UpdateUserPasswordDto updateUserDto)
         {
-            if (id != updateUserDto.UserId) return BadRequest("Users isn't the same"); 
-            var user_set = await _authorizationService.SetPassword(updateUserDto);
-            return Ok(user_set);
+            if (id != updateUserDto.UserId) return BadRequest("Users isn't the same");
+            if (!await _authorizationService.SetPassword(updateUserDto))
+                return BadRequest("Password isn't the same please check");
+                
+            return Ok(updateUserDto);
         }
     }
 }
