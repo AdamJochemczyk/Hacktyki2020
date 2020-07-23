@@ -64,8 +64,13 @@ namespace CarRental.Services.Models.Email_Templates
                 message.From = new MailAddress("kucherbogdan2000@gmail.com");
                 message.Subject = "Car Renting";
                 message.Body = "Something";
-                smpt.Send(mailMessage);
+                try
+                {
+                    smpt.Send(mailMessage);
+                }catch(SmtpFailedRecipientException ex)
+                {
 
+                }
             }
         }
     }
