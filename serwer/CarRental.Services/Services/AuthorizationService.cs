@@ -75,17 +75,15 @@ namespace CarRental.Services.Services
 
  
 
-        public async Task<bool> SetPassword(JwtSecurityToken token)
+        public async Task<bool> SetPassword(UpdateUserPasswordDto updateUserDto)
         {
-            var cos = token.Payload.Sub;
-            //var user = await _userRepository.FindByIdDetails();
+            var user = await _userRepository.FindByIdDetails(updateUserDto.Token.Payload.Jti[0]);
 
-            ////if (updateUserDto.EncodePassword != updateUserDto.ConfirmEncodePassword)
-            ////    return false;
-            //user.SetPassword(EncodePasswordToBase64(updateUserDto.EncodePassword));
-            //_userRepository.Update(user);
-            //await _userRepository.SaveChangesAsync();
-            //    // Change password is okay 
+            if (updateUserDto.EncodePassword != updateUserDto.ConfirmEncodePassword)
+                return false;
+              user.SetPassword(EncodePasswordToBase64(updateUserDto.EncodePassword));
+            _userRepository.Update(user);
+            await _userRepository.SaveChangesAsync();
             return true;            
         }
         public async Task<string> SignIn(UserLoginDto userLoginDto)
