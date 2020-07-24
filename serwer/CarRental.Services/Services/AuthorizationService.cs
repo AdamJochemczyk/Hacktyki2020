@@ -73,7 +73,8 @@ namespace CarRental.Services.Services
 
         }
 
- 
+
+
 
         public async Task<bool> SetPassword(UpdateUserPasswordDto updateUserPassword)
         {
@@ -84,10 +85,9 @@ namespace CarRental.Services.Services
             //Find by id and update password
             var user = await _userRepository.FindByIdDetails(Int32.Parse(token.Payload.Jti));
             user.SetPassword(EncodePasswordToBase64(updateUserPassword.EncodePassword));
-            _userRepository.Update(user);
-            await _userRepository.SaveChangesAsync();
-            return true;            
+            return true;
         }
+     
         public async Task<string> SignIn(UserLoginDto userLoginDto)
         {
             var password =EncodePasswordToBase64(userLoginDto.EncodePassword);
