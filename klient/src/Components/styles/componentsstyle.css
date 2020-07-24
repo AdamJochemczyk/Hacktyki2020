@@ -6,3 +6,7 @@ Form {
     padding: 1%;
     margin: 3% auto;
 }
+.loader {
+    display: flex;
+    justify-content: center;
+}
