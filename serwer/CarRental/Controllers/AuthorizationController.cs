@@ -38,14 +38,11 @@ namespace CarRental.API.Controllers
             return Ok(cos);
         }
         [HttpPut]
-        public async Task<IActionResult> SetPassword(string token)
+        public async Task<IActionResult> SetPassword(UpdateUserPasswordDto updateUserPassword)
         {
-            var jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NCIsInN1YiI6IkJvaGRhbiIsImVtYWlsIjoiYm9nZGFuLmt1Y2hlcjA5QGdtYWlsLmNvbSIsImV4cCI6MTU5NTU5Njg0NCwiaXNzIjoiTXlBdXRoU2VydmVyIiwiYXVkIjoiTXlBdXRoQ2xpZW50In0.vy6dFi-B2-4uCT7aXVU_fLZRlNVMQJxD501qRBuItUc";
-            var handler = new JwtSecurityTokenHandler();
-            var tokenn = handler.ReadJwtToken(jwt);
-            if (!await _authorizationService.SetPassword(tokenn))
+            if (!await _authorizationService.SetPassword(updateUserPassword))
                 return BadRequest("Password isn't the same please check");
-            return Ok(tokenn);
+            return Ok();
         }
     }
 }

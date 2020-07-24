@@ -24,7 +24,6 @@ namespace CarRental.Services.Models.Email_Templates
                      new Claim(JwtRegisteredClaimNames.Email,createUserDto.Email)
 
             };
-
             var jwt = new JwtSecurityToken(
                  issuer: TokenOptions.ISSUER,
                  audience: TokenOptions.AUDIENCE,
@@ -44,7 +43,7 @@ namespace CarRental.Services.Models.Email_Templates
                             <h2>Login: " + createUserDto.Email + @"
                              </h2>
                              <p>That's your temporary password, you can change your password followed this link.</p>
-                              <div style='text-align:center'><a href='https://localhost:3000/set-password/"+encodedJwt+@"' style='font-size:30px'>Change Password</a></div>
+                              <div style='text-align:center'><a href='http://localhost:3000/set-password/"+encodedJwt+@"' style='font-size:30px'>Change Password</a></div>
                               <p style='font-family: Arial,sans-serif'>We appreciate that you are with us and using service<br>Have a nice day,<br>Car Rental Service</p>
                             <img src=""cid:WinLogo"" />
                                     </body>
