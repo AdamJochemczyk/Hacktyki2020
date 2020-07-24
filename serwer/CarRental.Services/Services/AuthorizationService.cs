@@ -63,11 +63,8 @@ namespace CarRental.Services.Services
             {
                 _userRepository.Create(new_user);
                 await _userRepository.SaveChangesAsync();
-                if(!_email.EmailAfterRegistration(createUserDto))
-                {
-                    return BadRequestResult("Mail doesn't exsist");
-                }
-                
+                createUserDto.UserId = new_user.UserId;
+                _email.EmailAfterRegistration(createUserDto);
             }
             else
                 return createUserDto;
@@ -76,23 +73,20 @@ namespace CarRental.Services.Services
 
         }
 
-        private CreateUserDto BadRequestResult(string v)
-        {
-            throw new NotImplementedException();
-        }
+ 
 
-        public async Task<bool> SetPassword(UpdateUserPasswordDto updateUserDto)
+        public async Task<bool> SetPassword(JwtSecurityToken token)
         {
-            var user = await _userRepository.FindByIdDetails(updateUserDto.UserId); 
+            var cos = token.Payload.Sub;
+            //var user = await _userRepository.FindByIdDetails();
 
-            if (updateUserDto.EncodePassword != updateUserDto.ConfirmEncodePassword)
-                return false;
-                user.SetPassword(EncodePasswordToBase64(updateUserDto.EncodePassword));
-                _userRepository.Update(user);
-                await _userRepository.SaveChangesAsync();
-                // Change password is okay 
-                return true;
-            
+            ////if (updateUserDto.EncodePassword != updateUserDto.ConfirmEncodePassword)
+            ////    return false;
+            //user.SetPassword(EncodePasswordToBase64(updateUserDto.EncodePassword));
+            //_userRepository.Update(user);
+            //await _userRepository.SaveChangesAsync();
+            //    // Change password is okay 
+            return true;            
         }
         public async Task<string> SignIn(UserLoginDto userLoginDto)
         {

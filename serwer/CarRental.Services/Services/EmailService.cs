@@ -15,11 +15,14 @@ namespace CarRental.Services.Models.Email_Templates
 {
     public class EmailService : IEmailServices
     {
-           public bool EmailAfterRegistration(CreateUserDto createUserDto)
+        [Obsolete]
+        public bool EmailAfterRegistration(CreateUserDto createUserDto)
         {
             var claims = new List<Claim> {
-                     new Claim(createUserDto.UserId.ToString(), createUserDto.FirstName,createUserDto.LastName,createUserDto.NumberIdentificate
-                                         ,createUserDto.RoleOfWorker.ToString())
+                     new Claim(JwtRegisteredClaimNames.Jti,createUserDto.UserId.ToString()),
+                     new Claim(JwtRegisteredClaimNames.Sub,createUserDto.FirstName),
+                     new Claim(JwtRegisteredClaimNames.Email,createUserDto.Email)
+
             };
 
             var jwt = new JwtSecurityToken(
@@ -52,6 +55,7 @@ namespace CarRental.Services.Models.Email_Templates
             windowsLogo.ContentId = "WinLogo";
             alternateViewHtml.LinkedResources.Add(windowsLogo);*/
             MailMessage mailMessage = new MailMessage("kucherbogdan2000@gmail.com", createUserDto.Email, subject, messageBody);
+           // var replyEmail = new MailAddress("bogdan.kucher09@gmail.com", "Adress not found");
             mailMessage.AlternateViews.Add(alternateViewHtml);
             using (SmtpClient smpt = new SmtpClient("smtp.gmail.com", 587))
             {
@@ -62,14 +66,16 @@ namespace CarRental.Services.Models.Email_Templates
                 MailMessage message = new MailMessage();
                 message.To.Add(createUserDto.Email);
                 message.From = new MailAddress("kucherbogdan2000@gmail.com");
+                message.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
+            //    message.ReplyTo =replyEmail;
                 message.Subject = "Car Renting";
                 message.Body = "Something";
                 try
                 {
                     smpt.Send(mailMessage);
-                    return false;
-                }catch(SmtpFailedRecipientException ex)
+                }catch(SmtpFailedRecipientException)
                 {
+                      return false;
 
                 }
                 return true;

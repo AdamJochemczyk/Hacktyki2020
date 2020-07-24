@@ -55,8 +55,7 @@ namespace CarRental.Services.Services
         
         public async Task<UsersDto> UpdateUser(UsersDto usersDto)
         {
-            try
-            {
+         
                 var user = await _userRepository.FindByIdAsync(usersDto.UserId);
                 var check_user = await _userRepository.FindByLogin(usersDto.Email);
                 if (check_user == null)
@@ -65,16 +64,11 @@ namespace CarRental.Services.Services
                     _userRepository.Update(user);
                     await _userRepository.SaveChangesAsync();
                 }
-                else
-                    throw new Exception("This email already exists");
+               // else
+                               
                 user = await _userRepository.FindByIdAsync(usersDto.UserId);
                 return _mapper.Map<UsersDto>(user);
-            }
-            catch (InvalidCastException)
-            {
-                return usersDto;
-            }
-
+          
         }
        
 

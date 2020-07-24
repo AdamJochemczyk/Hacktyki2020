@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using CarRental.Services.Interfaces;
@@ -36,14 +37,15 @@ namespace CarRental.API.Controllers
            // }
             return Ok(cos);
         }
-        [HttpPut("{id}")]
-        public async Task<IActionResult> SetPassword(int id,UpdateUserPasswordDto updateUserDto)
+        [HttpPut]
+        public async Task<IActionResult> SetPassword(string token)
         {
-            if (id != updateUserDto.UserId) return BadRequest("Users isn't the same");
-            if (!await _authorizationService.SetPassword(updateUserDto))
+            var jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0NCIsInN1YiI6IkJvaGRhbiIsImVtYWlsIjoiYm9nZGFuLmt1Y2hlcjA5QGdtYWlsLmNvbSIsImV4cCI6MTU5NTU5Njg0NCwiaXNzIjoiTXlBdXRoU2VydmVyIiwiYXVkIjoiTXlBdXRoQ2xpZW50In0.vy6dFi-B2-4uCT7aXVU_fLZRlNVMQJxD501qRBuItUc";
+            var handler = new JwtSecurityTokenHandler();
+            var tokenn = handler.ReadJwtToken(jwt);
+            if (!await _authorizationService.SetPassword(tokenn))
                 return BadRequest("Password isn't the same please check");
-                
-            return Ok(updateUserDto);
+            return Ok(tokenn);
         }
     }
 }
