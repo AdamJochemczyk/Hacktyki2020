@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
+import {Row, Col} from "reactstrap"
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -123,7 +124,21 @@ export default function EditUser() {
   };
 
   useEffect(() => {
-    fetchCar();
+    async function fetchCar(){
+      if (!isAddMode) {
+        try {
+          await axios
+            .get("https://localhost:44390/api/cars/" + id)
+            .then((res) => {
+              console.log(res.data)
+              setCar(res.data);
+            });
+        } catch (error) {
+          alert(error.message)
+        }
+      }
+    }
+    fetchCar()
   }, []);
 
   return (
@@ -135,9 +150,10 @@ export default function EditUser() {
     >
       {({ errors, touched, isSubmitting }) => {
         return (
-          <Form id="carUpsert">
+          <Form id="carUpsert" className="upsertforms">
             <h1>{isAddMode ? "Add Car" : "Edit Car"}</h1>
-
+            <Row>
+            <Col>
             <label>Brand</label>
             <Field
               name="brand"
@@ -198,7 +214,8 @@ export default function EditUser() {
               <option value="0">Sport</option>
               <option value="2">Retro</option>
             </Field>
-
+              </Col>
+              <Col>
             <label>Year Of Procuction</label>
             <Field
               type="number"
@@ -240,6 +257,8 @@ export default function EditUser() {
                 (errors.imagePath && touched.imagePath ? " is-invalid" : "")
               }
             />
+             </Col>
+            </Row>
             <div className="pt-3">
               <button
                 type="submit"

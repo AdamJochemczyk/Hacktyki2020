@@ -11,63 +11,70 @@ export default function CarManager() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let history = useHistory();
-  const fetchCars = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get("https://localhost:44390/api/cars");
-      setData(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
-        history.goBack()
-      );
-    }
-  };
+
   useEffect(() => {
+    async function fetchCars() {
+      console.log("useEffect works now");
+      try {
+        setIsLoading(true);
+        const response = await axios.get("https://localhost:44390/api/cars");
+        setData(response.data);
+        setIsLoading(false);
+        return response;
+      } catch (error) {
+        Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
+          history.goBack()
+        );
+      }
+    }
     fetchCars();
   }, []);
 
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
-      confirmButton: 'btn btn-success',
-      cancelButton: 'btn btn-danger'
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-danger",
     },
-    buttonsStyling: false
-  })
+    buttonsStyling: false,
+  });
 
   function deleteCar(id) {
-    swalWithBootstrapButtons.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, cancel!',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.value) {
-        axios({
-          url: "https://localhost:44390/api/cars/" + id,
-          method: "DELETE",
-        }).catch((error) => {
-            Swal.fire("Oops", "Something went wrong when deleting. Error:"+error.response, "error");
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.value) {
+          axios({
+            url: "https://localhost:44390/api/cars/" + id,
+            method: "DELETE",
+          }).catch((error) => {
+            Swal.fire(
+              "Oops",
+              "Something went wrong when deleting. Error:" + error.response,
+              "error"
+            );
           });
-        swalWithBootstrapButtons.fire(
-          'Deleted!',
-          'Your car has been deleted.',
-          'success'
-        )
-        setTimeout(()=>fetchCars(),2000);
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        swalWithBootstrapButtons.fire(
-          'Cancelled',
-          'Your car is safe :)',
-          'error'
-        )
-      }
-    })
+          swalWithBootstrapButtons.fire(
+            "Deleted!",
+            "Your car has been deleted.",
+            "success"
+          ).then(()=>window.location.reload(false));
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            "Your car is safe :)",
+            "error"
+          );
+        }
+      });
+
   }
 
   const columns = useMemo(
@@ -123,7 +130,7 @@ export default function CarManager() {
     <div>
       {isLoading ? (
         <div className="loader">
-          <Loader type="Oval" color="#00BFFF" height={80} width={80} />
+          <Loader type="Oval" color="#00BFFF" />
         </div>
       ) : (
         <CarManagerTable columns={columns} data={data} />

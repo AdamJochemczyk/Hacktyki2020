@@ -97,22 +97,21 @@ export default function EditUser() {
   }
   const [user, setUser] = useState();
 
-  const fetchUser = async () => {
-    if (!isAddMode) {
-      try {
-        await axios
-          .get("https://localhost:44390/api/users/" + id)
-          .then((res) => {
-            console.log(res.data)
-            setUser(res.data);
-          });
-      } catch (error) {
-        Swal.fire("Oops...", "Something went wrong when fetching", "error")
+  useEffect(() => {
+    async function fetchUser(){
+      if (!isAddMode) {
+        try {
+          await axios
+            .get("https://localhost:44390/api/users/" + id)
+            .then((res) => {
+              console.log(res.data)
+              setUser(res.data);
+            });
+        } catch (error) {
+          Swal.fire("Oops...", "Something went wrong when fetching", "error")
+        }
       }
     }
-  };
-
-  useEffect(() => {
     fetchUser();
   }, []);
 
@@ -125,7 +124,7 @@ export default function EditUser() {
     >
       {({ errors, touched, isSubmitting }) => {
         return (
-          <Form id="userUpsert">
+          <Form id="userUpsert" className="upsertforms">
             <h1>{isAddMode ? "Add User" : "Edit User"}</h1>
 
             <label>First Name</label>

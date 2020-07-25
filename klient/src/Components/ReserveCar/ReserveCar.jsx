@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import CardCar from "../CarCard/CardCar";
-import { Col, Form, Input, Row, Container } from "reactstrap";
+import CardCar from "../CardCar/CardCar";
+import { Col, Form, Input, Row, Button } from "reactstrap";
 import Loader from "react-loader-spinner";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
@@ -10,21 +10,21 @@ export default function ReserveCar() {
   const [data, setData] = useState([]);
   const [filters, setFilter] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  let history = useHistory();
+  const history = useHistory();
 
-  const fetchCars = async () => {
-    try {
-      setIsLoading(true);
-      const response = await axios.get("https://localhost:44390/api/cars");
-      setData(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
-        history.goBack()
-      );
-    }
-  };
   useEffect(() => {
+    async function fetchCars(){
+      try {
+        setIsLoading(true);
+        const response = await axios.get("https://localhost:44390/api/cars");
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
+          history.goBack()
+        );
+      }
+    }
     fetchCars();
   }, []);
 
@@ -34,6 +34,16 @@ export default function ReserveCar() {
       [event.target.name]: event.target.value,
     });
   }
+
+  function reloadDataWithFilters() {
+    console.log("clicked");
+    let filteredData = {
+      carId: 55,
+      brand: "test",
+    };
+    setData(filteredData);
+  }
+
   function CreateCarCard(data) {
     return (
       <CardCar
@@ -53,13 +63,13 @@ export default function ReserveCar() {
     <div>
       {isLoading ? (
         <div className="loader">
-          <Loader type="Oval" color="#00BFFF" height={80} width={80} />
+          <Loader type="Oval" color="#00BFFF" />
         </div>
       ) : (
-        <Container>
-          <Row>
+        <div>
+          <Col sm={2} style={{ float: "left", textAlign: "center" }}>
             <Form>
-              <h1>Search your car</h1>
+              Search your car by:
               <Input
                 type="text"
                 placeholder="Brand"
@@ -67,10 +77,13 @@ export default function ReserveCar() {
                 value={filters.brand}
                 onChange={handleChange}
               />
+              <Button onClick={reloadDataWithFilters}>Click me!</Button>
             </Form>
-          </Row>
-          <Row>{data.map(CreateCarCard)}</Row>
-        </Container>
+          </Col>
+          <Col>
+            <Row>{data.map(CreateCarCard)}</Row>
+          </Col>
+        </div>
       )}
     </div>
   );
