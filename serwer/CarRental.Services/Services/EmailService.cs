@@ -18,6 +18,7 @@ namespace CarRental.Services.Models.Email_Templates
         [Obsolete]
         public bool EmailAfterRegistration(CreateUserDto createUserDto)
         {
+            //Ask about this
             var claims = new List<Claim> {
                      new Claim(JwtRegisteredClaimNames.Jti,createUserDto.UserId.ToString()),
                      new Claim(JwtRegisteredClaimNames.Sub,createUserDto.FirstName),
