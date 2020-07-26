@@ -14,6 +14,7 @@ namespace CarRental.DAL.Entities
         public string MobileNumber { get; set; }
         public string EncodePassword { get; set; }
         public string StatusOfVerification { get; set; }
+        public RoleOfWorker RoleOfUser { get; set; }
         public User(string firstName, string lastName, string numberIdentificate, string email,
             string mobileNumber)
         {
@@ -23,6 +24,7 @@ namespace CarRental.DAL.Entities
             Email = email;
             MobileNumber = mobileNumber;
             DateCreated = DateTime.Now;
+            RoleOfUser = RoleOfWorker.Worker;
             StatusOfVerification = "Processing...";
         }
         public User()

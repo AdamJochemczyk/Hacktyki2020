@@ -1,17 +1,28 @@
 import React, { useMemo } from "react";
 import { Input } from "reactstrap";
 import FaultManagerTable from "../FaultManagerTable/FaultManagerTable";
+import Swal from 'sweetalert2'
+import {useHistory} from "react-router-dom"
 
 export default function FaultManager() {
   /* const [data, setData] = useState([]);
+  const [isLoading, setIsLoading]=useState(false)
 
-// Using useEffect to call the API once mounted and set the data
-useEffect(() => {
-(async () => {
-  const result = await axios("https://api.tvmaze.com/search/shows?q=snow");
-  setData(result.data);
-})();
-}, []);*/
+  useEffect(() => {
+    async function fetchFaults(){
+       try {
+      setIsLoading(true)
+      const response = await axios.get(API);
+      setData(response.data);
+      setIsLoading(false)
+    } catch (error) {
+      Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
+        history.goBack()
+      );
+    }
+    }
+    fetchFaults()
+    },[]); */
 
   const data = [
     {

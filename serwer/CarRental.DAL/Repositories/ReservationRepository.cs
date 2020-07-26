@@ -45,5 +45,13 @@ namespace CarRental.DAL.Repositories
                 || (p.RentalDate >= reservation.RentalDate && p.ReturnDate <= reservation.ReturnDate))
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Reservation>> FindAllByUserIdAsync(int userId)
+        {
+            var result = await context.Reservations
+                .Where(p => p.UserId == userId)
+                .ToListAsync();
+            return result;
+        }
     }
 }

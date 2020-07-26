@@ -3,36 +3,74 @@ import { Button } from "reactstrap";
 import UserManagerTable from "../UserManagerTable/UserManagerTable";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Loader from "react-loader-spinner";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
 
 export default function UserManager() {
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  let history = useHistory();
 
-  const fetchUsers = async () => {
-    try {
-      const response = await axios.get("https://localhost:44390/api/users");
-      setData(response.data);
-    } catch (e) {
-      console.log(e);
-      setData(data);
-    }
-  }
   useEffect(() => {
+    async function fetchUsers() {
+      try {
+        setIsLoading(true);
+        const response = await axios.get("https://localhost:44390/api/users");
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
+          history.goBack()
+        );
+      }
+    }
     fetchUsers();
-    },[]);
+  }, []);
 
-  async function deleteUser(id) {
-    await axios({
-      url: "https://localhost:44390/api/users/" + id,
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (res.status === 200) {
-          alert("Deleted");
-          window.location.reload(false);
-        }
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-danger",
+    },
+    buttonsStyling: false,
+  });
+
+  function deleteUser(id) {
+    swalWithBootstrapButtons
+      .fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true,
       })
-      .catch((error) => {
-        console.log(error.response);
+      .then((result) => {
+        if (result.value) {
+          axios({
+            url: "https://localhost:44390/api/users/" + id,
+            method: "DELETE",
+          }).catch((error) => {
+            Swal.fire(
+              "Oops",
+              "Something went wrong when deleting. Error:" + error.response,
+              "error"
+            );
+          });
+          swalWithBootstrapButtons.fire(
+            "Deleted!",
+            "Your user has been deleted.",
+            "success"
+          ).then(()=>window.location.reload(false));
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          swalWithBootstrapButtons.fire(
+            "Cancelled",
+            "Your user is safe :)",
+            "error"
+          );
+        }
       });
   }
 
@@ -79,7 +117,13 @@ export default function UserManager() {
   );
   return (
     <div>
-      <UserManagerTable columns={columns} data={data} />
+      {isLoading ? (
+        <div className="loader">
+          <Loader type="Oval" color="#00BFFF" />
+        </div>
+      ) : (
+        <UserManagerTable columns={columns} data={data} />
+      )}
     </div>
   );
 }
