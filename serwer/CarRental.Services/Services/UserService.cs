@@ -52,25 +52,26 @@ namespace CarRental.Services.Services
             var user = await _userRepository.FindByIdAsync(Id);
             return _mapper.Map<UsersDto>(user);
         }
-        
+
         public async Task<UsersDto> UpdateUser(UsersDto usersDto)
         {
-         
-                var user = await _userRepository.FindByIdAsync(usersDto.UserId);
-                var check_user = await _userRepository.FindByLogin(usersDto.Email);
-                if (check_user == null)
-                {
-                    user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);
-                    _userRepository.Update(user);
-                    await _userRepository.SaveChangesAsync();
-                }
-               // else
-                               
-                user = await _userRepository.FindByIdAsync(usersDto.UserId);
+
+            var user = await _userRepository.FindByIdAsync(usersDto.UserId);
+            var check_user = await _userRepository.FindByLogin(usersDto.Email);
+            if (check_user == null)
+            {
+                user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);
+                _userRepository.Update(user);
+                await _userRepository.SaveChangesAsync();
+            }
+            else
                 return _mapper.Map<UsersDto>(user);
-          
+
+            user = await _userRepository.FindByIdAsync(usersDto.UserId);
+            return _mapper.Map<UsersDto>(user);
+
         }
-       
+
 
     }
 }
