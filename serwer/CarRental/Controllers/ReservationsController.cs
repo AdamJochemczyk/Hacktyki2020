@@ -51,7 +51,6 @@ namespace CarRental.API.Controllers
             if (await service.ReservationCanBeUpdatedAsync(reservationUpdateDto))
             {
                 var entity = await service.UpdateReservationAsync(reservationUpdateDto);
-                //var entity = await service.GetReservationByIdAsync(id);
                 return Ok(entity);
             }
             return BadRequest();

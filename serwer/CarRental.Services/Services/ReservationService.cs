@@ -28,7 +28,8 @@ namespace CarRental.Services.Services
                 UserId = reservationCreateDto.UserId,
                 CarId = reservationCreateDto.CarId,
                 RentalDate = reservationCreateDto.RentalDate,
-                ReturnDate = reservationCreateDto.ReturnDate
+                ReturnDate = reservationCreateDto.ReturnDate,
+                IsFinished = false
             };
             repository.Create(entity);
             await repository.SaveChangesAsync();
@@ -58,7 +59,7 @@ namespace CarRental.Services.Services
         public async Task<ReservationDto> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
         {
             var entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
-            entity.Update(reservationUpdateDto.RentalDate, reservationUpdateDto.ReturnDate, reservationUpdateDto.CarId);
+            entity.Update(reservationUpdateDto.RentalDate, reservationUpdateDto.ReturnDate, reservationUpdateDto.IsFinished);
             repository.Update(entity);
             await repository.SaveChangesAsync();
             entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
@@ -67,7 +68,8 @@ namespace CarRental.Services.Services
 
         public async Task<bool> ReservationCanBeCreatedAsync(ReservationCreateDto reservationDto)
         {
-            var entity = new Reservation() {
+            var entity = new Reservation()
+            {
                 RentalDate = reservationDto.RentalDate,
                 ReturnDate = reservationDto.ReturnDate,
                 CarId = reservationDto.CarId
@@ -81,10 +83,17 @@ namespace CarRental.Services.Services
             {
                 ReservationId = reservationDto.ReservationId,
                 RentalDate = reservationDto.RentalDate,
-                ReturnDate = reservationDto.ReturnDate, 
+                ReturnDate = reservationDto.ReturnDate,
                 CarId = reservationDto.CarId
             };
             return await repository.ReservationCanBeUpdatedAsync(entity);
         }
+
+        public async Task<IEnumerable<ReservationDto>> GetAllReservationsByUserIdAsync(int id)
+        {
+            var entities = await repository.FindAllByUserIdAsync(id);
+            return mapper.Map<IEnumerable<ReservationDto>>(entities);
+        }
+
     }
 }
