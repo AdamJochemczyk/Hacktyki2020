@@ -25,7 +25,7 @@ namespace CarRental.API.Controllers
             return Ok(entities);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetById")]
         public async Task<IActionResult> GetCarByIdAsync(int id)
         {
             var entity = await service.GetCarByIdAsync(id);
@@ -33,10 +33,16 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCatAsync(CarCreateDto carDto)
+        public async Task<IActionResult> CreateCarAsync(CarCreateDto carDto)
         {
             var result = await service.CreateCarAsync(carDto);
-            return Ok(result);
+            if (result == null)
+                return BadRequest();
+
+            return CreatedAtRoute(
+                routeName: "GetById",
+                routeValues: new { id = result.CarId },
+                value: result);
         }
 
         [HttpPut("{id}")]
@@ -51,6 +57,9 @@ namespace CarRental.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarAsync(int id)
         {
+            var car = await service.GetCarByIdAsync(id);
+            if (car == null)
+                return NotFound();
             await service.DeleteCar(id);
             return Ok();
         }
