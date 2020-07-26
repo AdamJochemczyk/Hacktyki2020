@@ -63,9 +63,7 @@ namespace CarRental.Services.Services
                     user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);
                     _userRepository.Update(user);
                     await _userRepository.SaveChangesAsync();
-                }
-               // else
-                               
+                }                               
                 user = await _userRepository.FindByIdAsync(usersDto.UserId);
                 return _mapper.Map<UsersDto>(user);
           
