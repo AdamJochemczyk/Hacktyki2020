@@ -28,6 +28,7 @@ namespace CarRental.API.Controllers
                 return BadRequest("This Email already exists");
             return Ok(user);
         }
+
         [HttpGet]
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
