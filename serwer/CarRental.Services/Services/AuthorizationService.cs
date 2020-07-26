@@ -85,6 +85,8 @@ namespace CarRental.Services.Services
             //Find by id and update password
             var user = await _userRepository.FindByIdDetails(Int32.Parse(token.Payload.Jti));
             user.SetPassword(EncodePasswordToBase64(updateUserPassword.EncodePassword));
+            _userRepository.Update(user);
+           await _userRepository.SaveChangesAsync();
             return true;
         }
      
@@ -92,17 +94,10 @@ namespace CarRental.Services.Services
         {
             var password =EncodePasswordToBase64(userLoginDto.EncodePassword);
             var user = await _userRepository.FindByLogin(userLoginDto.Email);
-            try
-            {
-                if (user.Email == null)
-                    throw new Exception("Email not correct");
-                if (user.EncodePassword != password)
-                    throw new Exception("Password not correct");
-                //
-            }
-            catch (InvalidCastException) { return "failed"; }
             var claims = new List<Claim> {
-                     new Claim(userLoginDto.Email, userLoginDto.EncodePassword,userLoginDto.RoleOfWorker.ToString()),
+                     new Claim(JwtRegisteredClaimNames.Email,userLoginDto.Email),
+                     new Claim(JwtRegisteredClaimNames.Sub , userLoginDto.EncodePassword),
+                     new Claim(JwtRegisteredClaimNames.Jti,userLoginDto.RoleOfWorker.ToString())
             };
           
             var jwt = new JwtSecurityToken(

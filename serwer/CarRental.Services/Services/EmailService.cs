@@ -70,16 +70,10 @@ namespace CarRental.Services.Models.Email_Templates
             //    message.ReplyTo =replyEmail;
                 message.Subject = "Car Renting";
                 message.Body = "Something";
-                try
-                {
-                    smpt.Send(mailMessage);
-                }catch(SmtpFailedRecipientException)
-                {
-                      return false;
-
-                }
-                return true;
+                smpt.Send(mailMessage);           
+                
             }
+            return true;
         }
     }
 }
