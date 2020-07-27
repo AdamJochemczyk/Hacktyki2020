@@ -1,4 +1,5 @@
-﻿using CarRental.Services.Models.User;
+﻿using CarRental.DAL.Entities;
+using CarRental.Services.Models.User;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace CarRental.Services.Validators
 {
-    public class UserLoginValidatorDto : AbstractValidator<UserLoginDto>
+    public class UserLoginValidatorDto : AbstractValidator<User>
     {
         public UserLoginValidatorDto() { 
         RuleFor(p=>p).Must(p => p.Email != null).WithMessage("Email not correct");

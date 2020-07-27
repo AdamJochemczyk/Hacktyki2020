@@ -53,9 +53,6 @@ namespace CarRental.Services.Services
         }
         public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
         {
-
-            if (createUserDto == null)
-                return createUserDto;
             var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.NumberIdentificate,
                 createUserDto.Email, createUserDto.MobileNumber);
                 var check_user = await _userRepository.FindByLogin(createUserDto.Email);
@@ -68,7 +65,8 @@ namespace CarRental.Services.Services
             }
             else
                 return createUserDto;
-                return _mapper.Map<CreateUserDto>(new_user);
+                
+            return _mapper.Map<CreateUserDto>(new_user);
 
 
         }
