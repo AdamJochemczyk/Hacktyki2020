@@ -10,7 +10,7 @@ namespace CarRental.Services.Models.User
 
         public string EncodePassword { get; set; }
         public string ConfirmEncodePassword { get; set; }
-        public string Token { get; set; }
+        public string CodeOfVerification { get; set; }
 
     }
 }

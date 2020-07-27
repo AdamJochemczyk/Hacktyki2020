@@ -16,5 +16,7 @@ namespace CarRental.Services.Models.User
         public DateTime DateCreated { get; set; }
         public string EncdodePassword { get; set; }
         public int RoleOfWorker { get; set; }
+        public string CodeOfVerification { get; set; }
+
     }
 }

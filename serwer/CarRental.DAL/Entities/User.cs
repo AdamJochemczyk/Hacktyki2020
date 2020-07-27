@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace CarRental.DAL.Entities
@@ -15,6 +16,7 @@ namespace CarRental.DAL.Entities
         public string EncodePassword { get; set; }
         public string StatusOfVerification { get; set; }
         public RoleOfWorker RoleOfUser { get; set; }
+        public string CodeOfVerification { get; set; }
         public User(string firstName, string lastName, string numberIdentificate, string email,
             string mobileNumber)
         {
@@ -26,6 +28,14 @@ namespace CarRental.DAL.Entities
             DateCreated = DateTime.Now;
             RoleOfUser = RoleOfWorker.Worker;
             StatusOfVerification = "Processing...";
+            
+            using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
+            {
+                byte[] tokenData = new byte[32];
+                rng.GetBytes(tokenData);
+
+                CodeOfVerification = Convert.ToBase64String(tokenData);
+            }
         }
         public User()
         {
