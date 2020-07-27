@@ -4,14 +4,16 @@ using CarRental.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarRental.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200727172052_ChangeLocationProperties")]
+    partial class ChangeLocationProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +70,7 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 7, 27, 19, 21, 47, 347, DateTimeKind.Local).AddTicks(5344),
+                            DateCreated = new DateTime(2020, 7, 27, 19, 20, 51, 632, DateTimeKind.Local).AddTicks(4669),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             Model = "Q5",
@@ -149,18 +151,6 @@ namespace CarRental.DAL.Migrations
                     b.HasIndex("ReservationId");
 
                     b.ToTable("Locations");
-
-                    b.HasData(
-                        new
-                        {
-                            LocationId = 1,
-                            DateCreated = new DateTime(2020, 7, 27, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(5023),
-                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsActual = true,
-                            Latitude = 50.5,
-                            Longitude = 43.299999999999997,
-                            ReservationId = 1
-                        });
                 });
 
             modelBuilder.Entity("CarRental.DAL.Entities.Reservation", b =>
@@ -201,19 +191,6 @@ namespace CarRental.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reservations");
-
-                    b.HasData(
-                        new
-                        {
-                            ReservationId = 1,
-                            CarId = 1,
-                            DateCreated = new DateTime(2020, 7, 27, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(3404),
-                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsFinished = false,
-                            RentalDate = new DateTime(2020, 7, 29, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(2206),
-                            ReturnDate = new DateTime(2020, 8, 1, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(2540),
-                            UserId = 1
-                        });
                 });
 
             modelBuilder.Entity("CarRental.DAL.Entities.User", b =>
@@ -264,7 +241,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 7, 27, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(1347),
+                            DateCreated = new DateTime(2020, 7, 27, 19, 20, 51, 637, DateTimeKind.Local).AddTicks(5194),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
                             LastName = "Doe",

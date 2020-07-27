@@ -10,11 +10,8 @@ namespace CarRental.DAL.Repositories
 {
     public class ReservationRepository : RepositoryBase<Reservation>, IReservationRepository
     {
-        private readonly ApplicationDbContext context;
         public ReservationRepository(ApplicationDbContext context) : base(context)
-        {
-            this.context = context;
-        }
+        { }
 
         public async Task<bool> ReservationCanBeCreatedAsync(Reservation reservation)
         {

@@ -2,22 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarRental.DAL.Entities
+namespace CarRental.Services.Models.Location
 {
-    public class Location : BaseEntity
+    public class LocationDto
     {
-        //public int LocationId { get; set; }
-        //public int CarId { get; set; }
-        //public string Position { get; set; }
-
-        //public Car Car { get; set; }
-
         public int LocationId { get; set; }
         public int ReservationId { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool IsActual { get; set; }
-
-        public Reservation Reservation { get; set; }
     }
 }
