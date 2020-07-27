@@ -8,22 +8,22 @@ import * as Yup from "yup";
 
 export default function Login() {
   let initialValues = {
-    encodePassword: "",
     email: "",
+    encodePassword: "",
   };
 
   const validationSchema = Yup.object().shape({
     encodePassword: Yup.string().required("Required"),
-    email: Yup.string().email("This isn't email"),
+    email: Yup.string().email("This isn't email").required("Required"),
   });
 
-  function signIn(fields) {
-    //TODO:
-    //signIn API to redirect when token is returned
+  async function signIn(fields) {
+  console.log("signIn -> fields", fields)
+        
     try {
-      axios({
-        url: "",
-        method: "",
+      const response = await axios({
+        url: "https://localhost:44390/api/authorization/signIn",
+        method: "POST",
         data: fields,
       }).catch((error) => {
         if (error.response) {
@@ -45,6 +45,7 @@ export default function Login() {
           );
         }
       });
+      console.log("signIn -> response", response.data)
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error");
     }

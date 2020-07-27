@@ -49,7 +49,7 @@ export default function EditUser() {
   function createUser(fields, setSubmitting) {
     try{
       axios({
-        url: "https://localhost:44390/api/authorization",
+        url: "https://localhost:44390/api/authorization/register",
         method: "POST",
         data: fields,
       }).catch((error) =>{
@@ -88,7 +88,7 @@ export default function EditUser() {
         }
         setSubmitting(false);
       });
-      Swal.fire("Good job!", 'You succesfully edited a car!', 'success')
+      Swal.fire("Good job!", 'You succesfully edited a user!', 'success')
       setSubmitting(true);
       setTimeout(()=>history.push('/user-manager'),2000)
     } catch (error) {
@@ -160,6 +160,7 @@ export default function EditUser() {
             <Field
               name="email"
               type="text"
+              disabled={!isAddMode}
               className={
                 "form-control" +
                 (errors.email && touched.email ? " is-invalid" : "")

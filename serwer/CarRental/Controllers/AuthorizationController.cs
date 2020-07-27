@@ -19,7 +19,7 @@ namespace CarRental.API.Controllers
         {
             _authorizationService = authorizationService;
         }
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(CreateUserDto createUserDto)
         {
             if (createUserDto == null) return BadRequest("User is null");
@@ -28,13 +28,15 @@ namespace CarRental.API.Controllers
                 return BadRequest("This Email already exists");
             return Ok(user);
         }
-        [HttpGet]
+
+        [HttpPost("signIn")]
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
             var cos = await _authorizationService.SignIn(userLoginDto);
-            //{
-                //return BadRequest("Failed Login");
-           // }
+            if (cos == "Email is not correct")
+                return BadRequest("Email is not correct");
+           else if (cos == "Password is not correct")
+                return BadRequest("Password is not correct");
             return Ok(cos);
         }
         [HttpPut]

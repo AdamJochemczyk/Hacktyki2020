@@ -76,6 +76,7 @@ namespace CarRental.API.StartupExtensions
             services.AddTransient<IValidator<CarDto>, CarDtoValidator>();
             services.AddTransient<IValidator<CarCreateDto>, CarCreateDtoValidator>();
             services.AddTransient<IValidator<LocationCreateDto>, LocationCreateDtoValidator>();
+            services.AddTransient<IValidator<UserLoginDto>, UserLoginValidatorDto>();
             return services;
         }
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)

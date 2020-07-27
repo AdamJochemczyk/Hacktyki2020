@@ -44,7 +44,7 @@ namespace CarRental.Services.Models.Email_Templates
                             <h2>Login: " + createUserDto.Email + @"
                              </h2>
                              <p>That's your temporary password, you can change your password followed this link.</p>
-                              <div style='text-align:center'><a href='http://localhost:3000/set-password/"+encodedJwt+@"' style='font-size:30px'>Change Password</a></div>
+                              <div style='text-align:center'><a href='http://localhost:3000/set-password/"+createUserDto.CodeOfVerification+@"' style='font-size:30px'>Change Password</a></div>
                               <p style='font-family: Arial,sans-serif'>We appreciate that you are with us and using service<br>Have a nice day,<br>Car Rental Service</p>
                             <img src=""cid:WinLogo"" />
                                     </body>
@@ -70,16 +70,10 @@ namespace CarRental.Services.Models.Email_Templates
             //    message.ReplyTo =replyEmail;
                 message.Subject = "Car Renting";
                 message.Body = "Something";
-                try
-                {
-                    smpt.Send(mailMessage);
-                }catch(SmtpFailedRecipientException)
-                {
-                      return false;
-
-                }
-                return true;
+                smpt.Send(mailMessage);           
+                
             }
+            return true;
         }
     }
 }
