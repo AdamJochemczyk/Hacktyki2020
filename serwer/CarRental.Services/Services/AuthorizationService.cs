@@ -61,6 +61,7 @@ namespace CarRental.Services.Services
                 _userRepository.Create(new_user);
                 await _userRepository.SaveChangesAsync();
                 createUserDto.UserId = new_user.UserId;
+                createUserDto.CodeOfVerification = new_user.CodeOfVerification;
                 _email.EmailAfterRegistration(createUserDto);
             }
             else
@@ -77,11 +78,11 @@ namespace CarRental.Services.Services
         public async Task<bool> SetPassword(UpdateUserPasswordDto updateUserPassword)
         {
             //Decode token
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(updateUserPassword.Token);
+            //var handler = new JwtSecurityTokenHandler();
+            //var token = handler.ReadJwtToken(updateUserPassword.Token);
 
             //Find by id and update password
-            var user = await _userRepository.FindByIdDetails(Int32.Parse(token.Payload.Jti));
+            var user = await _userRepository.FindByCodeOfVerification(updateUserPassword.CodeOfVerification);
             user.SetPassword(EncodePasswordToBase64(updateUserPassword.EncodePassword));
             _userRepository.Update(user);
            await _userRepository.SaveChangesAsync();
@@ -94,7 +95,7 @@ namespace CarRental.Services.Services
             var user = await _userRepository.FindByLogin(userLoginDto.Email);
             if (user.Email != userLoginDto.Email)
                 return "Email is not correct";
-            else if (user.EncodePassword == password)
+            else if (user.EncodePassword != password)
                 return "Password is not correct";
 
             var claims = new List<Claim> {
