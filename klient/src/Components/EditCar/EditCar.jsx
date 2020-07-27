@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
+import { Row, Col } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 export default function EditUser() {
   const { id } = useParams();
   const isAddMode = !id;
-  let history=useHistory()
+  let history = useHistory();
+  const BASE_URL = process.env.REACT_CAR_API_URL;
 
   let initialValues = {
     brand: "",
@@ -44,7 +46,8 @@ export default function EditUser() {
       .max(date.getFullYear()),
   });
 
-  function onSubmit(fields, {setSubmitting} ) {
+  function onSubmit(fields, { setSubmitting }) {
+    console.log(BASE_URL);
     if (isAddMode) {
       createCar(fields, setSubmitting);
     } else {
@@ -52,77 +55,96 @@ export default function EditUser() {
     }
   }
 
-  function createCar(fields, setSubmitting) {
-      let cartype = parseInt(fields.typeOfCar);
-      fields.typeOfCar = cartype;
-      try{
-      axios({
+  async function createCar(fields, setSubmitting) {
+    let cartype = parseInt(fields.typeOfCar);
+    fields.typeOfCar = cartype;
+    try {
+      await axios({
         url: "https://localhost:44390/api/cars",
         method: "POST",
         data: fields,
-      }).catch((error) =>{
+      }).catch((error) => {
         if (error.response) {
-          Swal.fire("Oops...", error.response.headers, "error")
+          Swal.fire("Oops...", error.response.headers, "error");
         } else if (error.request) {
-          Swal.fire("Oops...", "Error request was made but no response was recived. Error request: "+error.request, 'error');
+          Swal.fire(
+            "Oops...",
+            "Error request was made but no response was recived. Error request: " +
+              error.request,
+            "error"
+          );
         } else {
-          Swal.fire("Oops...", "Something happened in setting up the request that triggered an Error. Error massage: "+error.message, 'error');
+          Swal.fire(
+            "Oops...",
+            "Something happened in setting up the request that triggered an Error. Error massage: " +
+              error.message,
+            "error"
+          );
         }
         setSubmitting(false);
       });
-      Swal.fire("Good job!", 'You succesfully added new car!', 'success')
-      document.getElementById("carUpsert").reset()
-    }catch(error){
-      Swal.fire("Oops...", "Something went wrong...", "error")
-      console.log(error)
+      Swal.fire("Good job!", "You succesfully added new car!", "success");
+      document.getElementById("carUpsert").reset();
+    } catch (error) {
+      Swal.fire("Oops...", "Something went wrong...", "error");
+      console.log(error);
     }
   }
 
-  function updateCar(id, fields, setSubmitting) {
+  async function updateCar(id, fields, setSubmitting) {
     fields.carId = parseInt(id);
     let cartype = parseInt(fields.typeOfCar);
     fields.typeOfCar = cartype;
     console.log(fields);
     try {
-      axios({
+      await axios({
         url: "https://localhost:44390/api/cars/" + id,
         method: "PUT",
         data: fields,
-      }).catch((error) =>{
+      }).catch((error) => {
         if (error.response) {
-          Swal.fire("Oops...", error.response.headers, "error")
+          Swal.fire("Oops...", error.response.headers, "error");
         } else if (error.request) {
-          Swal.fire("Oops...", "Error request was made but no response was recived. Error request: "+error.request, 'error');
+          Swal.fire(
+            "Oops...",
+            "Error request was made but no response was recived. Error request: " +
+              error.request,
+            "error"
+          );
         } else {
-          Swal.fire("Oops...", "Something happened in setting up the request that triggered an Error. Error massage: "+error.message, 'error');
+          Swal.fire(
+            "Oops...",
+            "Something happened in setting up the request that triggered an Error. Error massage: " +
+              error.message,
+            "error"
+          );
         }
         setSubmitting(false);
       });
-      Swal.fire("Good job!", 'You succesfully edited a car!', 'success')
+      Swal.fire("Good job!", "You succesfully edited a car!", "success");
       setSubmitting(true);
-      setTimeout(()=>history.push('/car-manager'),2000)
+      setTimeout(() => history.push("/car-manager"), 2000);
     } catch (error) {
-      Swal.fire("Oops...", "Something went wrong", "error")
+      Swal.fire("Oops...", "Something went wrong", "error");
     }
   }
   const [car, setCar] = useState();
 
-  const fetchCar = async () => {
-    if (!isAddMode) {
-      try {
-        await axios
-          .get("https://localhost:44390/api/cars/" + id)
-          .then((res) => {
-            console.log(res.data)
-            setCar(res.data);
-          });
-      } catch (error) {
-        alert(error.message)
+  useEffect(() => {
+    async function fetchCar() {
+      if (!isAddMode) {
+        try {
+          await axios
+            .get("https://localhost:44390/api/cars/" + id)
+            .then((res) => {
+              console.log(res.data);
+              setCar(res.data);
+            });
+        } catch (error) {
+          alert(error.message);
+        }
       }
     }
-  };
-
-  useEffect(() => {
     fetchCar();
   }, []);
 
@@ -135,111 +157,115 @@ export default function EditUser() {
     >
       {({ errors, touched, isSubmitting }) => {
         return (
-          <Form id="carUpsert">
+          <Form id="carUpsert" className="upsertforms">
             <h1>{isAddMode ? "Add Car" : "Edit Car"}</h1>
+            <Row>
+              <Col>
+                <label>Brand</label>
+                <Field
+                  name="brand"
+                  className={
+                    "form-control" +
+                    (errors.brand && touched.brand ? " is-invalid" : "")
+                  }
+                />
+                <ErrorMessage
+                  name="brand"
+                  component="div"
+                  className="invalid-feedback"
+                />
 
-            <label>Brand</label>
-            <Field
-              name="brand"
-              className={
-                "form-control" +
-                (errors.brand && touched.brand ? " is-invalid" : "")
-              }
-            />
-            <ErrorMessage
-              name="brand"
-              component="div"
-              className="invalid-feedback"
-            />
+                <label>Registration Number</label>
+                <Field
+                  name="registrationNumber"
+                  type="text"
+                  className={
+                    "form-control" +
+                    (errors.registrationNumber && touched.registrationNumber
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <ErrorMessage
+                  name="registrationNumber"
+                  component="div"
+                  className="invalid-feedback"
+                />
 
-            <label>Registration Number</label>
-            <Field
-              name="registrationNumber"
-              type="text"
-              className={
-                "form-control" +
-                (errors.registrationNumber && touched.registrationNumber
-                  ? " is-invalid"
-                  : "")
-              }
-            />
-            <ErrorMessage
-              name="registrationNumber"
-              component="div"
-              className="invalid-feedback"
-            />
+                <label>Model</label>
+                <Field
+                  name="model"
+                  type="text"
+                  className={
+                    "form-control" +
+                    (errors.model && touched.model ? " is-invalid" : "")
+                  }
+                />
+                <ErrorMessage
+                  name="model"
+                  component="div"
+                  className="invalid-feedback"
+                />
 
-            <label>Model</label>
-            <Field
-              name="model"
-              type="text"
-              className={
-                "form-control" +
-                (errors.model && touched.model ? " is-invalid" : "")
-              }
-            />
-            <ErrorMessage
-              name="model"
-              component="div"
-              className="invalid-feedback"
-            />
-
-            <label>Type Of Car</label>
-            <Field
-              name="typeOfCar"
-              as="select"
-              className={
-                "form-control" +
-                (errors.typeOfCar && touched.typeOfCar ? " is-invalid" : "")
-              }
-            >
-              <option selected>Choose type...</option>
-              <option value="1">Classic</option>
-              <option value="0">Sport</option>
-              <option value="2">Retro</option>
-            </Field>
-
-            <label>Year Of Procuction</label>
-            <Field
-              type="number"
-              name="yearOfProduction"
-              className={
-                "form-control" +
-                (errors.yearOfProduction && touched.yearOfProduction
-                  ? " is-invalid"
-                  : "")
-              }
-            />
-            <label>Number of sits</label>
-            <Field
-              type="number"
-              name="numberOfSits"
-              className={
-                "form-control" +
-                (errors.numberOfSits && touched.numberOfSits
-                  ? " is-invalid"
-                  : "")
-              }
-            />
-            <label>Number of doors</label>
-            <Field
-              type="number"
-              name="numberOfDoor"
-              className={
-                "form-control" +
-                (errors.numberOfDoor && touched.numberOfDoor
-                  ? " is-invalid"
-                  : "")
-              }
-            />
-            <label>Img src</label>
-            <Field
-              name="imagePath"
-              className={
-                "form-control" +
-                (errors.imagePath && touched.imagePath ? " is-invalid" : "")
-              }
-            />
+                <label>Type Of Car</label>
+                <Field
+                  name="typeOfCar"
+                  as="select"
+                  className={
+                    "form-control" +
+                    (errors.typeOfCar && touched.typeOfCar ? " is-invalid" : "")
+                  }
+                >
+                  <option selected>Choose type...</option>
+                  <option value="1">Classic</option>
+                  <option value="0">Sport</option>
+                  <option value="2">Retro</option>
+                </Field>
+              </Col>
+              <Col>
+                <label>Year Of Procuction</label>
+                <Field
+                  type="number"
+                  name="yearOfProduction"
+                  className={
+                    "form-control" +
+                    (errors.yearOfProduction && touched.yearOfProduction
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <label>Number of sits</label>
+                <Field
+                  type="number"
+                  name="numberOfSits"
+                  className={
+                    "form-control" +
+                    (errors.numberOfSits && touched.numberOfSits
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <label>Number of doors</label>
+                <Field
+                  type="number"
+                  name="numberOfDoor"
+                  className={
+                    "form-control" +
+                    (errors.numberOfDoor && touched.numberOfDoor
+                      ? " is-invalid"
+                      : "")
+                  }
+                />
+                <label>Img src</label>
+                <Field
+                  name="imagePath"
+                  className={
+                    "form-control" +
+                    (errors.imagePath && touched.imagePath ? " is-invalid" : "")
+                  }
+                />
+              </Col>
+            </Row>
             <div className="pt-3">
               <button
                 type="submit"

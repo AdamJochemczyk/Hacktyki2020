@@ -8,8 +8,9 @@ export default function FaultManager() {
   /* const [data, setData] = useState([]);
   const [isLoading, setIsLoading]=useState(false)
 
-const fetchFaults = async () => {
-    try {
+  useEffect(() => {
+    async function fetchFaults(){
+       try {
       setIsLoading(true)
       const response = await axios.get(API);
       setData(response.data);
@@ -19,9 +20,8 @@ const fetchFaults = async () => {
         history.goBack()
       );
     }
-  }
-  useEffect(() => {
-    fetchFaults();
+    }
+    fetchFaults()
     },[]); */
 
   const data = [

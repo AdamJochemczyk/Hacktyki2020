@@ -92,6 +92,11 @@ namespace CarRental.Services.Services
         {
             var password =EncodePasswordToBase64(userLoginDto.EncodePassword);
             var user = await _userRepository.FindByLogin(userLoginDto.Email);
+            if (user.Email != userLoginDto.Email)
+                return "Email is not correct";
+            else if (user.EncodePassword == password)
+                return "Password is not correct";
+
             var claims = new List<Claim> {
                      new Claim(JwtRegisteredClaimNames.Email,userLoginDto.Email),
                      new Claim(JwtRegisteredClaimNames.Sub , userLoginDto.EncodePassword),

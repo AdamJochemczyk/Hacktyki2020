@@ -1,50 +1,33 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import "../styles/componentsstyle.css";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Link } from "react-router-dom";
 import * as Yup from "yup";
 
-export default function SetPassword() {
-
-  const { token } = useParams();
-
+export default function Login() {
   let initialValues = {
-    encodePassword: '',
-    confirmEncodePassword: '',
-    token: token
-  }
+    email: "",
+    encodePassword: "",
+  };
 
   const validationSchema = Yup.object().shape({
-    encodePassword: Yup.string()
-      .min(8, "Too short!")
-      .required("Required"),
-      confirmEncodePassword: Yup.string()
-      .min(8, "Too short!")
-      .required("Required")
-      .oneOf([Yup.ref('encodePassword'),null], 'Passwords must match')
+    encodePassword: Yup.string().required("Required"),
+    email: Yup.string().email("This isn't email").required("Required"),
   });
 
-
-  function onSubmit(fields) {
-    if (fields.encodePassword===fields.confirmEncodePassword) {
-      sendPassword(fields);
-    }
-    else{
-      Swal.fire("Oops...", "Try again password weren't same", "error");
-    }
-  }
-
-  function sendPassword(fields) {
-
+  async function signIn(fields) {
+  console.log("signIn -> fields", fields)
+        
     try {
-      axios({
-        url: "https://localhost:44390/api/authorization",
-        method: "PUT",
+      const response = await axios({
+        url: "https://localhost:44390/api/authorization/signIn",
+        method: "POST",
         data: fields,
       }).catch((error) => {
         if (error.response) {
-          console.log(error)
+          console.log(error);
           Swal.fire("Oops...", error.response.headers, "error");
         } else if (error.request) {
           Swal.fire(
@@ -62,7 +45,7 @@ export default function SetPassword() {
           );
         }
       });
-      Swal.fire("Good job!", "You succesfully set your password!", "success");
+      console.log("signIn -> response", response.data)
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error");
     }
@@ -73,19 +56,42 @@ export default function SetPassword() {
       initialValues={initialValues}
       validationSchema={validationSchema}
       enableReinitialize
-      onSubmit={onSubmit}
+      onSubmit={signIn}
     >
       {({ errors, touched, isSubmitting }) => {
         return (
-          <Form id="setPasswordForm">
-            <h1>Set your password</h1>
+          <Form className="upsertforms" id="loginform">
+            <h1>Sign In</h1>
+            <img
+              src="https://image.flaticon.com/icons/svg/3190/3190448.svg"
+              alt="secure"
+              height="150"
+              width="150"
+            />
+            <label>Email</label>
+            <Field
+              name="email"
+              type="email"
+              className={
+                "form-control" +
+                (errors.email && touched.email ? " is-invalid" : "")
+              }
+            />
+            <ErrorMessage
+              name="email"
+              component="div"
+              className="invalid-feedback"
+            />
+
             <label>Password</label>
             <Field
               name="encodePassword"
               type="password"
               className={
                 "form-control" +
-                (errors.encodePassword && touched.encodePassword ? " is-invalid" : "")
+                (errors.encodePassword && touched.encodePassword
+                  ? " is-invalid"
+                  : "")
               }
             />
             <ErrorMessage
@@ -94,29 +100,12 @@ export default function SetPassword() {
               className="invalid-feedback"
             />
 
-            <label>Confirm password</label>
-            <Field
-              name="confirmEncodePassword"
-              type="password"
-              className={
-                "form-control" +
-                (errors.confirmEncodePassword && touched.confirmEncodePassword
-                  ? " is-invalid"
-                  : "")
-              }
-            />
-            <ErrorMessage
-              name="confirmEncodePassword"
-              component="div"
-              className="invalid-feedback"
-            />
-
             <div className="pt-3">
-              <button
-                type="submit"
-                className="btn btn-primary"
-              >
-                Set password
+              <Link to={"."} className="btn btn-link">
+                Cancel
+              </Link>
+              <button type="submit" className="btn btn-primary">
+                Log in
               </button>
             </div>
           </Form>

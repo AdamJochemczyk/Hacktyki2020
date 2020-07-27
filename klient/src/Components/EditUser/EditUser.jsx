@@ -49,7 +49,7 @@ export default function EditUser() {
   function createUser(fields, setSubmitting) {
     try{
       axios({
-        url: "https://localhost:44390/api/authorization",
+        url: "https://localhost:44390/api/authorization/register",
         method: "POST",
         data: fields,
       }).catch((error) =>{
@@ -88,7 +88,7 @@ export default function EditUser() {
         }
         setSubmitting(false);
       });
-      Swal.fire("Good job!", 'You succesfully edited a car!', 'success')
+      Swal.fire("Good job!", 'You succesfully edited a user!', 'success')
       setSubmitting(true);
       setTimeout(()=>history.push('/user-manager'),2000)
     } catch (error) {
@@ -97,22 +97,21 @@ export default function EditUser() {
   }
   const [user, setUser] = useState();
 
-  const fetchUser = async () => {
-    if (!isAddMode) {
-      try {
-        await axios
-          .get("https://localhost:44390/api/users/" + id)
-          .then((res) => {
-            console.log(res.data)
-            setUser(res.data);
-          });
-      } catch (error) {
-        Swal.fire("Oops...", "Something went wrong when fetching", "error")
+  useEffect(() => {
+    async function fetchUser(){
+      if (!isAddMode) {
+        try {
+          await axios
+            .get("https://localhost:44390/api/users/" + id)
+            .then((res) => {
+              console.log(res.data)
+              setUser(res.data);
+            });
+        } catch (error) {
+          Swal.fire("Oops...", "Something went wrong when fetching", "error")
+        }
       }
     }
-  };
-
-  useEffect(() => {
     fetchUser();
   }, []);
 
@@ -125,7 +124,7 @@ export default function EditUser() {
     >
       {({ errors, touched, isSubmitting }) => {
         return (
-          <Form id="userUpsert">
+          <Form id="userUpsert" className="upsertforms">
             <h1>{isAddMode ? "Add User" : "Edit User"}</h1>
 
             <label>First Name</label>
@@ -161,6 +160,7 @@ export default function EditUser() {
             <Field
               name="email"
               type="text"
+              disabled={!isAddMode}
               className={
                 "form-control" +
                 (errors.email && touched.email ? " is-invalid" : "")

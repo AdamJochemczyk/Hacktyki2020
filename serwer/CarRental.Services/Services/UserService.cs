@@ -52,13 +52,13 @@ namespace CarRental.Services.Services
             var user = await _userRepository.FindByIdAsync(Id);
             return _mapper.Map<UsersDto>(user);
         }
-        
+
         public async Task<UsersDto> UpdateUser(UsersDto usersDto)
         {
          
                 var user = await _userRepository.FindByIdAsync(usersDto.UserId);
                 var check_user = await _userRepository.FindByLogin(usersDto.Email);
-                if (check_user == null)
+                if (check_user.Email == user.Email)
                 {
                     user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);
                     _userRepository.Update(user);
@@ -68,10 +68,10 @@ namespace CarRental.Services.Services
                 return _mapper.Map<UsersDto>(user);
                   
                 user = await _userRepository.FindByIdAsync(usersDto.UserId);
-                return _mapper.Map<UsersDto>(user);
-          
+            return _mapper.Map<UsersDto>(user);
+
         }
-       
+
 
     }
 }

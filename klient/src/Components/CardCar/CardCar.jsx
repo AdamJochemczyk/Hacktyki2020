@@ -11,14 +11,7 @@ export default function Cardcar(props) {
 
   return (
     <Col sm="4">
-    <div
-      style={{
-        margin: "3%",
-        border: "black 2px",
-        boxShadow: "5px 5px 5px 5px #888888",
-        padding: "2%",
-      }}
-    >
+    <div className="CardCar">
       <div style={{ textAlign: "center", display: "block" }}>
         <img
           src={props.imagePath || DEFAULT_IMAGE}
@@ -26,7 +19,7 @@ export default function Cardcar(props) {
           style={{ width: 200, height: 200 }}
         />
       </div>
-      <h5 key={props.key}>Model: {props.model}</h5>
+      <h5>Model: {props.model}</h5>
       <p>Year of production: {props.yearOfProduction}</p>
       <p>Brand: {props.brand}</p>
       <p>Registration number: {props.registrationNumber}</p>

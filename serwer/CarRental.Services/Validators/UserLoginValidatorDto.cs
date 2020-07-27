@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CarRental.Services.Validators
 {
-    public class UserLoginValidatorDto : AbstractValidator<User>
+    public class UserLoginValidatorDto : AbstractValidator<UserLoginDto>
     {
         public UserLoginValidatorDto() { 
         RuleFor(p=>p).Must(p => p.Email != null).WithMessage("Email not correct");
