@@ -51,7 +51,8 @@ namespace CarRental.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarAsync(int id)
         {
-            await service.DeleteCar(id);
+            try { await service.DeleteCar(id); }
+            catch (ArgumentNullException) { return BadRequest(); }
             return Ok();
         }
     }

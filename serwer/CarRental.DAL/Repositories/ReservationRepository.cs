@@ -10,11 +10,8 @@ namespace CarRental.DAL.Repositories
 {
     public class ReservationRepository : RepositoryBase<Reservation>, IReservationRepository
     {
-        private readonly ApplicationDbContext context;
         public ReservationRepository(ApplicationDbContext context) : base(context)
-        {
-            this.context = context;
-        }
+        { }
 
         public async Task<bool> ReservationCanBeCreatedAsync(Reservation reservation)
         {
@@ -44,6 +41,14 @@ namespace CarRental.DAL.Repositories
                 || (p.RentalDate < reservation.RentalDate && p.ReturnDate > reservation.RentalDate)
                 || (p.RentalDate >= reservation.RentalDate && p.ReturnDate <= reservation.ReturnDate))
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Reservation>> FindAllByUserIdAsync(int userId)
+        {
+            var result = await context.Reservations
+                .Where(p => p.UserId == userId)
+                .ToListAsync();
+            return result;
         }
     }
 }
