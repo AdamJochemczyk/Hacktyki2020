@@ -13,6 +13,43 @@ namespace CarRental.DAL.Repositories
         public ReservationRepository(ApplicationDbContext context) : base(context)
         { }
 
+        public new async Task<IEnumerable<Reservation>> FindAllAsync()
+        {
+            var result = await context
+                .Reservations
+                .Include(p => p.Car)
+                .ToListAsync();
+            return result;
+        }
+
+        public async Task<IEnumerable<Reservation>> FindAllByUserIdAsync(int id)
+        {
+            var result = await context.Reservations
+                .Where(p => p.UserId == id)
+                .Include(p => p.Car)
+                .ToListAsync();
+            return result;
+        }
+        
+        public async Task<IEnumerable<Reservation>> FindAllByCarIdAsync(int id)
+        {
+            var result = await context.Reservations
+                .Where(p => p.IsFinished == false)
+                .Where(p => p.CarId == id)
+                .Include(p => p.Car)
+                .ToListAsync();
+            return result;
+        }
+
+        public new async Task<Reservation> FindByIdAsync(int id)
+        {
+            var result = await context.Reservations
+                .Where(p => p.ReservationId == id)
+                .Include(p => p.Car)
+                .SingleOrDefaultAsync();
+            return result;
+        }
+
         public async Task<bool> ReservationCanBeCreatedAsync(Reservation reservation)
         {
             List<Reservation> entities = await FilterReservations(reservation);
@@ -41,14 +78,6 @@ namespace CarRental.DAL.Repositories
                 || (p.RentalDate < reservation.RentalDate && p.ReturnDate > reservation.RentalDate)
                 || (p.RentalDate >= reservation.RentalDate && p.ReturnDate <= reservation.ReturnDate))
                 .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Reservation>> FindAllByUserIdAsync(int userId)
-        {
-            var result = await context.Reservations
-                .Where(p => p.UserId == userId)
-                .ToListAsync();
-            return result;
         }
     }
 }

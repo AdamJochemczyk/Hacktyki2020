@@ -26,9 +26,23 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetReservationByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             var result = await service.GetReservationByIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpGet, Route("cars/{id}")]
+        public async Task<IActionResult> GetActualReservationsByCarIdAsync(int id)
+        {
+            var result = await service.GetActualReservationsByCarIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpGet, Route("users/{id}")]
+        public async Task<IActionResult> GetAllReservationsByUserIdAsync(int id)
+        {
+            var result = await service.GetAllReservationsByUserIdAsync(id);
             return Ok(result);
         }
 

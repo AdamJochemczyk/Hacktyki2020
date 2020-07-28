@@ -95,5 +95,10 @@ namespace CarRental.Services.Services
             return mapper.Map<IEnumerable<ReservationDto>>(entities);
         }
 
+        public async Task<IEnumerable<ReservationDto>> GetActualReservationsByCarIdAsync(int id)
+        {
+            var entities = await repository.FindAllByCarIdAsync(id);
+            return mapper.Map<IEnumerable<ReservationDto>>(entities);
+        }
     }
 }

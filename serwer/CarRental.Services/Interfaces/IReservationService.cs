@@ -10,6 +10,7 @@ namespace CarRental.Services.Interfaces
     {
         Task<ReservationDto> CreateReservationAsync(ReservationCreateDto reservationDto);
         Task<IEnumerable<ReservationDto>> GetAllReservationsAsync();
+        Task<IEnumerable<ReservationDto>> GetActualReservationsByCarIdAsync(int id);
         Task<ReservationDto> GetReservationByIdAsync(int id);
         Task<ReservationDto> UpdateReservationAsync(ReservationUpdateDto reservationDto);
         Task DeleteReservationAsync(int id);
