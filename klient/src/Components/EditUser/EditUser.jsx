@@ -9,6 +9,8 @@ export default function EditUser() {
   const { id } = useParams();
   const isAddMode = !id;
   let history=useHistory()
+  const REGISTER_URL=process.env.REACT_APP_REGISTER_API
+  const USER_URL=process.env.REACT_APP_USER_API
 
   let initialValues = {
     firstName: "",
@@ -49,7 +51,7 @@ export default function EditUser() {
   function createUser(fields, setSubmitting) {
     try{
       axios({
-        url: "https://localhost:44390/api/authorization/register",
+        url: REGISTER_URL,
         method: "POST",
         data: fields,
       }).catch((error) =>{
@@ -75,7 +77,7 @@ export default function EditUser() {
     fields.UserId = parseInt(id);
     try {
       axios({
-        url: "https://localhost:44390/api/users/" + id,
+        url: USER_URL+"/" + id,
         method: "PUT",
         data: fields,
       }).catch((error) =>{
@@ -90,7 +92,7 @@ export default function EditUser() {
       });
       Swal.fire("Good job!", 'You succesfully edited a user!', 'success')
       setSubmitting(true);
-      setTimeout(()=>history.push('/user-manager'),2000)
+      setTimeout(()=>history.push('/user-manager'), 2500)
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error")
     }
@@ -102,7 +104,7 @@ export default function EditUser() {
       if (!isAddMode) {
         try {
           await axios
-            .get("https://localhost:44390/api/users/" + id)
+            .get(USER_URL +"/" + id)
             .then((res) => {
               console.log(res.data)
               setUser(res.data);

@@ -11,6 +11,7 @@ export default function Login() {
     email: "",
     encodePassword: "",
   };
+  const BASE_URL=process.env.REACT_APP_LOGIN_API
 
   const validationSchema = Yup.object().shape({
     encodePassword: Yup.string().required("Required"),
@@ -22,7 +23,7 @@ export default function Login() {
         
     try {
       const response = await axios({
-        url: "https://localhost:44390/api/authorization/signIn",
+        url: BASE_URL,
         method: "POST",
         data: fields,
       }).catch((error) => {

@@ -15,7 +15,8 @@ import EditUser from './Components/EditUser/EditUser';
 import EditCar from './Components/EditCar/EditCar';
 import GenericNotFound from './Components/GenericNotFound/GenericNotFound'
 import SetPassword from './Components/SetPassword/SetPassword';
-import UserManager from './Components/UserManager/UserManager'
+import UserManager from './Components/UserManager/UserManager';
+import Booking from './Components/Booking/Booking'
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
     <Router>  
         <Switch>
           <Route exact path='/' component={Home} />  
-          <Route path='/reserve-car' component={ReserveCar} />  
+          <Route exact path='/reserve-car' component={ReserveCar} />
+          <Route path='/reserve-car/booking' component={Booking} />  
           <Route path='/sign-in' component={Login}/>
           <Route exact path='/user-manager' component={UserManager} />
           <Route path='/user-manager/edit/:id' component={EditUser}/>
@@ -35,7 +37,7 @@ function App() {
           <Route path='/add-car' component={EditCar} />
           <Route exact path='/history' component={History} />
           <Route path='/history/edit/:id' component={UserReportFault} />
-          <Route path='/set-password/:token' component={SetPassword} />
+          <Route path='/set-password/:code' component={SetPassword} />
           <Route component={GenericNotFound} />
         </Switch>    
     </Router>

@@ -11,12 +11,13 @@ export default function UserManager() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let history = useHistory();
+  const USER_URL=process.env.REACT_APP_USER_API
 
   useEffect(() => {
     async function fetchUsers() {
       try {
         setIsLoading(true);
-        const response = await axios.get("https://localhost:44390/api/users");
+        const response = await axios.get(USER_URL);
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -50,7 +51,7 @@ export default function UserManager() {
       .then((result) => {
         if (result.value) {
           axios({
-            url: "https://localhost:44390/api/users/" + id,
+            url: USER_URL +"/" + id,
             method: "DELETE",
           }).catch((error) => {
             Swal.fire(

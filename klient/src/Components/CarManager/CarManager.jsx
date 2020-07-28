@@ -11,13 +11,16 @@ export default function CarManager() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let history = useHistory();
+  const BASE_URL= process.env.REACT_APP_CAR_API
 
   useEffect(() => {
     async function fetchCars() {
-      console.log("useEffect works now");
       try {
         setIsLoading(true);
-        const response = await axios.get("https://localhost:44390/api/cars");
+        const response = await axios({
+          url: BASE_URL,
+          method: "GET",
+        });
         setData(response.data);
         setIsLoading(false);
         return response;
@@ -52,7 +55,7 @@ export default function CarManager() {
       .then((result) => {
         if (result.value) {
           axios({
-            url: "https://localhost:44390/api/cars/" + id,
+            url: BASE_URL +"/" + id,
             method: "DELETE",
           }).catch((error) => {
             Swal.fire(

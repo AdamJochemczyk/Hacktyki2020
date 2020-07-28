@@ -6,11 +6,13 @@ import * as Yup from "yup";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export default function EditUser() {
+export default function EditCar() {
   const { id } = useParams();
   const isAddMode = !id;
   let history = useHistory();
-  const BASE_URL = process.env.REACT_CAR_API_URL;
+  const BASE_URL= process.env.REACT_APP_CAR_API;
+  
+  
 
   let initialValues = {
     brand: "",
@@ -47,7 +49,6 @@ export default function EditUser() {
   });
 
   function onSubmit(fields, { setSubmitting }) {
-    console.log(BASE_URL);
     if (isAddMode) {
       createCar(fields, setSubmitting);
     } else {
@@ -60,7 +61,7 @@ export default function EditUser() {
     fields.typeOfCar = cartype;
     try {
       await axios({
-        url: "https://localhost:44390/api/cars",
+        url: BASE_URL,
         method: "POST",
         data: fields,
       }).catch((error) => {
@@ -98,7 +99,7 @@ export default function EditUser() {
     console.log(fields);
     try {
       await axios({
-        url: "https://localhost:44390/api/cars/" + id,
+        url: BASE_URL +"/"+id,
         method: "PUT",
         data: fields,
       }).catch((error) => {
@@ -135,7 +136,7 @@ export default function EditUser() {
       if (!isAddMode) {
         try {
           await axios
-            .get("https://localhost:44390/api/cars/" + id)
+            .get(BASE_URL +"/"+ id)
             .then((res) => {
               console.log(res.data);
               setCar(res.data);
