@@ -25,6 +25,14 @@ namespace CarRental.API.Controllers
             return Ok(entities);
         }
 
+        //example: .../api/cars/dates/2021-08-07/2021-09-07
+        [HttpGet, Route("dates/{rentalDate:datetime}/{returnDate:datetime}")]
+        public async Task<IActionResult> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
+        {
+            var entities = await service.GetAvailableCars(rentalDate, returnDate);
+            return Ok(entities);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCarByIdAsync(int id)
         {

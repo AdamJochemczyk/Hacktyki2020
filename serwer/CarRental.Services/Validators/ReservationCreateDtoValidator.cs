@@ -13,9 +13,9 @@ namespace CarRental.Services.Validators
         {
             RuleFor(p => p.CarId).NotNull().GreaterThan(0);
             RuleFor(p => p.UserId).NotNull().GreaterThan(0);
-            RuleFor(p => p.RentalDate).GreaterThanOrEqualTo(DateTime.Now)
+            RuleFor(p => p.RentalDate).GreaterThanOrEqualTo(DateTime.Now.Date)
                 .NotEmpty().NotNull();
-            RuleFor(p => p.ReturnDate).GreaterThan(p => p.RentalDate)
+            RuleFor(p => p.ReturnDate.Date).GreaterThanOrEqualTo(p => p.RentalDate.Date)
                 .NotEmpty().NotNull();
         }
     }

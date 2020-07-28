@@ -14,5 +14,6 @@ namespace CarRental.Services.Interfaces
         Task<CarDto> GetCarByIdAsync(int id);
         Task<CarDto> UpdateCarAsync(CarDto car);
         Task DeleteCar(int id);
+        Task<IEnumerable<CarDto>> GetAvailableCars(DateTime rentalDate, DateTime returnDate);
     }
 }
