@@ -101,9 +101,17 @@ export default function UserManager() {
         Header: "Actions",
         Cell: ({ row }) => (
           <div>
-            <Link to={"/user-manager/edit/" + row.original.userId}>
-              <Button color="success">Edit</Button>
+          <Button color="success">
+          <Link
+              to={{
+                pathname: "/user-manager/edit",
+                state: row.original.userId
+                }}
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              Edit
             </Link>
+            </Button>
             <Button
               color="danger"
               onClick={() => deleteUser(row.original.userId)}

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Swal from 'sweetalert2'
 
-export default function EditUser() {
-  const { id } = useParams();
+export default function EditUser({history}) {
+  const id = history.location.state;
   const isAddMode = !id;
-  let history=useHistory()
+  let redirect=useHistory()
   const REGISTER_URL=process.env.REACT_APP_REGISTER_API
   const USER_URL=process.env.REACT_APP_USER_API
 
@@ -48,9 +48,9 @@ export default function EditUser() {
     }
   }
 
-  function createUser(fields, setSubmitting) {
+  async function createUser(fields, setSubmitting) {
     try{
-      axios({
+      await axios({
         url: REGISTER_URL,
         method: "POST",
         data: fields,
@@ -63,7 +63,7 @@ export default function EditUser() {
           Swal.fire("Oops...", "Something happened in setting up the request that triggered an Error. Error massage: "+error.message, 'error');
         }
         setSubmitting(false);
-        history.goBack()
+        redirect.goBack()
       });
       Swal.fire("Good job!", 'You succesfully added new user!', 'success')
       document.getElementById("userUpsert").reset()
@@ -73,10 +73,10 @@ export default function EditUser() {
     }
     }
 
-  function updateUser(id, fields, setSubmitting) {
+  async function updateUser(id, fields, setSubmitting) {
     fields.UserId = parseInt(id);
     try {
-      axios({
+      await axios({
         url: USER_URL+"/" + id,
         method: "PUT",
         data: fields,
@@ -92,7 +92,7 @@ export default function EditUser() {
       });
       Swal.fire("Good job!", 'You succesfully edited a user!', 'success')
       setSubmitting(true);
-      setTimeout(()=>history.push('/user-manager'), 2500)
+      setTimeout(()=>redirect.push('/user-manager'), 2500)
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error")
     }

@@ -73,7 +73,7 @@ export default function CarManager() {
           swalWithBootstrapButtons.fire(
             "Cancelled",
             "Your car is safe :)",
-            "error"
+            "success"
           );
         }
       });
@@ -100,7 +100,7 @@ export default function CarManager() {
       },
       {
         Header: "Url to img",
-        accessor: "urlToImg",
+        accessor: "imagePath",
       },
       {
         Header: "Year Of Production",
@@ -110,12 +110,17 @@ export default function CarManager() {
         Header: "Actions",
         Cell: ({ row }) => (
           <div>
-            <Link
-              to={"/car-manager/edit/" + row.original.carId}
+          <Button color="success">
+          <Link
+              to={{
+                pathname: "/car-manager/edit",
+                state: row.original.carId
+                }}
               style={{ textDecoration: "none", color: "white" }}
             >
-              <Button color="success">Edit</Button>
+              Edit
             </Link>
+            </Button>
             <Button
               color="danger"
               onClick={() => deleteCar(row.original.carId)}

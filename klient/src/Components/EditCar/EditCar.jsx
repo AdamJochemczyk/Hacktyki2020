@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Row, Col } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export default function EditCar() {
-  const { id } = useParams();
+export default function EditCar({ history }) {
+  const id = history.location.state;
   const isAddMode = !id;
-  let history = useHistory();
+  let redirect = useHistory();
   const BASE_URL= process.env.REACT_APP_CAR_API;
   
   
@@ -124,7 +124,7 @@ export default function EditCar() {
       });
       Swal.fire("Good job!", "You succesfully edited a car!", "success");
       setSubmitting(true);
-      setTimeout(() => history.push("/car-manager"), 2000);
+      setTimeout(() => redirect.push("/car-manager"), 2000);
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error");
     }
