@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { useTable, useFilters, useSortBy } from "react-table";
+import { useTable, useFilters, useSortBy, usePagination } from "react-table";
 import { Table as BootstrapTable, Input } from "reactstrap";
 
 export default function CarManagerTable({ columns, data }) {
+  
   const [filter, setFilterBy] = useState({
     carId: "",
     registrationNumber: "",
     model: "",
     brand: "",
-    urlToImg: "",
+    imagePath: "",
     yearOfProduction: "",
   });
 
@@ -34,7 +35,8 @@ export default function CarManagerTable({ columns, data }) {
       data,
     },
     useFilters,
-    useSortBy
+    useSortBy,
+    usePagination
   );
 
   return (
@@ -87,7 +89,7 @@ export default function CarManagerTable({ columns, data }) {
               value={filter.urlToImg}
               onChange={filterBy}
               placeholder={"Search by urlToImg"}
-              name="urlToImg"
+              name="imagePath"
             />
           </td>
           <td>

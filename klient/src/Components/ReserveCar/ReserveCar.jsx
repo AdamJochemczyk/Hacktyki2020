@@ -5,6 +5,7 @@ import { Col, Form, Input, Row, Button } from "reactstrap";
 import Loader from "react-loader-spinner";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
+import moment from "moment"
 
 export default function ReserveCar() {
   const [data, setData] = useState([]);
@@ -16,29 +17,12 @@ export default function ReserveCar() {
     numberOfDoor: "",
     numberOfSits: "",
     startdate: "",
-    enddate: ""
+    enddate: "",
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const BASE_URL = process.env.REACT_APP_CAR_API;
-  const [today, setToday] = useState();
-
-  function getToday() {
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1;
-    let yyyy = today.getFullYear();
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-    if (mm < 10) {
-      mm = "0" + mm;
-    }
-
-    today = yyyy + "-" + mm + "-" + dd;
-    setToday(today);
-  }
 
   useEffect(() => {
     async function fetchCars() {
@@ -47,7 +31,7 @@ export default function ReserveCar() {
         const response = await axios.get(BASE_URL);
         setData(response.data);
         setIsLoading(false);
-        console.log(response.data)
+        console.log(response.data);
       } catch (error) {
         Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
           history.goBack()
@@ -55,7 +39,6 @@ export default function ReserveCar() {
       }
     }
     fetchCars();
-    getToday();
   }, []);
 
   function handleChange(event) {
@@ -65,14 +48,16 @@ export default function ReserveCar() {
     });
   }
 
-  function checkAvailability(){
+  function checkAvailability() {
     //TODO:
     //avilability of car
     history.push({
       pathname: "/reserve-car/booking",
-      state: {startdate: filters.startdate,
-      enddate: filters.enddate},
-    })
+      state: {
+        startdate: filters.startdate,
+        enddate: filters.enddate,
+      },
+    });
   }
 
   function CreateCarCard(data) {
@@ -146,15 +131,26 @@ export default function ReserveCar() {
                   value={filters.numberOfSits}
                   onChange={handleChange}
                 />
-                <Input type="date" min={today} onChange={handleChange} name="startdate"/>
-                <Input type="date" min={today} onChange={handleChange} name="enddate"/>
-                <Button color="success" onClick={checkAvailability}>Check availability of all cars!</Button>
+                <Input
+                  type="date"
+                  min={moment().format("YYYY-MM-DD")}
+                  onChange={handleChange}
+                  name="startdate"
+                />
+                <Input
+                  type="date"
+                  min={moment().format("YYYY-MM-DD")}
+                  onChange={handleChange}
+                  name="enddate"
+                />
+                <Button color="success" onClick={checkAvailability}>
+                  Check availability of all cars!
+                </Button>
               </Form>
             </Col>
             <Col sm={10}>
               <Row>
-                {
-                  data
+                {data
                   .filter((data) => {
                     return (
                       data.brand
@@ -171,8 +167,7 @@ export default function ReserveCar() {
                       data.numberOfSits >= filters.numberOfSits
                     );
                   })
-                  .map(CreateCarCard)
-                  }
+                  .map(CreateCarCard)}
               </Row>
             </Col>
           </Row>

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button, Col } from "reactstrap";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 
 export default function Cardcar(props) {
   const DEFAULT_IMAGE =

@@ -1,54 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Row, Col } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
-import Swal from "sweetalert2";
+import useEditCar from "./EditCar.utils";
 
 export default function EditCar({ history }) {
   const id = history.location.state;
   const isAddMode = !id;
-  let redirect = useHistory();
-  const BASE_URL= process.env.REACT_APP_CAR_API;
-  
-  
+  const {
+    car,
+    initialValues,
+    validationSchema,
+    isSubmitting,
+    createCar,
+    updateCar,
+    fetchCar,
+  } = useEditCar();
 
-  let initialValues = {
-    brand: "",
-    registrationNumber: "",
-    model: "",
-    typeOfCar: "",
-    numberOfDoor: "",
-    numberOfSits: "",
-    yearOfProduction: "",
-    imagePath: "",
-  };
-  const date = new Date();
-
-  const validationSchema = Yup.object().shape({
-    registrationNumber: Yup.string()
-      .min(3, "Too short!")
-      .max(7, "Too long!")
-      .required("Required"),
-    brand: Yup.string()
-      .min(3, "Too short!")
-      .max(30, "Too long!")
-      .required("Required"),
-    model: Yup.string()
-      .min(1, "Too short!")
-      .max(20, "Too long!")
-      .required("Required"),
-    typeOfCar: Yup.string().required("Required"),
-    numberOfDoor: Yup.number().required("Required").min(2).max(5),
-    numberOfSits: Yup.number().required("Required").min(2).max(9),
-    yearOfProduction: Yup.number()
-      .required("Required")
-      .min(1950)
-      .max(date.getFullYear()),
-  });
-
-  function onSubmit(fields, { setSubmitting }) {
+  function onSubmit(fields, {setSubmitting}) {
     if (isAddMode) {
       createCar(fields, setSubmitting);
     } else {
@@ -56,97 +25,10 @@ export default function EditCar({ history }) {
     }
   }
 
-  async function createCar(fields, setSubmitting) {
-    let cartype = parseInt(fields.typeOfCar);
-    fields.typeOfCar = cartype;
-    try {
-      await axios({
-        url: BASE_URL,
-        method: "POST",
-        data: fields,
-      }).catch((error) => {
-        if (error.response) {
-          Swal.fire("Oops...", error.response.headers, "error");
-        } else if (error.request) {
-          Swal.fire(
-            "Oops...",
-            "Error request was made but no response was recived. Error request: " +
-              error.request,
-            "error"
-          );
-        } else {
-          Swal.fire(
-            "Oops...",
-            "Something happened in setting up the request that triggered an Error. Error massage: " +
-              error.message,
-            "error"
-          );
-        }
-        setSubmitting(false);
-      });
-      Swal.fire("Good job!", "You succesfully added new car!", "success");
-      document.getElementById("carUpsert").reset();
-    } catch (error) {
-      Swal.fire("Oops...", "Something went wrong...", "error");
-      console.log(error);
-    }
-  }
-
-  async function updateCar(id, fields, setSubmitting) {
-    fields.carId = parseInt(id);
-    let cartype = parseInt(fields.typeOfCar);
-    fields.typeOfCar = cartype;
-    console.log(fields);
-    try {
-      await axios({
-        url: BASE_URL +"/"+id,
-        method: "PUT",
-        data: fields,
-      }).catch((error) => {
-        if (error.response) {
-          Swal.fire("Oops...", error.response.headers, "error");
-        } else if (error.request) {
-          Swal.fire(
-            "Oops...",
-            "Error request was made but no response was recived. Error request: " +
-              error.request,
-            "error"
-          );
-        } else {
-          Swal.fire(
-            "Oops...",
-            "Something happened in setting up the request that triggered an Error. Error massage: " +
-              error.message,
-            "error"
-          );
-        }
-        setSubmitting(false);
-      });
-      Swal.fire("Good job!", "You succesfully edited a car!", "success");
-      setSubmitting(true);
-      setTimeout(() => redirect.push("/car-manager"), 2000);
-    } catch (error) {
-      Swal.fire("Oops...", "Something went wrong", "error");
-    }
-  }
-  const [car, setCar] = useState();
-
   useEffect(() => {
-    async function fetchCar() {
-      if (!isAddMode) {
-        try {
-          await axios
-            .get(BASE_URL +"/"+ id)
-            .then((res) => {
-              console.log(res.data);
-              setCar(res.data);
-            });
-        } catch (error) {
-          alert(error.message);
-        }
-      }
+    if (!isAddMode) {
+    fetchCar(id);
     }
-    fetchCar();
   }, []);
 
   return (
@@ -156,7 +38,7 @@ export default function EditCar({ history }) {
       enableReinitialize
       onSubmit={onSubmit}
     >
-      {({ errors, touched, isSubmitting }) => {
+      {({ errors, touched }) => {
         return (
           <Form id="carUpsert" className="upsertforms">
             <h1>{isAddMode ? "Add Car" : "Edit Car"}</h1>
@@ -268,12 +150,8 @@ export default function EditCar({ history }) {
               </Col>
             </Row>
             <div className="pt-3">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="btn btn-primary"
-              >
-                {isSubmitting && (
+              <button type="submit" className="btn btn-primary">
+              {isSubmitting && (
                   <span className="spinner-border spinner-border-sm mr-1"></span>
                 )}
                 Save
