@@ -33,7 +33,8 @@ namespace CarRental.Services.Services
                 NumberOfDoor = carDto.NumberOfDoor,
                 NumberOfSits = carDto.NumberOfSits,
                 YearOfProduction = carDto.YearOfProduction,
-                ImagePath = carDto.ImagePath
+                ImagePath = carDto.ImagePath,
+                DateCreated = DateTime.Now
             };
             repository.Create(car);
             await repository.SaveChangesAsync();

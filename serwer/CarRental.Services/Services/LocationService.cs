@@ -41,7 +41,8 @@ namespace CarRental.Services.Services
                 ReservationId = locationCreateDto.ReservationId,
                 Latitude = locationCreateDto.Latitude,
                 Longitude = locationCreateDto.Longitude,
-                IsActual = true
+                IsActual = true,
+                DateCreated = DateTime.Now
             };
             repository.Create(location);
             await repository.SaveChangesAsync();

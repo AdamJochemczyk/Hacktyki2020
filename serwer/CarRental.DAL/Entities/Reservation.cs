@@ -21,6 +21,7 @@ namespace CarRental.DAL.Entities
             RentalDate = rentalDate;
             ReturnDate = returnDate;
             IsFinished = isFinished;
+            DateModified = DateTime.Now;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace CarRental.DAL.Repositories
             var result = await context
                 .Reservations
                 .Include(p => p.Car)
+                .Include(p => p.User)
                 .ToListAsync();
             return result;
         }
@@ -30,7 +31,7 @@ namespace CarRental.DAL.Repositories
                 .ToListAsync();
             return result;
         }
-        
+
         public async Task<IEnumerable<Reservation>> FindAllByCarIdAsync(int id)
         {
             var result = await context.Reservations
@@ -77,6 +78,16 @@ namespace CarRental.DAL.Repositories
                 (p.RentalDate < reservation.ReturnDate && p.ReturnDate > reservation.RentalDate)
                 || (p.RentalDate < reservation.RentalDate && p.ReturnDate > reservation.RentalDate)
                 || (p.RentalDate >= reservation.RentalDate && p.ReturnDate <= reservation.ReturnDate))
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Reservation>> FindCloseReservationsByCarIdAsync(int id)
+        {
+            return await context.Reservations
+                .Where(p => p.CarId == id)
+                .Where(p => p.IsFinished == false)
+                .Where(p => p.RentalDate <= DateTime.Now.AddDays(14).Date)
+                .Where(p => p.RentalDate >= DateTime.Now.Date)
                 .ToListAsync();
         }
     }
