@@ -18,21 +18,7 @@ namespace CarRental.Services.Models.Email_Templates
         [Obsolete]
         public bool EmailAfterRegistration(CreateUserDto createUserDto)
         {
-            //Ask about this
-            var claims = new List<Claim> {
-                     new Claim(JwtRegisteredClaimNames.Jti,createUserDto.UserId.ToString()),
-                     new Claim(JwtRegisteredClaimNames.Sub,createUserDto.FirstName),
-                     new Claim(JwtRegisteredClaimNames.Email,createUserDto.Email)
-
-            };
-            var jwt = new JwtSecurityToken(
-                 issuer: TokenOptions.ISSUER,
-                 audience: TokenOptions.AUDIENCE,
-                 claims: claims,
-                 expires: DateTime.Now.AddMinutes(TokenOptions.LIFETIME),
-                 signingCredentials: new SigningCredentials(TokenOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-           
+            ////Ask about this
             string subject = "Rent Car Service";
             string data = createUserDto.FirstName;
             string htmlBody = @"

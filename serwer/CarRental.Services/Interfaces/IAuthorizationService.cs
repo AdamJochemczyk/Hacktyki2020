@@ -1,4 +1,5 @@
-﻿using CarRental.Services.Models.User;
+﻿using CarRental.Services.Models.Token;
+using CarRental.Services.Models.User;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,6 +12,6 @@ namespace CarRental.Services.Interfaces
     {
         Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto);
         Task<bool> SetPassword(UpdateUserPasswordDto updateUserPassword);
-        Task<string> SignIn(UserLoginDto userLogin);
+        Task<TokenDto> SignIn(UserLoginDto userLogin);
     }
 }

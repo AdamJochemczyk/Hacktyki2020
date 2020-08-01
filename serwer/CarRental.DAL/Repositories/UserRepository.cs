@@ -27,5 +27,6 @@ namespace CarRental.DAL.Repositories
         {
             return await context.Set<User>().FirstOrDefaultAsync(e => e.Email == email);
         }
+
     } 
 }

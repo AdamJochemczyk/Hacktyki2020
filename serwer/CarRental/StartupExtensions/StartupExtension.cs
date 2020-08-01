@@ -52,6 +52,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<IEmailServices, EmailService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<ICarService, CarService>();
+            services.AddScoped<ITokenService, TokenService>();
             return services;
         }
 
@@ -60,6 +61,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<IReservationRepository, ReservationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICarRepository, CarRepository>();
+            services.AddScoped<IRefreshRepository, RefreshRepository>();
             return services;
         }
 

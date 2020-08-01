@@ -18,6 +18,7 @@ namespace CarRental.DAL
         public DbSet<Location> Locations { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<User> Users { get; set; }
+        public  DbSet<RefreshToken> Refresh { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
