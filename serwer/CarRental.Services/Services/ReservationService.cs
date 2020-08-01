@@ -5,6 +5,7 @@ using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Reservation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,7 +30,8 @@ namespace CarRental.Services.Services
                 CarId = reservationCreateDto.CarId,
                 RentalDate = reservationCreateDto.RentalDate,
                 ReturnDate = reservationCreateDto.ReturnDate,
-                IsFinished = false
+                IsFinished = false,
+                DateCreated = DateTime.Now
             };
             repository.Create(entity);
             await repository.SaveChangesAsync();
@@ -99,6 +101,28 @@ namespace CarRental.Services.Services
         {
             var entities = await repository.FindAllByCarIdAsync(id);
             return mapper.Map<IEnumerable<ReservationDto>>(entities);
+        }
+
+        public async Task<IEnumerable<string>> GetFreeTermsByCarIdAsync(int id)
+        {
+            var reservations = await repository.FindCloseReservationsByCarIdAsync(id);
+            var freeDays = Enumerable.Range(DateTime.Now.DayOfYear, 14).ToList();
+            var dates = new List<string>();
+            string date;
+            foreach (var reservation in reservations)
+            {
+                for (int i = reservation.RentalDate.DayOfYear; i <= reservation.ReturnDate.DayOfYear; i++)
+                {
+                    freeDays.Remove(i);
+                }
+            }
+
+            foreach (var dayOfYear in freeDays)
+            {
+                date = new DateTime(DateTime.Now.Year, 1, 1).AddDays(dayOfYear - 1).Date.ToString("dd/MM/yyyy");
+                dates.Add(date);
+            }
+            return dates;
         }
     }
 }

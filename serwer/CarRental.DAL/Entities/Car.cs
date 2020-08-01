@@ -20,14 +20,15 @@ namespace CarRental.DAL.Entities
         public void Update(string brand, string model, string registrationNumber, CarType type, int numberOfDoor,
            int numberOfSits, int yearOfProduction, string imagePath)
         {
-            this.Brand = brand;
-            this.Model = model;
-            this.RegistrationNumber = registrationNumber;
-            this.TypeOfCar = type;
-            this.NumberOfDoor = numberOfDoor;
-            this.NumberOfSits = numberOfSits;
-            this.YearOfProduction = yearOfProduction;
-            this.ImagePath = imagePath;
+            Brand = brand;
+            Model = model;
+            RegistrationNumber = registrationNumber;
+            TypeOfCar = type;
+            NumberOfDoor = numberOfDoor;
+            NumberOfSits = numberOfSits;
+            YearOfProduction = yearOfProduction;
+            ImagePath = imagePath;
+            DateModified = DateTime.Now;
         }
     }
 }

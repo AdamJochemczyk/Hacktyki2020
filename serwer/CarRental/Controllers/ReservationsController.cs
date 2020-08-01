@@ -46,6 +46,12 @@ namespace CarRental.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet, Route("terms/{id}")]
+        public async Task<IActionResult> GetFreeTermsByCarIdAsync(int id)
+        {
+            var result = await service.GetFreeTermsByCarIdAsync(id);
+            return Ok(result);
+        }
         [HttpPost]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {

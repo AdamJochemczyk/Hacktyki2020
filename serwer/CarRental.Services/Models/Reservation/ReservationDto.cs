@@ -1,5 +1,6 @@
 ﻿
 using CarRental.Services.Models.Car;
+using CarRental.Services.Models.User;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,5 +16,6 @@ namespace CarRental.Services.Models.Reservation
         public int CarId { get; set; }
         public int UserId { get; set; }
         public CarDto Car { get; set; }
+        public UsersDto User { get; set; }
     }
 }
