@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import CardCar from "../CardCar/CardCar";
-import { Col, Form, Input, Row } from "reactstrap";
+import { Col, Form, Input, Row, Button } from "reactstrap";
 import Loader from "react-loader-spinner";
 import Swal from "sweetalert2";
 import { useHistory } from "react-router-dom";
+import moment from "moment"
 
 export default function ReserveCar() {
   const [data, setData] = useState([]);
@@ -14,18 +15,23 @@ export default function ReserveCar() {
     registrationNumber: "",
     yearOfProduction: "",
     numberOfDoor: "",
-    numberOfSits: ""
+    numberOfSits: "",
+    startdate: "",
+    enddate: "",
   });
+
   const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
+  const BASE_URL = process.env.REACT_APP_CAR_API;
 
   useEffect(() => {
     async function fetchCars() {
       try {
         setIsLoading(true);
-        const response = await axios.get("https://localhost:44390/api/cars");
+        const response = await axios.get(BASE_URL);
         setData(response.data);
         setIsLoading(false);
+        console.log(response.data);
       } catch (error) {
         Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
           history.goBack()
@@ -41,7 +47,19 @@ export default function ReserveCar() {
       [event.target.name]: event.target.value,
     });
   }
-  console.log(data)
+
+  function checkAvailability() {
+    //TODO:
+    //avilability of car
+    history.push({
+      pathname: "/reserve-car/booking",
+      state: {
+        startdate: filters.startdate,
+        enddate: filters.enddate,
+      },
+    });
+  }
+
   function CreateCarCard(data) {
     return (
       <CardCar
@@ -54,10 +72,11 @@ export default function ReserveCar() {
         doors={data.numberOfDoor}
         sits={data.numberOfSits}
         src={data.imagePath}
+        startdate={filters.startdate}
+        enddate={filters.enddate}
       />
     );
   }
-
   return (
     <div>
       {isLoading ? (
@@ -112,18 +131,39 @@ export default function ReserveCar() {
                   value={filters.numberOfSits}
                   onChange={handleChange}
                 />
+                <Input
+                  type="date"
+                  min={moment().format("YYYY-MM-DD")}
+                  onChange={handleChange}
+                  name="startdate"
+                />
+                <Input
+                  type="date"
+                  min={moment().format("YYYY-MM-DD")}
+                  onChange={handleChange}
+                  name="enddate"
+                />
+                <Button color="success" onClick={checkAvailability}>
+                  Check availability of all cars!
+                </Button>
               </Form>
             </Col>
-            <Col>
+            <Col sm={10}>
               <Row>
                 {data
                   .filter((data) => {
                     return (
-                      data.brand.toLowerCase().includes(filters.brand.toLowerCase()) &&
-                      data.model.toLowerCase().includes(filters.model.toLowerCase()) &&
-                      data.registrationNumber.toLowerCase().includes(filters.registrationNumber.toLowerCase()) &&
-                      data.yearOfProduction >=filters.yearOfProduction &&
-                      data.numberOfDoor >=filters.numberOfDoor &&
+                      data.brand
+                        .toLowerCase()
+                        .includes(filters.brand.toLowerCase()) &&
+                      data.model
+                        .toLowerCase()
+                        .includes(filters.model.toLowerCase()) &&
+                      data.registrationNumber
+                        .toLowerCase()
+                        .includes(filters.registrationNumber.toLowerCase()) &&
+                      data.yearOfProduction >= filters.yearOfProduction &&
+                      data.numberOfDoor >= filters.numberOfDoor &&
                       data.numberOfSits >= filters.numberOfSits
                     );
                   })

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace CarRental.DAL.Interfaces
 {
-    public interface ICarRepository : IRepositoryBase<Car>
+    public interface ILocationRepository : IRepositoryBase<Location>
     {
-        Task<IEnumerable<Car>> GetAvailableCars(DateTime rentalDate, DateTime returnDate);
+        Task<Location> GetActualLocationByReservationIdAsync(int id);
     }
 }

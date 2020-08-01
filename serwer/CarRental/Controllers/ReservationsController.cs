@@ -26,12 +26,32 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetReservationByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             var result = await service.GetReservationByIdAsync(id);
             return Ok(result);
         }
 
+        [HttpGet, Route("cars/{id}")]
+        public async Task<IActionResult> GetActualReservationsByCarIdAsync(int id)
+        {
+            var result = await service.GetActualReservationsByCarIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpGet, Route("users/{id}")]
+        public async Task<IActionResult> GetAllReservationsByUserIdAsync(int id)
+        {
+            var result = await service.GetAllReservationsByUserIdAsync(id);
+            return Ok(result);
+        }
+
+        [HttpGet, Route("terms/{id}")]
+        public async Task<IActionResult> GetFreeTermsByCarIdAsync(int id)
+        {
+            var result = await service.GetFreeTermsByCarIdAsync(id);
+            return Ok(result);
+        }
         [HttpPost]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
@@ -51,7 +71,6 @@ namespace CarRental.API.Controllers
             if (await service.ReservationCanBeUpdatedAsync(reservationUpdateDto))
             {
                 var entity = await service.UpdateReservationAsync(reservationUpdateDto);
-                //var entity = await service.GetReservationByIdAsync(id);
                 return Ok(entity);
             }
             return BadRequest();
@@ -61,11 +80,15 @@ namespace CarRental.API.Controllers
         public async Task<IActionResult> DeleteReservationAsync(int id)
         {
             var entity = await service.GetReservationByIdAsync(id);
-            if (entity.RentalDate > DateTime.Now)
+            try
             {
-                await service.DeleteReservationAsync(id);
-                return Ok();
+                if (entity.RentalDate > DateTime.Now)
+                {
+                    await service.DeleteReservationAsync(id);
+                    return Ok();
+                }
             }
+            catch (NullReferenceException) { return BadRequest(); }
             return BadRequest();
         }
     }

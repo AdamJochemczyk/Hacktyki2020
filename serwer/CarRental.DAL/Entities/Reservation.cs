@@ -16,11 +16,12 @@ namespace CarRental.DAL.Entities
         public Car Car { get; set; }
         public User User { get; set; }
 
-        public void Update(DateTime rentalDate, DateTime returnDate, int carId)
+        public void Update(DateTime rentalDate, DateTime returnDate, bool isFinished)
         {
             RentalDate = rentalDate;
             ReturnDate = returnDate;
-            CarId = carId;
+            IsFinished = isFinished;
+            DateModified = DateTime.Now;
         }
     }
 }

@@ -14,7 +14,8 @@ namespace CarRental.Services.Services
     {
         private readonly ICarRepository repository;
         private readonly IMapper mapper;
-        public CarService(ICarRepository repository,
+        public CarService(
+            ICarRepository repository,
             IMapper mapper)
         {
             this.repository = repository;
@@ -32,7 +33,8 @@ namespace CarRental.Services.Services
                 NumberOfDoor = carDto.NumberOfDoor,
                 NumberOfSits = carDto.NumberOfSits,
                 YearOfProduction = carDto.YearOfProduction,
-                ImagePath = carDto.ImagePath
+                ImagePath = carDto.ImagePath,
+                DateCreated = DateTime.Now
             };
             repository.Create(car);
             await repository.SaveChangesAsync();
@@ -68,6 +70,12 @@ namespace CarRental.Services.Services
             await repository.SaveChangesAsync();
             var entity = await repository.FindByIdAsync(carDto.CarId);
             return mapper.Map<CarDto>(entity);
+        }
+
+        public async Task<IEnumerable<CarDto>> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
+        {
+            var entities = await repository.GetAvailableCars(rentalDate, returnDate);
+            return mapper.Map<IEnumerable<CarDto>>(entities);
         }
     }
 }

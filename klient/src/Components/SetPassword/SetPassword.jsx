@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -7,12 +7,13 @@ import * as Yup from "yup";
 
 export default function SetPassword() {
 
-  const { token } = useParams();
+  const { code } = useParams();
+  let history = useHistory()
 
   let initialValues = {
     encodePassword: '',
     confirmEncodePassword: '',
-    token: token
+    codeofverification: code
   }
 
   const validationSchema = Yup.object().shape({
@@ -36,6 +37,7 @@ export default function SetPassword() {
   }
 
   function sendPassword(fields) {
+  console.log("sendPassword -> fields", fields)
 
     try {
       axios({
@@ -63,6 +65,7 @@ export default function SetPassword() {
         }
       });
       Swal.fire("Good job!", "You succesfully set your password!", "success");
+      history.push('/sign-in')
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error");
     }

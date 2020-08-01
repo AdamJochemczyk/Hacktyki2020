@@ -40,16 +40,30 @@ namespace CarRental.DAL
                     FirstName = "John",
                     LastName = "Doe",
                     DateCreated = DateTime.Now
-                }
-                //,
-            //    new User
-            //    {
-            //        UserId = 2,
-            //        FirstName = "James",
-            //        LastName = "Doe",
-            //        DateCreated = DateTime.Now
-            //    }
-               );
+                });
+
+            builder.Entity<Reservation>().HasData(
+                new Reservation
+                {
+                    ReservationId = 1,
+                    RentalDate = DateTime.Now.AddDays(2),
+                    ReturnDate = DateTime.Now.AddDays(5),
+                    IsFinished = false,
+                    CarId = 1,
+                    UserId = 1,
+                    DateCreated = DateTime.Now
+                });
+
+            builder.Entity<Location>().HasData(
+                new Location
+                {
+                    LocationId = 1,
+                    ReservationId = 1,
+                    Latitude = 50.50,
+                    Longitude = 43.30,
+                    IsActual = true,
+                    DateCreated = DateTime.Now
+                });
         }
     }
 }

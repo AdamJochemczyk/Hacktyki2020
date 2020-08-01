@@ -8,6 +8,9 @@ namespace CarRental.DAL.Interfaces
 {
     public interface IReservationRepository : IRepositoryBase<Reservation>
     {
+        Task<IEnumerable<Reservation>> FindAllByUserIdAsync(int id);
+        Task<IEnumerable<Reservation>> FindAllByCarIdAsync(int id);
+        Task<IEnumerable<Reservation>> FindCloseReservationsByCarIdAsync(int id);
         Task<bool> ReservationCanBeCreatedAsync(Reservation reservation);
         Task<bool> ReservationCanBeUpdatedAsync(Reservation reservation);
     }
