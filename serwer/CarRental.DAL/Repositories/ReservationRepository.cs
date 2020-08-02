@@ -81,14 +81,14 @@ namespace CarRental.DAL.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Reservation>> FindCloseReservationsByCarIdAsync(int id)
-        {
-            return await context.Reservations
-                .Where(p => p.CarId == id)
-                .Where(p => p.IsFinished == false)
-                .Where(p => p.RentalDate <= DateTime.Now.AddDays(14).Date)
-                .Where(p => p.RentalDate >= DateTime.Now.Date)
-                .ToListAsync();
-        }
+        //public async Task<IEnumerable<Reservation>> FindCloseReservationsByCarIdAsync(int id)
+        //{
+        //    return await context.Reservations
+        //        .Where(p => p.CarId == id)
+        //        .Where(p => p.IsFinished == false)
+        //      //  .Where(p => p.RentalDate <= DateTime.Now.AddDays(14).Date)
+        //       // .Where(p => p.RentalDate >= DateTime.Now.Date)
+        //        .ToListAsync();
+        //}
     }
 }

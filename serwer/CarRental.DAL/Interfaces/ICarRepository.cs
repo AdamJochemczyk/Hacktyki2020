@@ -8,6 +8,6 @@ namespace CarRental.DAL.Interfaces
 {
     public interface ICarRepository : IRepositoryBase<Car>
     {
-        Task<IEnumerable<Car>> GetAvailableCars(DateTime rentalDate, DateTime returnDate);
+        Task<IEnumerable<Car>> GetReservedCarsByDates(DateTime rentalDate, DateTime returnDate);
     }
 }

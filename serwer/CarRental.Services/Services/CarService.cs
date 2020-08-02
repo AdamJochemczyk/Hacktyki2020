@@ -5,6 +5,7 @@ using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Car;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -74,8 +75,11 @@ namespace CarRental.Services.Services
 
         public async Task<IEnumerable<CarDto>> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
         {
-            var entities = await repository.GetAvailableCars(rentalDate, returnDate);
-            return mapper.Map<IEnumerable<CarDto>>(entities);
+            var reservedCars = await repository.GetReservedCarsByDates(rentalDate, returnDate);
+            var allCars = await repository.FindAllAsync();
+            List<Car> availableCars = allCars.Except(reservedCars).ToList();
+
+            return mapper.Map<IEnumerable<CarDto>>(availableCars);
         }
     }
 }
