@@ -105,10 +105,11 @@ namespace CarRental.Services.Services
 
         public async Task<IEnumerable<string>> GetFreeTermsByCarIdAsync(int id)
         {
-            var reservations = await repository.FindCloseReservationsByCarIdAsync(id);
+            var reservations = await repository.FindAllByCarIdAsync(id);
             var freeDays = Enumerable.Range(DateTime.Now.DayOfYear, 14).ToList();
             var dates = new List<string>();
             string date;
+
             foreach (var reservation in reservations)
             {
                 for (int i = reservation.RentalDate.DayOfYear; i <= reservation.ReturnDate.DayOfYear; i++)

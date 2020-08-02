@@ -52,6 +52,7 @@ namespace CarRental.API.Controllers
             var result = await service.GetFreeTermsByCarIdAsync(id);
             return Ok(result);
         }
+
         [HttpPost]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
