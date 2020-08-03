@@ -18,7 +18,7 @@ export default function useUserManager(){
     setData(res);
     setIsLoading(false)
       }catch(error){
-        history.goBack()
+       // history.goBack()
           console.log(error)
       }
   }

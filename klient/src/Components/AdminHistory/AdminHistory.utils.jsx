@@ -36,23 +36,23 @@ export default function useAdminHistory() {
       },
       {
         Header: "Registration Number",
-        //accessor: "registrationNumber",
+        accessor: "car.registrationNumber",
       },
       {
         Header: "Name",
-       // accessor: "name",
+        accessor: "user.firstName",
       },
       {
         Header: "Surame",
-       // accessor: "surname",
+        accessor: "user.lastName",
       },
       {
         Header: "Phone",
-      //  accessor: "phone",
+        accessor: "user.mobileNumber",
       },
       {
         Header: "Mail",
-       // accessor: "mail",
+        accessor: "user.email",
       },
     ],
     []

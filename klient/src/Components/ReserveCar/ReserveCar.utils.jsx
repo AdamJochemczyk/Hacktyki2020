@@ -28,7 +28,6 @@ export default function useReserveCar() {
       setIsLoading(false);
     } catch (error) {
       console.log(error);
-      history.goBack();
     }
   }
 

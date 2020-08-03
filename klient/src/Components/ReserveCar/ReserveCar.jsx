@@ -30,7 +30,7 @@ export default function ReserveCar() {
           <Row>
             <Col sm={2}>
               <Form>
-                Search your car by:
+                Search car by:
                 <Input
                   type="text"
                   placeholder="Brand"
@@ -54,21 +54,21 @@ export default function ReserveCar() {
                 />
                 <Input
                   type="text"
-                  placeholder="Year Of Production"
+                  placeholder="Minimum year of production"
                   name="yearOfProduction"
                   value={filters.yearOfProduction}
                   onChange={handleChange}
                 />
                 <Input
                   type="text"
-                  placeholder="Number of doors"
+                  placeholder="Minimum number of doors"
                   name="numberOfDoor"
                   value={filters.numberOfDoor}
                   onChange={handleChange}
                 />
                 <Input
                   type="text"
-                  placeholder="Sits places"
+                  placeholder="Minimum sits places"
                   name="numberOfSits"
                   value={filters.numberOfSits}
                   onChange={handleChange}
@@ -92,7 +92,7 @@ export default function ReserveCar() {
                     checkAvailability(filters.startdate, filters.enddate)
                   }
                 >
-                  Check availability of all cars!
+                  Search
                 </Button>
               </Form>
             </Col>
