@@ -41,6 +41,7 @@ namespace CarRental.API.StartupExtensions
                 .AddSingleton<Profile, UserProfile>()
                 .AddSingleton<Profile, CarProfile>()
                 .AddSingleton<Profile, LocationProfile>()
+                .AddSingleton<Profile,DefectProfile>()
                 .AddSingleton<IConfigurationProvider, AutoMapperConfiguration>(p =>
                     new AutoMapperConfiguration(p.GetServices<Profile>()))
                 .AddSingleton<IMapper, Mapper>();
@@ -56,6 +57,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IDefectsService, DefectService>();
             return services;
         }
 
@@ -66,6 +68,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<ICarRepository, CarRepository>();
             services.AddScoped<IRefreshRepository, RefreshRepository>();
             services.AddScoped<ILocationRepository, LocationRepository>();
+            services.AddScoped<IDefectRepository, DefectRepository>();
             return services;
         }
 

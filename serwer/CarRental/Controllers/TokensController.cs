@@ -12,10 +12,10 @@ namespace CarRental.API.Controllers
 {
      [Route("api/refresh")]
      [ApiController]
-    public class TokenController : Controller
+    public class TokensController : Controller
     {
         public  ITokenService _tokenService;
-        public TokenController(ITokenService tokenService)
+        public TokensController(ITokenService tokenService)
         {
             _tokenService = tokenService;
         }

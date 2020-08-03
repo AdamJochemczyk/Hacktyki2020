@@ -70,15 +70,9 @@ namespace CarRental.Services.Services
                 _email.EmailAfterRegistration(createUserDto);
             }
             else
-                return createUserDto;
-                
+                return createUserDto;                
             return _mapper.Map<CreateUserDto>(new_user);
-
-
         }
-
-
-
 
         public async Task<bool> SetPassword(UpdateUserPasswordDto updateUserPassword)
         {
@@ -90,7 +84,6 @@ namespace CarRental.Services.Services
             return true;
         }
 
-
         public async Task<TokenDto> SignIn(UserLoginDto userLoginDto)
         {
             var user = await _userRepository.FindByLogin(userLoginDto.Email);
@@ -99,17 +92,13 @@ namespace CarRental.Services.Services
                 TokenDto token_error = new TokenDto();
                 token_error.ErrorCode = 401;
                 return token_error;
-            }
-
-          
+            } 
             //Return two tokens Access , Refresh
             TokenDto token = new TokenDto();
             token.ErrorCode = 200;
             token.AccessToken =await _token.GenerateToken(user.UserId);
-            token.RefreshToken = _token.RefreshGenerateToken();
-           
+            token.RefreshToken = _token.RefreshGenerateToken();           
             //Save To database Refresh token 
-
             RefreshToken refreshToken = new RefreshToken(token.RefreshToken, user.UserId, true);
             _refreshRepository.Create(refreshToken);
            await _refreshRepository.SaveChangesAsync();

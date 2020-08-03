@@ -4,14 +4,16 @@ using CarRental.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarRental.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200802105033_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +70,7 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 8, 2, 15, 31, 26, 559, DateTimeKind.Local).AddTicks(458),
+                            DateCreated = new DateTime(2020, 8, 2, 12, 50, 33, 316, DateTimeKind.Local).AddTicks(3431),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             Model = "Q5",
@@ -95,26 +97,14 @@ namespace CarRental.DAL.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateOfReport")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RegistrationNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<string>("Surname")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -166,7 +156,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             LocationId = 1,
-                            DateCreated = new DateTime(2020, 8, 2, 15, 31, 26, 564, DateTimeKind.Local).AddTicks(2984),
+                            DateCreated = new DateTime(2020, 8, 2, 12, 50, 33, 321, DateTimeKind.Local).AddTicks(8636),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActual = true,
                             Latitude = 50.5,
@@ -248,11 +238,11 @@ namespace CarRental.DAL.Migrations
                         {
                             ReservationId = 1,
                             CarId = 1,
-                            DateCreated = new DateTime(2020, 8, 2, 15, 31, 26, 564, DateTimeKind.Local).AddTicks(1012),
+                            DateCreated = new DateTime(2020, 8, 2, 12, 50, 33, 321, DateTimeKind.Local).AddTicks(4973),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsFinished = false,
-                            RentalDate = new DateTime(2020, 8, 4, 15, 31, 26, 563, DateTimeKind.Local).AddTicks(9528),
-                            ReturnDate = new DateTime(2020, 8, 7, 15, 31, 26, 563, DateTimeKind.Local).AddTicks(9949),
+                            RentalDate = new DateTime(2020, 8, 4, 12, 50, 33, 321, DateTimeKind.Local).AddTicks(2334),
+                            ReturnDate = new DateTime(2020, 8, 7, 12, 50, 33, 321, DateTimeKind.Local).AddTicks(2755),
                             UserId = 1
                         });
                 });
@@ -311,7 +301,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 8, 2, 15, 31, 26, 563, DateTimeKind.Local).AddTicks(8281),
+                            DateCreated = new DateTime(2020, 8, 2, 12, 50, 33, 321, DateTimeKind.Local).AddTicks(1270),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
                             LastName = "Doe",

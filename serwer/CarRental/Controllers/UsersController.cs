@@ -22,7 +22,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> GetUsersAsync()
         {
             var result = await _usersService.GetAllUsers();

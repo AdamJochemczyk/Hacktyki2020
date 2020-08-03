@@ -11,11 +11,11 @@ namespace CarRental.API.Controllers
 {
     [Route("api/authorization")]
     [ApiController]
-    public class AuthorizationController : Controller
+    public class AuthorizationsController : Controller
     {
         private readonly IAuthorizationService _authorizationService;
 
-        public AuthorizationController(IAuthorizationService authorizationService)
+        public AuthorizationsController(IAuthorizationService authorizationService)
         {
             _authorizationService = authorizationService;
         }
