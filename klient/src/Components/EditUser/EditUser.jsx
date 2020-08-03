@@ -1,190 +1,123 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import axios from "axios";
+import useEditUser from "./EditUser.utils";
 
-export default function EditUser() {
-  const { id } = useParams();
+export default function EditUser({ history }) {
+  const id = history.location.state;
   const isAddMode = !id;
 
-  let initialValues = {
-    FirstName: "",
-    LastName: "",
-    Email: "",
-    NumberIdentificate: "",
-    MobileNumber: "",
-  };
+  const {
+    user,
+    initialValues,
+    validationSchema,
+    isSubmitting,
+    createUser,
+    updateUser,
+    fetchUser,
+  } = useEditUser();
 
-  const validationSchema = Yup.object().shape({
-    FirstName: Yup.string()
-      .min(3, "Too short!")
-      .max(20, "Too long!")
-      .required("Required"),
-    LastName: Yup.string()
-      .min(3, "Too short!")
-      .max(20, "Too long!")
-      .required("Required"),
-    NumberIdentificate: Yup.string()
-      .min(6)
-      .max(6, "Too long!")
-      .required("Required"),
-    Email: Yup.string().email("Invalid email").required("Required"),
-    MobileNumber: Yup.string()
-      .min(9, "Must contains at least 9 numers")
-      .max(15, "Too long number")
-      .required("Required"),
-  });
-
-  function onSubmit(fields, { setStatus, setSubmitting }) {
-    setStatus();
+  function onSubmit(fields, { setSubmitting }) {
     if (isAddMode) {
       createUser(fields, setSubmitting);
+      document.getElementById("userUpsert").reset();
     } else {
       updateUser(id, fields, setSubmitting);
     }
   }
 
-  function createUser(fields, setSubmitting) {
-    try {
-      axios({
-        url: "https://localhost:44390/api/authorization",
-        method: "POST",
-        data: fields,
-      });
-    } catch (e) {
-      console.log(e);
-      setSubmitting(false);
-    }
-  }
-
-  function updateUser(id, fields, setSubmitting) {
-    fields.UserId = parseInt(id);
-    console.log(fields);
-    try {
-      axios({
-        url: "https://localhost:44390/api/users/" + id,
-        method: "PUT",
-        data: fields,
-      });
-      alert("User edited");
-      setSubmitting(true);
-    } catch (e) {
-      console.log(e);
-      setSubmitting(false);
-    }
-  }
-  const [user, setUser] = useState();
-
-  const fetchUser = async () => {
-    if (!isAddMode) {
-      try {
-        await axios.get(
-          "https://localhost:44390/api/users/" + id
-        ).then(res=> {
-          const myuser=res.data;
-          console.log("User from api:",myuser)
-          setUser(myuser)
-        });
-        console.log("User:",user)
-        /*setUser(response.data);
-        console.log("Response data:", response.data);
-        console.log("user:", user)
-        console.log("initialvalues:", initialValues);*/
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
   useEffect(() => {
-    fetchUser();
+    if (!isAddMode) {
+    fetchUser(id);
+    }
   }, []);
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={isAddMode ? initialValues : user}
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={onSubmit}
     >
-      {({ errors, touched, isSubmitting }) => {
+      {({ errors, touched }) => {
         return (
-          <Form>
+          <Form id="userUpsert" className="upsertforms">
             <h1>{isAddMode ? "Add User" : "Edit User"}</h1>
 
             <label>First Name</label>
             <Field
-              name="FirstName"
+              name="firstName"
               className={
                 "form-control" +
-                (errors.FirstName && touched.FirstName ? " is-invalid" : "")
+                (errors.firstName && touched.firstName ? " is-invalid" : "")
               }
             />
             <ErrorMessage
-              name="FirstName"
+              name="firstName"
               component="div"
               className="invalid-feedback"
             />
 
             <label>Last Name</label>
             <Field
-              name="LastName"
+              name="lastName"
               type="text"
               className={
                 "form-control" +
-                (errors.LastName && touched.LastName ? " is-invalid" : "")
+                (errors.lastName && touched.lastName ? " is-invalid" : "")
               }
             />
             <ErrorMessage
-              name="LastName"
+              name="lastName"
               component="div"
               className="invalid-feedback"
             />
 
             <label>Email</label>
             <Field
-              name="Email"
+              name="email"
               type="text"
+              disabled={!isAddMode}
               className={
                 "form-control" +
-                (errors.Email && touched.Email ? " is-invalid" : "")
+                (errors.email && touched.email ? " is-invalid" : "")
               }
             />
             <ErrorMessage
-              name="Email"
+              name="email"
               component="div"
               className="invalid-feedback"
             />
 
             <label>Number Identificate</label>
             <Field
-              name="NumberIdentificate"
+              name="numberIdentificate"
               type="text"
               className={
                 "form-control" +
-                (errors.NumberIdentificate && touched.NumberIdentificate
+                (errors.numberIdentificate && touched.numberIdentificate
                   ? " is-invalid"
                   : "")
               }
             />
             <ErrorMessage
-              name="NumberIdentificate"
+              name="numberIdentificate"
               component="div"
               className="invalid-feedback"
             />
 
             <label>Mobile Number</label>
             <Field
-              name="MobileNumber"
+              name="mobileNumber"
               className={
                 "form-control" +
-                (errors.MobileNumber && touched.MobileNumber
+                (errors.mobileNumber && touched.mobileNumber
                   ? " is-invalid"
                   : "")
               }
             />
             <ErrorMessage
-              name="MobileNumber"
+              name="mobileNumber"
               component="div"
               className="invalid-feedback"
             />

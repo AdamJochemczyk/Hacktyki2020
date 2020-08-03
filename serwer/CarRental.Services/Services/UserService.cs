@@ -14,14 +14,12 @@ namespace CarRental.Services.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly IEmailServices _email;
         public UsersService(
           IUserRepository userRepository,
-          IMapper mapper,IEmailServices email)
+          IMapper mapper)
         {
             _userRepository = userRepository;
             _mapper = mapper;
-            _email = email;
         }
         //For decode password @Zaneta
         //public string DecodeFrom64(string encodeddata)
@@ -37,6 +35,7 @@ namespace CarRental.Services.Services
         //}
         public async Task DeleteUser(int Id) 
         {
+            
             var user = await _userRepository.FindByIdAsync(Id);
             _userRepository.Delete(user);
             await _userRepository.SaveChangesAsync();
@@ -51,19 +50,29 @@ namespace CarRental.Services.Services
         public async Task<UsersDto> GetUser(int Id)
         {
             var user = await _userRepository.FindByIdAsync(Id);
+           
             return _mapper.Map<UsersDto>(user);
         }
-        
+
         public async Task<UsersDto> UpdateUser(UsersDto usersDto)
         {
-            var user = await _userRepository.FindByIdAsync(usersDto.UserId);
-           user.Update(usersDto.FirstName,usersDto.LastName,usersDto.NumberIdentificate,usersDto.Email,usersDto.MobileNumber);
-             _userRepository.Update(user);
-            await _userRepository.SaveChangesAsync();
-            user = await _userRepository.FindByIdAsync(usersDto.UserId);
+         
+                var user = await _userRepository.FindByIdAsync(usersDto.UserId);
+                var check_user = await _userRepository.FindByLogin(usersDto.Email);
+                if (check_user.Email == user.Email)
+                {
+                    user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);
+                    _userRepository.Update(user);
+                    await _userRepository.SaveChangesAsync();
+                }
+                else
+                return _mapper.Map<UsersDto>(user);
+                  
+                user = await _userRepository.FindByIdAsync(usersDto.UserId);
             return _mapper.Map<UsersDto>(user);
+
         }
-       
+
 
     }
 }

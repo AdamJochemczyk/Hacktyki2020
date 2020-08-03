@@ -13,6 +13,5 @@ namespace CarRental.Services.Models.User
         public string NumberIdentificate { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
-        public string EncodePassword { get; set; }
     }
 }

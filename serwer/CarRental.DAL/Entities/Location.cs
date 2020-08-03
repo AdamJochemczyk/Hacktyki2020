@@ -6,10 +6,18 @@ namespace CarRental.DAL.Entities
 {
     public class Location : BaseEntity
     {
-        public int LocationId { get; set; }
-        public int CarId { get; set; }
-        public string Position { get; set; }
+        //public int LocationId { get; set; }
+        //public int CarId { get; set; }
+        //public string Position { get; set; }
 
-        public Car Car { get; set; }
+        //public Car Car { get; set; }
+
+        public int LocationId { get; set; }
+        public int ReservationId { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public bool IsActual { get; set; }
+
+        public Reservation Reservation { get; set; }
     }
 }

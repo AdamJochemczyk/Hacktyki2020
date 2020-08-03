@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using CarRental.Services.Interfaces;
@@ -10,36 +11,38 @@ namespace CarRental.API.Controllers
 {
     [Route("api/authorization")]
     [ApiController]
-    public class AuthorizationController : Controller
+    public class AuthorizationsController : Controller
     {
         private readonly IAuthorizationService _authorizationService;
 
-        public AuthorizationController(IAuthorizationService authorizationService)
+        public AuthorizationsController(IAuthorizationService authorizationService)
         {
             _authorizationService = authorizationService;
         }
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(CreateUserDto createUserDto)
         {
             if (createUserDto == null) return BadRequest("User is null");
             var user = await _authorizationService.RegistrationUserAsync(createUserDto);
+            if (user.UserId == 0)
+                return BadRequest("This Email already exists");
             return Ok(user);
         }
-        [HttpGet]
+        //
+        [HttpPost("signIn")]
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
-            if (!await _authorizationService.SignIn(userLoginDto))
-            {
-                return BadRequest("Failed Login");
-            }
-            return Ok(userLoginDto);
+            var cos = await _authorizationService.SignIn(userLoginDto);
+            if (cos.ErrorCode == 401)
+                return Unauthorized("Email/Password not correct");
+            return Ok(cos);
         }
-        [HttpPut("{id}")]
-        public async Task<IActionResult> SetPassword(int id,UpdateUserPasswordDto updateUserDto)
+        [HttpPut]
+        public async Task<IActionResult> SetPassword(UpdateUserPasswordDto updateUserPassword)
         {
-            if (id != updateUserDto.UserId) return BadRequest("Users isn't the same"); 
-            var user_set = await _authorizationService.SetPassword(updateUserDto);
-            return Ok(user_set);
+            if (!await _authorizationService.SetPassword(updateUserPassword))
+                return BadRequest("Password isn't the same please check");        
+            return Ok();
         }
     }
 }

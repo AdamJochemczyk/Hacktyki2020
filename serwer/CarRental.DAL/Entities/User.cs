@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace CarRental.DAL.Entities
@@ -12,8 +13,12 @@ namespace CarRental.DAL.Entities
         public string NumberIdentificate { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
-        public string EncodePassword { get; set; }
+        public string HashPassword { get; set; }
+        public string Salt { get; set; }
         public string StatusOfVerification { get; set; }
+        public RoleOfWorker RoleOfUser { get; set; }
+        public string CodeOfVerification { get; set; }
+        public List<RefreshToken> RefreshTokens { get; set; }
         public User(string firstName, string lastName, string numberIdentificate, string email,
             string mobileNumber)
         {
@@ -23,7 +28,16 @@ namespace CarRental.DAL.Entities
             Email = email;
             MobileNumber = mobileNumber;
             DateCreated = DateTime.Now;
+            RoleOfUser = RoleOfWorker.Worker;
             StatusOfVerification = "Processing...";
+            
+            using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
+            {
+                byte[] tokenData = new byte[32];
+                rng.GetBytes(tokenData);
+
+                CodeOfVerification = Convert.ToBase64String(tokenData);
+            }
         }
         public User()
         {
@@ -39,9 +53,10 @@ namespace CarRental.DAL.Entities
             MobileNumber = mobileNumber;
             DateModified = DateTime.Now;
         }
-        public void SetPassword(string encodePassword)
+        public void SetPassword(string encodePassword,string salt)
         {
-            EncodePassword = encodePassword;
+            Salt = salt;
+            HashPassword = encodePassword;
             StatusOfVerification = "Account has been registered.";
 
         }

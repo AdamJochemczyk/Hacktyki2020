@@ -68,13 +68,14 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 7, 21, 16, 30, 53, 802, DateTimeKind.Local).AddTicks(9455),
+                            DateCreated = new DateTime(2020, 8, 3, 14, 38, 35, 147, DateTimeKind.Local).AddTicks(5896),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             Model = "Q5",
-                            NumberOfDoor = 0,
-                            NumberOfSits = 0,
-                            TypeOfCar = 0,
+                            NumberOfDoor = 5,
+                            NumberOfSits = 5,
+                            RegistrationNumber = "SZE4562",
+                            TypeOfCar = 1,
                             YearOfProduction = 2019
                         });
                 });
@@ -95,14 +96,29 @@ namespace CarRental.DAL.Migrations
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateOfReport")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RegistrationNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("Surname")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -123,26 +139,73 @@ namespace CarRental.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsActual")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Position")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ReservationId")
+                        .HasColumnType("int");
 
                     b.HasKey("LocationId");
 
-                    b.HasIndex("CarId");
+                    b.HasIndex("ReservationId");
 
                     b.ToTable("Locations");
+
+                    b.HasData(
+                        new
+                        {
+                            LocationId = 1,
+                            DateCreated = new DateTime(2020, 8, 3, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(7022),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActual = true,
+                            Latitude = 50.5,
+                            Longitude = 43.299999999999997,
+                            ReservationId = 1
+                        });
+                });
+
+            modelBuilder.Entity("CarRental.DAL.Entities.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateOfEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Refresh")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Refresh");
                 });
 
             modelBuilder.Entity("CarRental.DAL.Entities.Reservation", b =>
@@ -183,6 +246,19 @@ namespace CarRental.DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reservations");
+
+                    b.HasData(
+                        new
+                        {
+                            ReservationId = 1,
+                            CarId = 1,
+                            DateCreated = new DateTime(2020, 8, 3, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(5199),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsFinished = false,
+                            RentalDate = new DateTime(2020, 8, 5, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(3723),
+                            ReturnDate = new DateTime(2020, 8, 8, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(4185),
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("CarRental.DAL.Entities.User", b =>
@@ -191,6 +267,9 @@ namespace CarRental.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CodeOfVerification")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -201,10 +280,10 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EncodePassword")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("HashPassword")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -219,6 +298,12 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("NumberIdentificate")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RoleOfUser")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Salt")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("StatusOfVerification")
                         .HasColumnType("nvarchar(max)");
 
@@ -230,10 +315,11 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 7, 21, 16, 30, 53, 807, DateTimeKind.Local).AddTicks(146),
+                            DateCreated = new DateTime(2020, 8, 3, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(2314),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
-                            LastName = "Doe"
+                            LastName = "Doe",
+                            RoleOfUser = 0
                         });
                 });
 
@@ -254,9 +340,18 @@ namespace CarRental.DAL.Migrations
 
             modelBuilder.Entity("CarRental.DAL.Entities.Location", b =>
                 {
-                    b.HasOne("CarRental.DAL.Entities.Car", "Car")
+                    b.HasOne("CarRental.DAL.Entities.Reservation", "Reservation")
                         .WithMany()
-                        .HasForeignKey("CarId")
+                        .HasForeignKey("ReservationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CarRental.DAL.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("CarRental.DAL.Entities.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

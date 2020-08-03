@@ -2,9 +2,17 @@
 using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.Services.Interfaces;
+using CarRental.Services.Models.HashPassword;
+using CarRental.Services.Models.Token;
 using CarRental.Services.Models.User;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,81 +24,85 @@ namespace CarRental.Services.Services
         private readonly IUserRepository _userRepository;
         private readonly IEmailServices _email;
         private readonly IMapper _mapper;
-        public AuthorizationService(IUserRepository userRepository,IEmailServices email , IMapper mapper)
+        private readonly ITokenService _token;
+        private readonly IRefreshRepository _refreshRepository;
+        public AuthorizationService(IUserRepository userRepository,IEmailServices email , IMapper mapper
+            ,ITokenService token, IRefreshRepository refreshRepository )
         {
             _userRepository = userRepository;
             _email = email;
             _mapper = mapper;
+            _token = token;
+            _refreshRepository=refreshRepository;
         }
+        //Generate Hash Password
+        public static HashSaltDto GenerateSaltedHash(int size, string password)
+        {
+            var saltBytes = new byte[size];
+            var provider = new RNGCryptoServiceProvider();
+            provider.GetNonZeroBytes(saltBytes);
+            var salt = Convert.ToBase64String(saltBytes);
 
-        public static string EncodePasswordToBase64(string password)
-        {
-            try
-            {
-                byte[] encData_byte = new byte[password.Length];
-                encData_byte = System.Text.Encoding.UTF8.GetBytes(password);
-                string encodedData = Convert.ToBase64String(encData_byte);
-                return encodedData;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error in base64Encode" + ex.Message);
-            }
+            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 10000);
+            var hashPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256));
+
+            HashSaltDto hashSalt = new HashSaltDto { Hash = hashPassword, Salt = salt };
+            return hashSalt;
         }
-        public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
+        //Verify Password
+        public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
         {
-            try {
-                if (createUserDto == null)
-                    throw new Exception("Model is empty");
+            var saltBytes = Convert.FromBase64String(storedSalt);
+            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(enteredPassword, saltBytes, 10000);
+            return Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256)) == storedHash;
+        }
+            public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
+        {
             var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.NumberIdentificate,
                 createUserDto.Email, createUserDto.MobileNumber);
                 var check_user = await _userRepository.FindByLogin(createUserDto.Email);
-                if (check_user == null)
-                {
-                    _userRepository.Create(new_user);
-                    await _userRepository.SaveChangesAsync();
-                    _email.EmailAfterRegistration(createUserDto);
-                    return _mapper.Map<CreateUserDto>(new_user);
-                }
-               else
-                    throw new Exception("User with this email exists");
-            }
-            catch (InvalidCastException)
+            if (check_user == null)
             {
-                return createUserDto;
-            }
-        }
-        public async Task<CreateUserDto> SetPassword(UpdateUserPasswordDto updateUserDto)
-        {
-            var user = await _userRepository.FindByIdDetails(updateUserDto.UserId); ;   
-            try
-            {
-                if (updateUserDto.EncodePassword != updateUserDto.ConfirmEncodePassword)
-                    throw new Exception("Passwords isn't the same");
-                if (user == null)
-                    throw new Exception("This user does not exist");
-                user.SetPassword(EncodePasswordToBase64(updateUserDto.EncodePassword));
-                _userRepository.Update(user);
+                _userRepository.Create(new_user);
                 await _userRepository.SaveChangesAsync();
-                user = await _userRepository.FindByIdAsync(updateUserDto.UserId);
-                return _mapper.Map<CreateUserDto>(user);
-            }catch (InvalidCastException){
-                return _mapper.Map<CreateUserDto>(user);
+                createUserDto.UserId = new_user.UserId;
+                createUserDto.CodeOfVerification = new_user.CodeOfVerification;
+                _email.EmailAfterRegistration(createUserDto);
             }
+            else
+                return createUserDto;                
+            return _mapper.Map<CreateUserDto>(new_user);
         }
-        public async Task<bool> SignIn(UserLoginDto userLoginDto)
+
+        public async Task<bool> SetPassword(UpdateUserPasswordDto updateUserPassword)
         {
-            var password = EncodePasswordToBase64(userLoginDto.EncodePassword);
-            var user = await _userRepository.FindByLogin(userLoginDto.Email);
-            try
-            {
-                if (user.Email == null)
-                    throw new Exception("Email not correct");
-                if (user.EncodePassword != password)
-                    throw new Exception("Password not correct");
-            }
-            catch (InvalidCastException) { return false; }
+            var user = await _userRepository.FindByCodeOfVerification(updateUserPassword.CodeOfVerification);
+            var saltHashPassword = GenerateSaltedHash(16, updateUserPassword.EncodePassword);
+            user.SetPassword(saltHashPassword.Hash, saltHashPassword.Salt);
+            _userRepository.Update(user);
+           await _userRepository.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<TokenDto> SignIn(UserLoginDto userLoginDto)
+        {
+            var user = await _userRepository.FindByLogin(userLoginDto.Email);
+            if (userLoginDto.Email!=user.Email||!VerifyPassword(userLoginDto.EncodePassword, user.HashPassword,user.Salt))
+            {
+                TokenDto token_error = new TokenDto();
+                token_error.ErrorCode = 401;
+                return token_error;
+            } 
+            //Return two tokens Access , Refresh
+            TokenDto token = new TokenDto();
+            token.ErrorCode = 200;
+            token.AccessToken =await _token.GenerateToken(user.UserId);
+            token.RefreshToken = _token.RefreshGenerateToken();           
+            //Save To database Refresh token 
+            RefreshToken refreshToken = new RefreshToken(token.RefreshToken, user.UserId, true);
+            _refreshRepository.Create(refreshToken);
+           await _refreshRepository.SaveChangesAsync();
+            return token;
         }
     }
 }

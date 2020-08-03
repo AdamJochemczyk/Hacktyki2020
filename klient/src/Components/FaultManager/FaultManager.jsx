@@ -1,40 +1,85 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Input } from "reactstrap";
 import FaultManagerTable from "../FaultManagerTable/FaultManagerTable";
+import Swal from "sweetalert2";
+import { useHistory } from "react-router-dom";
+import Loader from "react-loader-spinner";
+import axios from "axios";
 
 export default function FaultManager() {
-  /* const [data, setData] = useState([]);
+  //TODO:
+  //API CREATE, GET, PUT, DELETE
+  const [data, setData] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  let history = useHistory();
 
-// Using useEffect to call the API once mounted and set the data
-useEffect(() => {
-(async () => {
-  const result = await axios("https://api.tvmaze.com/search/shows?q=snow");
-  setData(result.data);
-})();
-}, []);*/
+  /*useEffect(() => {
+    async function fetchFaults(){
+       try {
+      setIsLoading(true)
+      const response = await axios({
+        url: '',
+        metod: "GET"});
+      setData(response.data);
+      setIsLoading(false)
+    } catch (error) {
+      Swal.fire("Oops...", "Something went wrong!", "error").then(() =>
+        history.goBack()
+      );
+    }
+    }
+    fetchFaults()
+    },[]);*/
+    /*const data= [{
+      reservationId: 1,
+      status: "to check"
+    }]*/
 
-  const data = [
-    {
-      faultId: "1",
-      registrationNumber: "STA22345",
-      description: "motor cant start",
-      name: "Grzegorz",
-      surname: "Bąk",
-      phone: "123456789",
-      dateofreport: "12.01.2020",
-      status: "to check",
-    },
-    {
-      faultId: "2",
-      registrationNumber: "STA22345",
-      description: "motor cant start",
-      name: "Grzegorz",
-      surname: "Bąk",
-      phone: "123456789",
-      dateofreport: "13.01.2020",
-      status: "all okay",
-    },
-  ];
+    async function deleteFault(id){
+      try{
+      await axios({
+        url: '',
+        method: "DELETE",
+        data: id
+      }).catch((error)=>
+      Swal.fire("Oops...", error.message,"error"))
+    }catch(error){
+      console.log(error)
+    }
+    }
+
+    async function updateStatus(id){
+      const fields={
+        id: id,
+        status: "in progress"
+      }
+      try{
+        await axios({
+          url: '',
+          method: "PUT",
+          data: fields
+        }).catch((error)=>
+        Swal.fire("Oops...", error.message,"error"))
+      }catch(error){
+        console.log(error)
+      }
+    }
+
+  function handleChange(id, status) {
+    switch(status) {
+      case "all okay":
+        deleteFault(id)
+        break;
+        case "in progress":
+        updateStatus(id)
+        break;
+        case "to check":
+          Swal.fire("Whooa!","You should pick in progress or all okay status","question")
+          break;
+      default:
+        Swal.fire("Oops...","Something went wrong","error")
+    }
+  }
 
   const columns = useMemo(
     () => [
@@ -69,7 +114,7 @@ useEffect(() => {
           <Input
             type="select"
             defaultValue={row.original.status}
-            onChange={(e) => console.log(e.target.value)}
+            onChange={(e) => handleChange(row.original.faultId, e.target.value)}
           >
             <option value="to check"> to check </option>
             <option value="all okay"> all okay </option>
@@ -81,5 +126,15 @@ useEffect(() => {
     []
   );
 
-  return <FaultManagerTable columns={columns} data={data} />;
+  return (
+    <div>
+      {isLoading ? (
+        <div className="loader">
+          <Loader type="Oval" color="#00BFFF" />
+        </div>
+      ) : (
+        <FaultManagerTable columns={columns} data={data} />
+      )}
+    </div>
+  );
 }

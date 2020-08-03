@@ -7,6 +7,6 @@ namespace CarRental.Services.Interfaces
 {
     public interface IEmailServices
     {
-        public void EmailAfterRegistration(CreateUserDto createUserDto);
+        public bool EmailAfterRegistration(CreateUserDto createUserDto);
     }
 }
