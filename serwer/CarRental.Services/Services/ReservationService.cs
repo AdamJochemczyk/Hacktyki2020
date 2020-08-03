@@ -103,10 +103,15 @@ namespace CarRental.Services.Services
             return mapper.Map<IEnumerable<ReservationDto>>(entities);
         }
 
-        public async Task<IEnumerable<string>> GetFreeTermsByCarIdAsync(int id)
+        public async Task<IEnumerable<string>> GetFreeTermsByCarIdAsync(int id, DateTime? rentalDate, DateTime? returnDate)
         {
             var reservations = await repository.FindAllByCarIdAsync(id);
-            var freeDays = Enumerable.Range(DateTime.Now.DayOfYear, 14).ToList();
+            int week = 7;
+            var startRange 
+                = (rentalDate == null || rentalDate.Value.DayOfYear - week < DateTime.Now.DayOfYear) ? 
+                DateTime.Now.DayOfYear : rentalDate.Value.DayOfYear - week;
+            var endRange = returnDate == null ? 2 * week : returnDate.Value.DayOfYear - rentalDate.Value.DayOfYear + week + 1;            
+            var freeDays = Enumerable.Range(startRange, endRange).ToList();
             var dates = new List<string>();
             string date;
 

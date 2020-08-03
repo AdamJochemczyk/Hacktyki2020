@@ -1,6 +1,5 @@
 ﻿using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
-using CarRental.DAL.Migrations;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

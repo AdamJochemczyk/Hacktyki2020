@@ -1,18 +1,19 @@
 import React, { useState } from "react";
-import { Col, Row, Button } from "reactstrap";
+import { Col, Row, Button, Table } from "reactstrap";
 import { useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import moment from "moment"
+import Api from "../API";
 
 export default function Booking({ history }) {
   let data = history.location.state;
   let redirect = useHistory();
   const BASE_URL = process.env.REACT_APP_RESERVATION_API;
   const [checkavilable, setCheckAvilable] = useState(false);
-  const [reserved, setReservedTerms] = useState();
+  const [freeTerms, setFreeTerms] = useState([]);
 
   let initialValues = {
     rentaldate: data.startdate,
@@ -28,24 +29,18 @@ export default function Booking({ history }) {
 
   async function checkAvilable() {
     setCheckAvilable(true);
-    console.log("Chcek avilable: ",BASE_URL+"/cars/"+data.car)
-    const response = await axios({
-      method: "GET",
-      url: BASE_URL + "/cars/" + data.car,
-    }).catch((error) => {
-      console.log(error);
-    });
-    console.log(response.data)
-    setReservedTerms(response.data);
+    console.log("Chcek avilable: ",BASE_URL+"/terms/"+data.car)
+    let api=new Api()
+    const response = await api.checkAvilable(data.car)
+    console.log(response)
+    setFreeTerms(response);
   }
 
   async function onSubmit(fields) {
     fields.userId= 28
     fields.carId= data.car
-    console.log("onSubmit -> fields", fields)
       //FIXME:
       //get right userID from localstorage
-    console.log("reserveCar -> fields", fields);
     try {
       await axios({
         url: BASE_URL,
@@ -123,13 +118,12 @@ export default function Booking({ history }) {
 
 
 <div className="pt-3">
-<Button color="primary" onClick={checkAvilable}>
+<Button color="primary" onClick={checkAvilable} name="checkdates">
             Check date
           </Button>
           <Button
             color="success"
             type="submit"
-            disabled={!checkavilable}
           >
             Confirm reservation
           </Button>
@@ -139,14 +133,21 @@ export default function Booking({ history }) {
       }}
     </Formik>
     {checkavilable && (
-            <div>
-              {(reserved && reserved.lenght!==0)
-                ? <h1>terminy zajete </h1>
-                /*reserved.map((reservation) => {
-                    return <td>{reservation}</td>;
-                  })*/
-                : "No more nearby reservations"}
-                </div>
+      <div style={{
+            maxHeight: '200px',
+            overflowY: 'auto'
+          }}>
+            <Table bordered>
+            <thead>
+              <tr><td>Avilable terms</td></tr>
+            </thead>
+              {(freeTerms && freeTerms.lenght!==0) &&
+                 freeTerms.map((reservation) => {
+                    return <tr><td>{reservation}</td></tr>;
+                  })
+                  }
+                  </Table>
+                  </div>
           )}
     </Col>
       </Row>

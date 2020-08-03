@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRental.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200802133127_ModifyClassDefect")]
-    partial class ModifyClassDefect
+    [Migration("20200803112943_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,7 +70,7 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 8, 2, 15, 31, 26, 559, DateTimeKind.Local).AddTicks(458),
+                            DateCreated = new DateTime(2020, 8, 3, 13, 29, 42, 951, DateTimeKind.Local).AddTicks(435),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             Model = "Q5",
@@ -107,6 +107,9 @@ namespace CarRental.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RegistrationNumber")
@@ -168,7 +171,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             LocationId = 1,
-                            DateCreated = new DateTime(2020, 8, 2, 15, 31, 26, 564, DateTimeKind.Local).AddTicks(2984),
+                            DateCreated = new DateTime(2020, 8, 3, 13, 29, 42, 959, DateTimeKind.Local).AddTicks(836),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActual = true,
                             Latitude = 50.5,
@@ -250,11 +253,11 @@ namespace CarRental.DAL.Migrations
                         {
                             ReservationId = 1,
                             CarId = 1,
-                            DateCreated = new DateTime(2020, 8, 2, 15, 31, 26, 564, DateTimeKind.Local).AddTicks(1012),
+                            DateCreated = new DateTime(2020, 8, 3, 13, 29, 42, 958, DateTimeKind.Local).AddTicks(7638),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsFinished = false,
-                            RentalDate = new DateTime(2020, 8, 4, 15, 31, 26, 563, DateTimeKind.Local).AddTicks(9528),
-                            ReturnDate = new DateTime(2020, 8, 7, 15, 31, 26, 563, DateTimeKind.Local).AddTicks(9949),
+                            RentalDate = new DateTime(2020, 8, 5, 13, 29, 42, 958, DateTimeKind.Local).AddTicks(5022),
+                            ReturnDate = new DateTime(2020, 8, 8, 13, 29, 42, 958, DateTimeKind.Local).AddTicks(5710),
                             UserId = 1
                         });
                 });
@@ -313,7 +316,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 8, 2, 15, 31, 26, 563, DateTimeKind.Local).AddTicks(8281),
+                            DateCreated = new DateTime(2020, 8, 3, 13, 29, 42, 958, DateTimeKind.Local).AddTicks(3295),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
                             LastName = "Doe",

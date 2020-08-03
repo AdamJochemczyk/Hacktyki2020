@@ -8,7 +8,7 @@ import axios from "axios";
 
 export default function FaultManager() {
   //TODO:
-  //API GET, PUT, DELETE
+  //API CREATE, GET, PUT, DELETE
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(false);
   let history = useHistory();
