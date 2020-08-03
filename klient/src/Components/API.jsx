@@ -5,14 +5,16 @@ const CAR_API = process.env.REACT_APP_CAR_API;
 const REGISTER_URL = process.env.REACT_APP_REGISTER_API;
 const USER_URL = process.env.REACT_APP_USER_API;
 const RESERVATION_URL=process.env.REACT_APP_RESERVATION_API;
+const AUTHORIZATION_URL=process.env.REACT_APP_LOGIN_API
 
 export default class Api {
   //TODO:
   //get tokens from localstorage and check if token valid
   //class to user, car, extends api
   //class for errors
+  //axios instance
   constructor() {
-    this.token = "aaa";
+    this.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6I…50In0.ps8_jCqi9qyIhNF9YshNYlehSsUki-x-gwp3noO9OFU";
     this.refreshtoken = "bbb";
   }
 
@@ -118,6 +120,18 @@ export default class Api {
     }
   }
 
+  async fetchCarByDate(startdate,enddate){
+    try {
+      const res=await axios({
+        url: CAR_API +'/dates/'+startdate+'/'+enddate,
+        method: "GET",
+      })
+      return res.data;
+    } catch (error) {
+      Swal.fire("Oops...", "Something went wrong!", "error");
+    }
+  }
+
   //USER
   async createUser(params) {
     try {
@@ -184,6 +198,10 @@ export default class Api {
       const res = await axios({
         url: USER_URL + "/" + id,
         method: "GET",
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${this.token}`,
+        }
       }).catch((error) => {
         console.log(error);
       });
@@ -197,6 +215,10 @@ export default class Api {
       const res = await axios({
         url: USER_URL,
         method: "GET",
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${this.token}`,
+        }
       });
       return res.data;
     } catch (error) {
@@ -263,5 +285,28 @@ export default class Api {
     ).then(() => window.location.reload(false));
   }
 
+  async checkAvilable(carid) {
+    const response = await axios({
+      method: "GET",
+      url: RESERVATION_URL+"/terms/"+carid,
+    }).catch((error) => {
+      console.log(error);
+    });
+    return response.data
+  }
+
+//AUTHORIZATION
+
+async signIn(params) {
+  console.log(params)
+  const response = await axios({
+    url: AUTHORIZATION_URL,
+    method: "POST",
+    data: params,
+  }).catch((error) => {
+      Swal.fire("Opss...",error.response.data,"error");
+  });
+  return response.data
+}
 
 }

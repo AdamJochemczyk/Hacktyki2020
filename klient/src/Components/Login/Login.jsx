@@ -1,63 +1,18 @@
 import React from "react";
 import "../styles/componentsstyle.css";
-import axios from "axios";
-import Swal from "sweetalert2";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { Link } from "react-router-dom";
-import * as Yup from "yup";
+import useLogin from "./Login.utils";
 
 export default function Login() {
-  let initialValues = {
-    email: "",
-    encodePassword: "",
-  };
-  const BASE_URL=process.env.REACT_APP_LOGIN_API
-
-  const validationSchema = Yup.object().shape({
-    encodePassword: Yup.string().required("Required"),
-    email: Yup.string().email("This isn't email").required("Required"),
-  });
-
-  async function signIn(fields) {
-  console.log("signIn -> fields", fields)
-        
-    try {
-      const response = await axios({
-        url: BASE_URL,
-        method: "POST",
-        data: fields,
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error);
-          Swal.fire("Oops...", error.response.headers, "error");
-        } else if (error.request) {
-          Swal.fire(
-            "Oops...",
-            "Error request was made but no response was recived. Error request: " +
-              error.request,
-            "error"
-          );
-        } else {
-          Swal.fire(
-            "Oops...",
-            "Something happened in setting up the request that triggered an Error. Error massage: " +
-              error.message,
-            "error"
-          );
-        }
-      });
-      console.log("signIn -> response", response.data)
-    } catch (error) {
-      Swal.fire("Oops...", "Something went wrong", "error");
-    }
-  }
+  const { initialValues, validationSchema, onSubmit } = useLogin();
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       enableReinitialize
-      onSubmit={signIn}
+      onSubmit={onSubmit}
     >
       {({ errors, touched, isSubmitting }) => {
         return (

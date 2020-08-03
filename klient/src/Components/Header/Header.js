@@ -37,7 +37,13 @@ const Header = (props) => {
               <NavLink href="/add-car">Add Car</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/history">History</NavLink>
+              <NavLink href="/user-history">User history</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href="/admin-history">Admin history</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href="/map">Map</NavLink>
             </NavItem>
           </Nav>
         </Collapse>

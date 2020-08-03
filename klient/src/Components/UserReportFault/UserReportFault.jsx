@@ -24,9 +24,6 @@ export default function UserReportFault({history}){
     //FIXME:
     //get id from localstorage
     fields.userId=28;
-    //TODO:
-      //url
-      //after send
       try{
         axios({
           url: "",

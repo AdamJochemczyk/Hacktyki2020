@@ -68,7 +68,7 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 7, 27, 19, 21, 47, 347, DateTimeKind.Local).AddTicks(5344),
+                            DateCreated = new DateTime(2020, 8, 2, 12, 38, 18, 372, DateTimeKind.Local).AddTicks(9775),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             Model = "Q5",
@@ -154,7 +154,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             LocationId = 1,
-                            DateCreated = new DateTime(2020, 7, 27, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(5023),
+                            DateCreated = new DateTime(2020, 8, 2, 12, 38, 18, 377, DateTimeKind.Local).AddTicks(1880),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActual = true,
                             Latitude = 50.5,
@@ -236,11 +236,11 @@ namespace CarRental.DAL.Migrations
                         {
                             ReservationId = 1,
                             CarId = 1,
-                            DateCreated = new DateTime(2020, 7, 27, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(3404),
+                            DateCreated = new DateTime(2020, 8, 2, 12, 38, 18, 377, DateTimeKind.Local).AddTicks(166),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsFinished = false,
-                            RentalDate = new DateTime(2020, 7, 29, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(2206),
-                            ReturnDate = new DateTime(2020, 8, 1, 19, 21, 47, 352, DateTimeKind.Local).AddTicks(2540),
+                            RentalDate = new DateTime(2020, 8, 4, 12, 38, 18, 376, DateTimeKind.Local).AddTicks(8856),
+                            ReturnDate = new DateTime(2020, 8, 7, 12, 38, 18, 376, DateTimeKind.Local).AddTicks(9229),
                             UserId = 1
                         });
                 });
@@ -299,7 +299,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 7, 30, 18, 9, 9, 850, DateTimeKind.Local).AddTicks(7695),
+                            DateCreated = new DateTime(2020, 8, 2, 12, 38, 18, 376, DateTimeKind.Local).AddTicks(7515),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
                             LastName = "Doe",
