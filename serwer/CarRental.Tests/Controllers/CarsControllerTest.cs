@@ -47,15 +47,15 @@ namespace CarRental.Tests.Controllers
             Assert.Equal(2, cars.Length);
         }
 
-        //[Fact]
-        //public async Task GetCarById_UnknowedIdPassed_ReturnsNotFoundResult()
-        //{
-        //    int testId = 9000;
-        //    mockService.Setup(p => p.GetCarByIdAsync(testId))
-        //        .ReturnsAsync(new CarDto());
-        //    var result = await controller.GetCarByIdAsync(testId);
-        //    Assert.IsType<NotFoundObjectResult>(result);
-        //}
+        [Fact]
+        public async Task GetCarById_UnknowedIdPassed_ReturnsNotFoundResult()
+        {
+            int testId = 9000;
+            mockService.Setup(p => p.GetCarByIdAsync(testId))
+                .ReturnsAsync((CarDto)null);
+            var result = await controller.GetCarByIdAsync(testId);
+            Assert.IsType<NotFoundObjectResult>(result);
+        }
 
         [Fact]
         public async Task GetCarByIdAsync_ExistingIdPassed_ReturnsOkResult()
