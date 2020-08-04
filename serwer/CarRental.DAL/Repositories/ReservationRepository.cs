@@ -57,7 +57,7 @@ namespace CarRental.DAL.Repositories
             entity.IsFinished = true; 
         }
 
-        public async Task<List<Reservation>> FilterReservations(Reservation reservation)
+        public async Task<List<Reservation>> FilterReservationsAsync(Reservation reservation)
         {
             return await context.Reservations
                 .Where(p => p.CarId == reservation.CarId)

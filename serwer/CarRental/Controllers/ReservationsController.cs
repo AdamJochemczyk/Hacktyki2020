@@ -46,14 +46,6 @@ namespace CarRental.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet, Route("terms/{id}")]
-        [HttpGet, Route("terms/{id}/{rentalDate:datetime}/{returnDate:datetime}")]
-        public async Task<IActionResult> GetFreeTermsByCarIdAsync(int id, DateTime? rentalDate, DateTime? returnDate)
-        {
-            var result = await service.GetFreeTermsByCarIdAsync(id, rentalDate, returnDate);
-            return Ok(result);
-        }
-
         [HttpPost]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {

@@ -53,15 +53,15 @@ namespace CarRental.Services.Services
 
         public async Task<ReservationDto> GetReservationByIdAsync(int id)
         {
-            var entity = await repository.FindByIdAsync(id);     
+            var entity = await repository.FindByIdAsync(id);
             return mapper.Map<ReservationDto>(entity);
         }
 
         public async Task<ReservationDto> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
         {
             var entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
-            entity.Update(reservationUpdateDto.RentalDate, 
-                reservationUpdateDto.ReturnDate, 
+            entity.Update(reservationUpdateDto.RentalDate,
+                reservationUpdateDto.ReturnDate,
                 reservationUpdateDto.IsFinished);
             repository.Update(entity);
             await repository.SaveChangesAsync();
@@ -77,7 +77,7 @@ namespace CarRental.Services.Services
                 ReturnDate = reservationDto.ReturnDate,
                 CarId = reservationDto.CarId
             };
-            List<Reservation> entities = await repository.FilterReservations(reservation);
+            List<Reservation> entities = await repository.FilterReservationsAsync(reservation);
             return entities.Count == 0 ? true : false;
         }
 
@@ -90,14 +90,10 @@ namespace CarRental.Services.Services
                 ReturnDate = Convert.ToDateTime(reservationDto.ReturnDate),
                 CarId = reservationDto.CarId
             };
-            List<Reservation> entities = await repository.FilterReservations(reservation);
+            List<Reservation> entities = await repository.FilterReservationsAsync(reservation);
             int count = entities.Count;
             int id = count == 0 ? 0 : entities.FirstOrDefault().ReservationId;
-            if (count == 0 || (count == 1 && id == reservation.ReservationId))
-            {
-                return true;
-            }
-            return false;
+            return (count == 0 || (count == 1 && id == reservation.ReservationId)) ? true : false;
         }
 
         public async Task<IEnumerable<ReservationDto>> GetAllReservationsByUserIdAsync(int id)
@@ -110,34 +106,6 @@ namespace CarRental.Services.Services
         {
             var entities = await repository.FindAllByCarIdAsync(id);
             return mapper.Map<IEnumerable<ReservationDto>>(entities);
-        }
-
-        public async Task<IEnumerable<string>> GetFreeTermsByCarIdAsync(int id, DateTime? rentalDate, DateTime? returnDate)
-        {
-            var reservations = await repository.FindAllByCarIdAsync(id);
-            int week = 7;
-            var startRange 
-                = (rentalDate == null || rentalDate.Value.DayOfYear - week < DateTime.Now.DayOfYear) ? 
-                DateTime.Now.DayOfYear : rentalDate.Value.DayOfYear - week;
-            var endRange = returnDate == null ? 2 * week : returnDate.Value.DayOfYear - rentalDate.Value.DayOfYear + week + 1;            
-            var freeDays = Enumerable.Range(startRange, endRange).ToList();
-            var dates = new List<string>();
-            string date;
-
-            foreach (var reservation in reservations)
-            {
-                for (int i = reservation.RentalDate.DayOfYear; i <= reservation.ReturnDate.DayOfYear; i++)
-                {
-                    freeDays.Remove(i);
-                }
-            }
-
-            foreach (var dayOfYear in freeDays)
-            {
-                date = new DateTime(DateTime.Now.Year, 1, 1).AddDays(dayOfYear - 1).Date.ToString("dd/MM/yyyy");
-                dates.Add(date);
-            }
-            return dates;
-        }
+        }    
     }
 }

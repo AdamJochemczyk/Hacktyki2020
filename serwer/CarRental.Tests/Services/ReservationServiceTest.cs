@@ -100,7 +100,8 @@ namespace CarRental.Tests.Services
                 ReturnDate = DateTime.Today.AddDays(5),
                 IsFinished = true
             };
-            Reservation reservation = new Reservation() { 
+            Reservation reservation = new Reservation()
+            {
                 ReservationId = 1,
                 RentalDate = DateTime.Today,
                 ReturnDate = DateTime.Today.AddDays(10),
@@ -119,6 +120,86 @@ namespace CarRental.Tests.Services
             Assert.Equal(Convert.ToDateTime(result.ReturnDate), reservationDto.ReturnDate);
             Assert.Equal(result.IsFinished, reservationDto.IsFinished);
             Assert.IsType<ReservationDto>(result);
+        }
+
+        [Fact]
+        public async Task ReservationCanBeCreatedAsync_CarIsAvailable_ReturnsTrue()
+        {
+            //Arrange
+            var reservationDto = new ReservationCreateDto() { };
+            mockRepository
+                .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
+                .ReturnsAsync(new List<Reservation>() { });
+            var service = new ReservationService(mockRepository.Object, mapper);
+            //Act
+            var result = await service.ReservationCanBeCreatedAsync(reservationDto);
+            //Assert
+            Assert.True(result);
+
+        }
+
+        [Fact]
+        public async Task ReservationCanBeCreatedAsync_CarIsNotAvailable_ReturnsFalse()
+        {
+            //Arrange
+            var reservationDto = new ReservationCreateDto() { };
+            var reservations = new List<Reservation>() { new Reservation() };
+            mockRepository
+                .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservations);
+            var service = new ReservationService(mockRepository.Object, mapper);
+            //Act
+            var result = await service.ReservationCanBeCreatedAsync(reservationDto);
+            //Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task ReservationCanBeUpdatedAsync_CarIsAvailable_ReturnsTrue()
+        {
+            //Arrange
+            var reservationDto = new ReservationUpdateDto() { };
+            var reservations = new List<Reservation>() { };
+            mockRepository
+                .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservations);
+            var service = new ReservationService(mockRepository.Object, mapper);
+            //Act
+            var result = await service.ReservationCanBeUpdatedAsync(reservationDto);
+            //Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task ReservationCanBeUpdatedAsync_ReservationCanBeExtended_ReturnsTrue()
+        {
+            //Arrange
+            var reservationDto = new ReservationUpdateDto() { ReservationId = 1 };
+            var reservations = new List<Reservation>() { new Reservation() { ReservationId = 1 } };
+            mockRepository
+                .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservations);
+            var service = new ReservationService(mockRepository.Object, mapper);
+            //Act
+            var result = await service.ReservationCanBeUpdatedAsync(reservationDto);
+            //Assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public async Task ReservationCanBeUpdatedAsync_CarIsNotAvailable_ReturnsFalse()
+        {
+            //Arrange
+            var reservationDto = new ReservationUpdateDto() { };
+            var reservations = new List<Reservation>() { new Reservation(), new Reservation() };
+            mockRepository
+                .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
+                .ReturnsAsync(reservations);
+            var service = new ReservationService(mockRepository.Object, mapper);
+            //Act
+            var result = await service.ReservationCanBeUpdatedAsync(reservationDto);
+            //Assert
+            Assert.False(result);
         }
     }
 }
