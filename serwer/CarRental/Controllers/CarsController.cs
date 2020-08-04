@@ -48,7 +48,7 @@ namespace CarRental.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCarAsync(int id, CarDto carDto)
         {
-            if (id != carDto.CarId) 
+            if (id != carDto.CarId)
                 return BadRequest();
             var result = await service.UpdateCarAsync(carDto);
             return Ok(result);
@@ -57,9 +57,13 @@ namespace CarRental.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarAsync(int id)
         {
-            try { await service.DeleteCar(id); }
-            catch (ArgumentNullException) { return BadRequest(); }
-            return Ok();
+            var entity = await service.GetCarByIdAsync(id);
+            if (entity != null && entity.IsDeleted != true)
+            {
+                await service.DeleteCar(entity);
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

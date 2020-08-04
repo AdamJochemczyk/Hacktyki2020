@@ -115,8 +115,8 @@ namespace CarRental.Tests.Services
             var result = await service.UpdateReservationAsync(reservationDto);
             //Assert
             Assert.Equal(result.ReservationId, reservationDto.ReservationId);
-            Assert.Equal(result.RentalDate, reservationDto.RentalDate);
-            Assert.Equal(result.ReturnDate, reservationDto.ReturnDate);
+            Assert.Equal(Convert.ToDateTime(result.RentalDate), reservationDto.RentalDate);
+            Assert.Equal(Convert.ToDateTime(result.ReturnDate), reservationDto.ReturnDate);
             Assert.Equal(result.IsFinished, reservationDto.IsFinished);
             Assert.IsType<ReservationDto>(result);
         }

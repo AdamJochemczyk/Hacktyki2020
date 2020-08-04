@@ -36,8 +36,11 @@ namespace CarRental.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLocationAsync(int id)
         {
-            try { await service.DeleteLocationAsync(id); }
-            catch (ArgumentNullException) { return BadRequest(); }
+            var entity = await service.GetLocationByIdAsync(id);
+            if (entity != null)
+            {
+                await service.DeleteLocationAsync(entity);
+            }
             return Ok();
         }
     }

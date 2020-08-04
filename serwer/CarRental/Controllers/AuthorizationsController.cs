@@ -14,11 +14,11 @@ namespace CarRental.API.Controllers
     public class AuthorizationsController : Controller
     {
         private readonly IAuthorizationService _authorizationService;
-
         public AuthorizationsController(IAuthorizationService authorizationService)
         {
             _authorizationService = authorizationService;
         }
+
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(CreateUserDto createUserDto)
         {
@@ -28,7 +28,7 @@ namespace CarRental.API.Controllers
                 return BadRequest("This Email already exists");
             return Ok(user);
         }
-        //
+
         [HttpPost("signIn")]
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
@@ -37,11 +37,12 @@ namespace CarRental.API.Controllers
                 return Unauthorized("Email/Password not correct");
             return Ok(cos);
         }
+
         [HttpPut]
         public async Task<IActionResult> SetPassword(UpdateUserPasswordDto updateUserPassword)
         {
             if (!await _authorizationService.SetPassword(updateUserPassword))
-                return BadRequest("Password isn't the same please check");        
+                return BadRequest("Password isn't the same, please check");
             return Ok();
         }
     }

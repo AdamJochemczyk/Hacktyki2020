@@ -20,14 +20,15 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-       // [Authorize]
+        // [Authorize]
         public async Task<IActionResult> RegisterDefect(RegisterDefectDto registerDefectDto)
         {
-            if (registerDefectDto == null) { return BadRequest("Model is empty");}
-          var register_defect =  await _defectsService.RegisterDefectAsync(registerDefectDto);
+            if (registerDefectDto == null) { return BadRequest("Model is empty"); }
+            var register_defect = await _defectsService.RegisterDefectAsync(registerDefectDto);
             if (register_defect == null) { return BadRequest("Object car or user is empty;"); }
             return Ok(register_defect);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllDefects()
         {
@@ -36,6 +37,7 @@ namespace CarRental.API.Controllers
                 return BadRequest("Database is empty");
             return Ok(defects);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDefect(int id)
         {
@@ -44,10 +46,5 @@ namespace CarRental.API.Controllers
                 return BadRequest("This is defect does not exist");
             return Ok(defect);
         }
-         //[HttpPut]
-         //public async Task<IActionResult> UpdateDefect()
-         // {
-
-         // }
     }
 }
