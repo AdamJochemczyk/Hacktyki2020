@@ -58,6 +58,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IDefectsService, DefectService>();
+            services.AddScoped<ITermService, TermService>();
             return services;
         }
 
