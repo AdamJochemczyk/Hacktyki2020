@@ -19,6 +19,7 @@ namespace CarRental.DAL.Repositories
                 .Reservations
                 .Include(p => p.Car)
                 .Include(p => p.User)
+                .Include(p => p.User)
                 .ToListAsync();
             return result;
         }
@@ -49,6 +50,11 @@ namespace CarRental.DAL.Repositories
                 .Include(p => p.Car)
                 .SingleOrDefaultAsync();
             return result;
+        }
+        public async Task Delete(int id)
+        {
+            var entity = await FindByIdAsync(id);
+            entity.IsFinished = true; 
         }
 
         public async Task<List<Reservation>> FilterReservations(Reservation reservation)

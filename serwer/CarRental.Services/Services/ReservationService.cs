@@ -41,8 +41,7 @@ namespace CarRental.Services.Services
 
         public async Task DeleteReservationAsync(int id)
         {
-            var entity = await repository.FindByIdAsync(id);
-            repository.Delete(entity);
+            await repository.Delete(id);
             await repository.SaveChangesAsync();
         }
 
@@ -54,8 +53,7 @@ namespace CarRental.Services.Services
 
         public async Task<ReservationDto> GetReservationByIdAsync(int id)
         {
-            var entity = await repository.FindByIdAsync(id);
-         
+            var entity = await repository.FindByIdAsync(id);     
             return mapper.Map<ReservationDto>(entity);
         }
 

@@ -22,7 +22,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
-      //  [Authorize]
+        //  [Authorize]
         public async Task<IActionResult> GetUsersAsync()
         {
             var result = await _usersService.GetAllUsers();
@@ -34,7 +34,7 @@ namespace CarRental.API.Controllers
         [Authorize]
         public async Task<IActionResult> GetUserAsync(int Id)
         {
-                if (Id == 0) return BadRequest("This ID does not exist");
+            if (Id == 0) return BadRequest("This ID does not exist");
             var user = await _usersService.GetUser(Id);
             return Ok(user);
         }
@@ -49,9 +49,9 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync(int Id,UsersDto usersDto)
+        public async Task<IActionResult> UpdateUserAsync(int Id, UsersDto usersDto)
         {
-            if (usersDto.UserId != Id||usersDto.UserId==0) return BadRequest("This user does not exist");
+            if (usersDto.UserId != Id || usersDto.UserId == 0) return BadRequest("This user does not exist");
             var result = await _usersService.UpdateUser(usersDto);
             return Ok(result);
         }

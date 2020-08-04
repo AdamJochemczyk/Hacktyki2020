@@ -157,7 +157,7 @@ namespace CarRental.Tests.Controllers
         {
             int testId = 222;
             var result = await controller.DeleteCarAsync(testId);
-            Assert.IsType<NotFoundResult>(result);
+            Assert.IsType<BadRequestResult>(result);
         }
 
         [Fact]

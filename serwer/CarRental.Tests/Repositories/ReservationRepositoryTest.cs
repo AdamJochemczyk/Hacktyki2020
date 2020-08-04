@@ -16,12 +16,12 @@ namespace CarRental.Tests.Repositories
         {
             mockContext = new Mock<ApplicationDbContext>();
         }
-        [Fact]
-        public async Task FindAllAsync_WhenCalled_ReturnsObjectsWithUserAndCars()
-        {
-            var repository = new ReservationRepository(mockContext.Object);
-            var result = await repository.FindAllAsync();
+        //[Fact]
+        //public async Task FindAllAsync_WhenCalled_ReturnsObjectsWithUserAndCars()
+        //{
+        //    var repository = new ReservationRepository(mockContext.Object);
+        //    var result = await repository.FindAllAsync();
 
-        }
+        //}
     }
 }

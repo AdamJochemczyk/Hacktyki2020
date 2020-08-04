@@ -28,13 +28,18 @@ namespace CarRental.Services.Services
             return mapper.Map<LocationDto>(location);
         }
 
+        public async Task<LocationDto> GetLocationByIdAsync(int id)
+        {
+            var location = await repository.FindByIdAsync(id);
+            return mapper.Map<LocationDto>(location);
+        }
+
         public async Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto)
         {
             var oldLocation = await repository
                 .GetActualLocationByReservationIdAsync(locationCreateDto.ReservationId);
             if (oldLocation != null)
                 oldLocation.IsActual = false;
-
 
             Location location = new Location()
             {
@@ -49,10 +54,9 @@ namespace CarRental.Services.Services
             return mapper.Map<LocationDto>(location);
         }
 
-        public async Task DeleteLocationAsync(int id)
+        public async Task DeleteLocationAsync(LocationDto location)
         {
-            var entity = await repository.FindByIdAsync(id);
-            repository.Delete(entity);
+            location.IsActual = false;
             await repository.SaveChangesAsync();
         }
     }
