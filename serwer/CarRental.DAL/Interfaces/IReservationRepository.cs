@@ -10,8 +10,8 @@ namespace CarRental.DAL.Interfaces
     {
         Task<IEnumerable<Reservation>> FindAllByUserIdAsync(int id);
         Task<IEnumerable<Reservation>> FindAllByCarIdAsync(int id);
-      //  Task<IEnumerable<Reservation>> FindCloseReservationsByCarIdAsync(int id);
-        Task<bool> ReservationCanBeCreatedAsync(Reservation reservation);
-        Task<bool> ReservationCanBeUpdatedAsync(Reservation reservation);
+        Task<List<Reservation>> FilterReservations(Reservation reservation);
+        //Task<bool> ReservationCanBeCreatedAsync(Reservation reservation);
+        //Task<bool> ReservationCanBeUpdatedAsync(Reservation reservation);
     }
 }

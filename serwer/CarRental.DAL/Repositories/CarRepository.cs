@@ -21,7 +21,10 @@ namespace CarRental.DAL.Repositories
                  .Where(p => p.ReturnDate >= rentalDate && p.RentalDate <= returnDate)
                  .Include(p => p.Car)
                  .ToListAsync();
-            var cars = entities.GroupBy(p => p.Car).Select(p => p.Key).ToList();
+            var cars = entities
+                .GroupBy(p => p.Car)
+                .Select(p => p.Key)
+                .ToList();
             return cars;
         }
     }

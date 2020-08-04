@@ -55,13 +55,16 @@ namespace CarRental.Services.Services
         public async Task<ReservationDto> GetReservationByIdAsync(int id)
         {
             var entity = await repository.FindByIdAsync(id);
+         
             return mapper.Map<ReservationDto>(entity);
         }
 
         public async Task<ReservationDto> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
         {
             var entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
-            entity.Update(reservationUpdateDto.RentalDate, reservationUpdateDto.ReturnDate, reservationUpdateDto.IsFinished);
+            entity.Update(reservationUpdateDto.RentalDate, 
+                reservationUpdateDto.ReturnDate, 
+                reservationUpdateDto.IsFinished);
             repository.Update(entity);
             await repository.SaveChangesAsync();
             entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
@@ -70,25 +73,33 @@ namespace CarRental.Services.Services
 
         public async Task<bool> ReservationCanBeCreatedAsync(ReservationCreateDto reservationDto)
         {
-            var entity = new Reservation()
+            var reservation = new Reservation()
             {
                 RentalDate = reservationDto.RentalDate,
                 ReturnDate = reservationDto.ReturnDate,
                 CarId = reservationDto.CarId
             };
-            return await repository.ReservationCanBeCreatedAsync(entity);
+            List<Reservation> entities = await repository.FilterReservations(reservation);
+            return entities.Count == 0 ? true : false;
         }
 
         public async Task<bool> ReservationCanBeUpdatedAsync(ReservationUpdateDto reservationDto)
         {
-            var entity = new Reservation()
+            var reservation = new Reservation()
             {
                 ReservationId = reservationDto.ReservationId,
-                RentalDate = reservationDto.RentalDate,
-                ReturnDate = reservationDto.ReturnDate,
+                RentalDate = Convert.ToDateTime(reservationDto.RentalDate),
+                ReturnDate = Convert.ToDateTime(reservationDto.ReturnDate),
                 CarId = reservationDto.CarId
             };
-            return await repository.ReservationCanBeUpdatedAsync(entity);
+            List<Reservation> entities = await repository.FilterReservations(reservation);
+            int count = entities.Count;
+            int id = count == 0 ? 0 : entities.FirstOrDefault().ReservationId;
+            if (count == 0 || (count == 1 && id == reservation.ReservationId))
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task<IEnumerable<ReservationDto>> GetAllReservationsByUserIdAsync(int id)

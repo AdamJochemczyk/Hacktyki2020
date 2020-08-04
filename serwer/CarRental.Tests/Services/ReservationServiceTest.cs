@@ -98,13 +98,13 @@ namespace CarRental.Tests.Services
                 ReservationId = 1,
                 RentalDate = DateTime.Today,
                 ReturnDate = DateTime.Today.AddDays(5),
-                CarId = 5
+                IsFinished = true
             };
             Reservation reservation = new Reservation() { 
                 ReservationId = 1,
                 RentalDate = DateTime.Today,
                 ReturnDate = DateTime.Today.AddDays(10),
-                CarId = 10
+                IsFinished = false
             };
 
             mockRepository
@@ -117,7 +117,7 @@ namespace CarRental.Tests.Services
             Assert.Equal(result.ReservationId, reservationDto.ReservationId);
             Assert.Equal(result.RentalDate, reservationDto.RentalDate);
             Assert.Equal(result.ReturnDate, reservationDto.ReturnDate);
-            Assert.Equal(result.CarId, reservationDto.CarId);
+            Assert.Equal(result.IsFinished, reservationDto.IsFinished);
             Assert.IsType<ReservationDto>(result);
         }
     }

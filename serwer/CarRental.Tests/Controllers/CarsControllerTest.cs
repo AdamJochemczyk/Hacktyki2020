@@ -54,7 +54,8 @@ namespace CarRental.Tests.Controllers
             mockService.Setup(p => p.GetCarByIdAsync(testId))
                 .ReturnsAsync((CarDto)null);
             var result = await controller.GetCarByIdAsync(testId);
-            Assert.IsType<NotFoundObjectResult>(result);
+            var assertResult = Assert.IsType<OkObjectResult>(result);
+            Assert.Null(assertResult.Value);
         }
 
         [Fact]

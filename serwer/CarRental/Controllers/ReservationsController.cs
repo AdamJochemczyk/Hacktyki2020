@@ -84,7 +84,7 @@ namespace CarRental.API.Controllers
             var entity = await service.GetReservationByIdAsync(id);
             try
             {
-                if (entity.RentalDate > DateTime.Now)
+                if (Convert.ToDateTime(entity.RentalDate) > DateTime.Now)
                 {
                     await service.DeleteReservationAsync(id);
                     return Ok();
