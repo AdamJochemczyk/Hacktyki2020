@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import * as Yup from "yup";
-import Api from "../API";
-import { useHistory } from "react-router-dom";
+import Api from "../API/ReservationApi";
 
 export default function useBooking() {
-  let redirect = useHistory();
+
   const [checkavilable, setCheckAvilable] = useState(false);
   const [freeTerms, setFreeTerms] = useState([]);
 
@@ -26,17 +25,17 @@ export default function useBooking() {
   }
 
   async function onSubmit(fields) {
-    fields.userId = 1;
+    fields.userId = 2;
     fields.carId = 1;
     //FIXME:
     //get right userID from localstorage
     //get right carID from localstorage
-    /*try {
+    try {
       let api = new Api();
       await api.addReservation(fields);
     } catch (error) {
       console.log(error);
-    }*/
+    }
   }
 
   return {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
-import Api from "../API";
+import Api from "../API/UserApi";
 
 export default function useEditUser() {
   let redirect = useHistory();

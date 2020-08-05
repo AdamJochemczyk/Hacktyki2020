@@ -1,9 +1,9 @@
 import React from "react";
 import { useParams, useHistory } from "react-router-dom";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import Api from "../API/AuthorizationApi"
 
 export default function SetPassword() {
 
@@ -36,36 +36,12 @@ export default function SetPassword() {
     }
   }
 
-  function sendPassword(fields) {
-  console.log("sendPassword -> fields", fields)
-
+  async function sendPassword(fields) {
     try {
-      axios({
-        url: "https://localhost:44390/api/authorization",
-        method: "PUT",
-        data: fields,
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error)
-          Swal.fire("Oops...", error.response.headers, "error");
-        } else if (error.request) {
-          Swal.fire(
-            "Oops...",
-            "Error request was made but no response was recived. Error request: " +
-              error.request,
-            "error"
-          );
-        } else {
-          Swal.fire(
-            "Oops...",
-            "Something happened in setting up the request that triggered an Error. Error massage: " +
-              error.message,
-            "error"
-          );
-        }
-      });
-      Swal.fire("Good job!", "You succesfully set your password!", "success");
-      history.push('/sign-in')
+      let api=new Api()
+      await api.sendPassword(fields)
+      //let history=useHistory()
+      //history.push('/sign-in')
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error");
     }

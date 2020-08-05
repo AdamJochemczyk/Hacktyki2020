@@ -98,7 +98,7 @@ export default function ReserveCar() {
             </Col>
             <Col sm={10}>
               <Row>
-                { data
+                {data ? data
                   .filter((data) => {
                     return (
                       data.brand
@@ -114,8 +114,8 @@ export default function ReserveCar() {
                       data.numberOfDoor >= filters.numberOfDoor &&
                       data.numberOfSits >= filters.numberOfSits
                     );
-                  })
-                  .map(CreateCarCard)}
+                  }) 
+                  .map(CreateCarCard) : "We don't have cars now"}
               </Row>
             </Col>
           </Row>

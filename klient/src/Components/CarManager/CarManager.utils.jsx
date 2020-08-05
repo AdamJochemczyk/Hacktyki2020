@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Button } from "reactstrap";
 import { Link, useHistory } from "react-router-dom";
-import Api from "../API";
+import Api from "../API/CarApi";
 import Swal from "sweetalert2"
 
 export default function useCarManager() {

@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { Button } from "reactstrap";
-import Api from "../API";
+import Api from "../API/ReservationApi";
 
 export default function useUserHistory(){
 

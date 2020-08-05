@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
-import Api from "../API";
+import Api from "../API/ReservationApi";
+import moment from "moment"
+import {Button} from "reactstrap"
 
 export default function useAdminHistory() {
   let history = useHistory();
@@ -18,6 +20,11 @@ export default function useAdminHistory() {
       console.log(error);
       history.push(".");
     }
+  }
+
+  async function returnNow(reservationId){
+    let api=new Api()
+    await api.cancelReservation(reservationId)
   }
 
   const columns = useMemo(
@@ -43,7 +50,7 @@ export default function useAdminHistory() {
         accessor: "user.firstName",
       },
       {
-        Header: "Surame",
+        Header: "Surname",
         accessor: "user.lastName",
       },
       {
@@ -53,6 +60,25 @@ export default function useAdminHistory() {
       {
         Header: "Mail",
         accessor: "user.email",
+      },
+      {
+        Header: "Actions",
+        Cell: ({ row }) => (
+          <div>
+            {moment().utc().isBefore(moment.utc(row.original.returnDate)) &&
+                <Button
+                  color="primary"
+                  onClick={() =>
+                    returnNow(
+                      row.original.reservationId
+                    )
+                  }
+                >
+                  Return
+                </Button>
+              }
+          </div>
+        ),
       },
     ],
     []

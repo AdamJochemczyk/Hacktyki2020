@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import CardCar from "../CardCar/CardCar";
-import { useHistory } from "react-router-dom";
-import Api from "../API";
+import Api from "../API/CarApi";
 
 export default function useReserveCar() {
-  const history = useHistory();
 
   const [data, setData] = useState([]);
   const [filters, setFilter] = useState({

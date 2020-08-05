@@ -3,7 +3,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import { useHistory, Link} from "react-router-dom"
 import * as Yup from "yup";
 import "../styles/componentsstyle.css"
-import axios from "axios"
+import Api from "../API/FaultApi"
 import Swal from "sweetalert2"
 
 export default function UserReportFault({history}){
@@ -25,25 +25,14 @@ export default function UserReportFault({history}){
     //get id from localstorage
     fields.userId=28;
       try{
-        axios({
-          url: "",
-          method: "POST",
-          data: fields,
-        }).catch((error) =>{
-          if (error.response) {
-            Swal.fire("Oops...", error.response.headers, "error")
-          } else if (error.request) {
-            Swal.fire("Oops...", "Error request was made but no response was recived. Error request: "+error.request, 'error');
-          } else {
-            Swal.fire("Oops...", "Something happened in setting up the request that triggered an Error. Error massage: "+error.message, 'error');
-          }
-          redirect.goBack()
-        });
+        let api=new Api()
+        api.createReport(fields)
         Swal.fire("Thank you!", 'You succesfully reported problem!', 'success')
         redirect.push('/')
-      }catch(error){
-        Swal.fire("Oops...", "Something went wrong...", "error")
+      }
+      catch(error){
         console.log(error)
+        Swal.fire("Oops...", "Something went wrong...", "error").then(()=>redirect.goBack())
       }
   }
 
