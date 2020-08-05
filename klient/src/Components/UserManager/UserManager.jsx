@@ -17,7 +17,7 @@ export default function UserManager() {
           <Loader type="Oval" color="#00BFFF" />
         </div>
       ) : (
-        <UserManagerTable columns={columns} data={data} />
+        data && <UserManagerTable columns={columns} data={data} />
       )}
     </div>
   );

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import moment from "moment";
-import Api from "../API";
+import Api from "../API/CarApi";
 
 export default function useEditCar() {
   let redirect = useHistory();

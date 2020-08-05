@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import mapStyles from "./mapStyles";
-import LocationApi from "../LocationApi";
+import LocationApi from "../API/LocationApi";
 
 export default function useMap() {
   const libraries = ["places"];

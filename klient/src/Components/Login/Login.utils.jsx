@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import Api from "../API";
+import Api from "../API/AuthorizationApi";
 
 export default function useLogin(){
 

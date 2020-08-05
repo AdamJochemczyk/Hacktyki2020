@@ -1,7 +1,7 @@
 import React, {useMemo, useState} from "react"
 import { Link, useHistory } from "react-router-dom";
 import { Button } from "reactstrap";
-import Api from "../API"
+import Api from "../API/UserApi"
 import Swal from "sweetalert2"
 
 export default function useUserManager(){
