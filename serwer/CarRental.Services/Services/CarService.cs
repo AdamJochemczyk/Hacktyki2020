@@ -43,10 +43,9 @@ namespace CarRental.Services.Services
             return mapper.Map<CarDto>(entity);
         }
 
-        public async Task DeleteCar(int id)
+        public async Task DeleteCar(CarDto entity)
         {
-            var entity = await repository.FindByIdAsync(id);
-            repository.Delete(entity);
+            entity.IsDeleted = true;
             await repository.SaveChangesAsync();
         }
 
@@ -78,7 +77,6 @@ namespace CarRental.Services.Services
             var reservedCars = await repository.GetReservedCarsByDates(rentalDate, returnDate);
             var allCars = await repository.FindAllAsync();
             List<Car> availableCars = allCars.Except(reservedCars).ToList();
-
             return mapper.Map<IEnumerable<CarDto>>(availableCars);
         }
     }

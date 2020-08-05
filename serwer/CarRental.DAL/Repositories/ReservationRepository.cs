@@ -19,6 +19,7 @@ namespace CarRental.DAL.Repositories
                 .Reservations
                 .Include(p => p.Car)
                 .Include(p => p.User)
+                .Include(p => p.User)
                 .ToListAsync();
             return result;
         }
@@ -50,26 +51,13 @@ namespace CarRental.DAL.Repositories
                 .SingleOrDefaultAsync();
             return result;
         }
-
-        public async Task<bool> ReservationCanBeCreatedAsync(Reservation reservation)
+        public async Task Delete(int id)
         {
-            List<Reservation> entities = await FilterReservations(reservation);
-            return entities.Count == 0 ? true : false;
+            var entity = await FindByIdAsync(id);
+            entity.IsFinished = true; 
         }
 
-        public async Task<bool> ReservationCanBeUpdatedAsync(Reservation reservation)
-        {
-            List<Reservation> entities = await FilterReservations(reservation);
-            int count = entities.Count;
-            int id = count == 0 ? 0 : entities.FirstOrDefault().ReservationId;
-            if (count == 0 || (count == 1 && id == reservation.ReservationId))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private async Task<List<Reservation>> FilterReservations(Reservation reservation)
+        public async Task<List<Reservation>> FilterReservationsAsync(Reservation reservation)
         {
             return await context.Reservations
                 .Where(p => p.CarId == reservation.CarId)
@@ -80,15 +68,5 @@ namespace CarRental.DAL.Repositories
                 || (p.RentalDate >= reservation.RentalDate && p.ReturnDate <= reservation.ReturnDate))
                 .ToListAsync();
         }
-
-        //public async Task<IEnumerable<Reservation>> FindCloseReservationsByCarIdAsync(int id)
-        //{
-        //    return await context.Reservations
-        //        .Where(p => p.CarId == id)
-        //        .Where(p => p.IsFinished == false)
-        //      //  .Where(p => p.RentalDate <= DateTime.Now.AddDays(14).Date)
-        //       // .Where(p => p.RentalDate >= DateTime.Now.Date)
-        //        .ToListAsync();
-        //}
     }
 }

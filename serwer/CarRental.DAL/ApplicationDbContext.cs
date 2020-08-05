@@ -30,6 +30,10 @@ namespace CarRental.DAL
                     Model = "Q5",
                     YearOfProduction = 2019,
                     ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
+                    RegistrationNumber = "SZE4562",
+                    NumberOfDoor = 5,
+                    NumberOfSits = 5,
+                    TypeOfCar = CarType.Classic,
                     DateCreated = DateTime.Now
                 });
 

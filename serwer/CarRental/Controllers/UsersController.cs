@@ -21,9 +21,8 @@ namespace CarRental.API.Controllers
         {
             _usersService = usersService;
         }
-       [EnableCors(origins: "https://localhost:44390/api", headers: "*", methods: "*")]
         [HttpGet]
-      //  [Authorize]
+        //  [Authorize]
         public async Task<IActionResult> GetUsersAsync()
         {
             var result = await _usersService.GetAllUsers();
@@ -32,16 +31,19 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
-     //   [Authorize]
+        [Authorize]
         public async Task<IActionResult> GetUserAsync(int id)
         {
+ 
             var user = await _usersService.GetUser(id);
             if (user == null) return NotFound("This ID does not exist");
+            if (id == 0) return BadRequest("This ID does not exist");
+             user = await _usersService.GetUser(id);
             return Ok(user);
         }
 
         [HttpDelete("{id}")]
-      //  [Authorize]
+        [Authorize]
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
 
@@ -52,7 +54,7 @@ namespace CarRental.API.Controllers
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUserAsync(UsersDto usersDto)
-        {
+        { 
             var result = await _usersService.UpdateUser(usersDto);
             if (result.isValid == false)
                 return NotFound("User Not Found");

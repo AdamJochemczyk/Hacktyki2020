@@ -4,14 +4,16 @@ using CarRental.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarRental.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200803123835_ChangesInDataSeed")]
+    partial class ChangesInDataSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,9 +39,6 @@ namespace CarRental.DAL.Migrations
 
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Model")
                         .HasColumnType("nvarchar(max)");
@@ -71,10 +70,9 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 8, 4, 13, 12, 2, 516, DateTimeKind.Local).AddTicks(1838),
+                            DateCreated = new DateTime(2020, 8, 3, 14, 38, 35, 147, DateTimeKind.Local).AddTicks(5896),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
-                            IsDeleted = false,
                             Model = "Q5",
                             NumberOfDoor = 5,
                             NumberOfSits = 5,
@@ -174,7 +172,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             LocationId = 1,
-                            DateCreated = new DateTime(2020, 8, 4, 13, 12, 2, 522, DateTimeKind.Local).AddTicks(8392),
+                            DateCreated = new DateTime(2020, 8, 3, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(7022),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActual = true,
                             Latitude = 50.5,
@@ -256,11 +254,11 @@ namespace CarRental.DAL.Migrations
                         {
                             ReservationId = 1,
                             CarId = 1,
-                            DateCreated = new DateTime(2020, 8, 4, 13, 12, 2, 522, DateTimeKind.Local).AddTicks(4193),
+                            DateCreated = new DateTime(2020, 8, 3, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(5199),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsFinished = false,
-                            RentalDate = new DateTime(2020, 8, 6, 13, 12, 2, 522, DateTimeKind.Local).AddTicks(2170),
-                            ReturnDate = new DateTime(2020, 8, 9, 13, 12, 2, 522, DateTimeKind.Local).AddTicks(2678),
+                            RentalDate = new DateTime(2020, 8, 5, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(3723),
+                            ReturnDate = new DateTime(2020, 8, 8, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(4185),
                             UserId = 1
                         });
                 });
@@ -311,9 +309,6 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("StatusOfVerification")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
@@ -322,12 +317,11 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 8, 4, 13, 12, 2, 522, DateTimeKind.Local).AddTicks(911),
+                            DateCreated = new DateTime(2020, 8, 3, 14, 38, 35, 152, DateTimeKind.Local).AddTicks(2314),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
                             LastName = "Doe",
-                            RoleOfUser = 0,
-                            isDeleted = false
+                            RoleOfUser = 0
                         });
                 });
 

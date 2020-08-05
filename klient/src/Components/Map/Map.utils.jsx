@@ -21,8 +21,18 @@ export default function useMap() {
   const [marker, setMarker] = useState();
 
   const onMapClick = useCallback((e) => {
-    //TODO:
-    //send marker to API
+
+    let props={
+      latitude: e.latLng.lat(),
+      longitude: e.latLng.lng(),
+      //TODO:
+      //get reservationid from history
+      reservationid: 1
+    }
+
+    let api=new LocationApi()
+    api.setLocalization(props)
+
     setMarker({
       latitude: e.latLng.lat(),
       longitude: e.latLng.lng(),

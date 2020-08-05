@@ -25,15 +25,7 @@ namespace CarRental.API.Controllers
             return Ok(entities);
         }
 
-        //example: .../api/cars/dates/2021-08-07/2021-09-07
-        [HttpGet, Route("dates/{rentalDate:datetime}/{returnDate:datetime}")]
-        public async Task<IActionResult> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
-        {
-            var entities = await service.GetAvailableCars(rentalDate, returnDate);
-            return Ok(entities);
-        }
-
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetById")]
         public async Task<IActionResult> GetCarByIdAsync(int id)
         {
             var entity = await service.GetCarByIdAsync(id);
@@ -41,16 +33,22 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCatAsync(CarCreateDto carDto)
+        public async Task<IActionResult> CreateCarAsync(CarCreateDto carDto)
         {
             var result = await service.CreateCarAsync(carDto);
-            return Ok(result);
+            if (result == null)
+                return BadRequest();
+
+            return CreatedAtRoute(
+                routeName: "GetById",
+                routeValues: new { id = result.CarId },
+                value: result);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCarAsync(int id, CarDto carDto)
         {
-            if (id != carDto.CarId) 
+            if (id != carDto.CarId)
                 return BadRequest();
             var result = await service.UpdateCarAsync(carDto);
             return Ok(result);
@@ -59,9 +57,13 @@ namespace CarRental.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarAsync(int id)
         {
-            try { await service.DeleteCar(id); }
-            catch (ArgumentNullException) { return BadRequest(); }
-            return Ok();
+            var entity = await service.GetCarByIdAsync(id);
+            if (entity != null && entity.IsDeleted != true)
+            {
+                await service.DeleteCar(entity);
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

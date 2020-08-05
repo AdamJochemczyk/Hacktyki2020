@@ -10,7 +10,7 @@ export default class LocationApi extends Api{
             const res = await axios({
                 //FIXME:
                 //right reservation ID
-              url: BASE_URL + "/" + 2,
+              url: BASE_URL + "/" + 1,
               method: "GET",
             }).catch((error) => {
               console.log(error);

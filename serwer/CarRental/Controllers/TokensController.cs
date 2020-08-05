@@ -10,17 +10,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
 {
-     [Route("api/refresh")]
-     [ApiController]
+    [Route("api/refresh")]
+    [ApiController]
     public class TokensController : Controller
     {
-        public  ITokenService _tokenService;
+        public ITokenService _tokenService;
         public TokensController(ITokenService tokenService)
         {
             _tokenService = tokenService;
         }
+
         [HttpPost]
-       public async Task<IActionResult> RefreshToken(TokenDto refreshToken)
+        public async Task<IActionResult> RefreshToken(TokenDto refreshToken)
         {
             var refresh = await _tokenService.CheckAccessRefreshToken(refreshToken.RefreshToken);
             if (!refresh.CheckRefreshToken)
@@ -33,8 +34,6 @@ namespace CarRental.API.Controllers
                 _tokenService.SaveRefreshToken(refresh.UserId, refreshToken.RefreshToken, true);
             }
             return Ok(refreshToken);
-
         }
-
     }
 }

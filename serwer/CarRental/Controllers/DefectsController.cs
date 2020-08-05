@@ -28,6 +28,7 @@ namespace CarRental.API.Controllers
             if (register_defect == null) { return BadRequest("Object car or user is empty;"); }
             return Ok(register_defect);
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAllDefects()
         {
@@ -36,6 +37,7 @@ namespace CarRental.API.Controllers
                 return BadRequest("Database is empty");
             return Ok(defects);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDefect(int id)
         {

@@ -60,12 +60,6 @@ export default function useUserHistory(){
                   Cancel booking
                 </Button>
                   }
-                  {
-                    (moment.utc().isAfter(moment.utc(row.original.rentalDate)) && moment.utc().isBefore(moment.utc(row.original.returnDate))) && 
-                    <Button color="success" onClick={()=>returnNow}>
-                      Return now
-                    </Button>
-                  }
               </div>
             ),
           },
@@ -114,17 +108,7 @@ export default function useUserHistory(){
         } catch (error) {
           history.push(".");
         }
-      }
-
-      async function returnNow(){
-        try{
-          //let api=new Api();
-          
-        }catch(error){
-
-        }
-      }
-    
+      }   
 
       return {data, isLoading, columns, fetchUserHistory}
 }

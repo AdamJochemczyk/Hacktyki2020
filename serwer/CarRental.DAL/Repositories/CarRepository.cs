@@ -14,6 +14,14 @@ namespace CarRental.DAL.Repositories
         public CarRepository(ApplicationDbContext context) : base(context)
         {
         }
+
+        public new async Task<IEnumerable<Car>> FindAllAsync()
+        {
+            return await context.Cars
+                .Where(p => p.IsDeleted == false)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Car>> GetReservedCarsByDates(DateTime rentalDate, DateTime returnDate)
         {
             var entities = await context.Reservations
@@ -21,7 +29,10 @@ namespace CarRental.DAL.Repositories
                  .Where(p => p.ReturnDate >= rentalDate && p.RentalDate <= returnDate)
                  .Include(p => p.Car)
                  .ToListAsync();
-            var cars = entities.GroupBy(p => p.Car).Select(p => p.Key).ToList();
+            var cars = entities
+                .GroupBy(p => p.Car)
+                .Select(p => p.Key)
+                .ToList();
             return cars;
         }
     }

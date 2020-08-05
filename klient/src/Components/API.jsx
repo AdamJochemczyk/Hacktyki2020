@@ -145,7 +145,7 @@ export default class Api {
         } else if (error.request) {
           Swal.fire(
             "Oops...",
-            "Error request was made but no response was recived. Error request: " +
+            "Error request was made but no response was received. Error request: " +
               error.request,
             "error"
           );
@@ -158,7 +158,7 @@ export default class Api {
           );
         }
       });
-      Swal.fire("Good job!", "You succesfully added new user!", "success");
+      Swal.fire("Good job!", "You successfully added new user!", "success");
     } catch (error) {
         console.log(error)
     }
@@ -175,7 +175,7 @@ export default class Api {
         } else if (error.request) {
           Swal.fire(
             "Oops...",
-            "Error request was made but no response was recived. Error request: " +
+            "Error request was made but no response was received. Error request: " +
               error.request,
             "error"
           );
@@ -188,7 +188,7 @@ export default class Api {
           );
         }
       });
-      Swal.fire("Good job!", "You succesfully edited a user!", "success");
+      Swal.fire("Good job!", "You successfully edited a user!", "success");
     } catch (error) {
       console.log(error);
     }
@@ -213,16 +213,18 @@ export default class Api {
   async fetchUsers() {
     try {
       const res = await axios({
-        url: USER_URL,
+        url: "https://localhost:44390/api/users",
         method: "GET",
-        headers: {
+       /* headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${this.token}`,
-        }
+        }*/
       });
+      console.log(res)
       return res.data;
     } catch (error) {
-      Swal.fire("Oops...", "Something went wrong!", "error");
+      console.log("Api -> fetchUsers -> error", error)
+      //Swal.fire("Oops...", "Something went wrong!", "error");
     }
   }
   async deleteUser(id) {
@@ -245,9 +247,11 @@ export default class Api {
   //RESERVATIONS
   async fetchUserHistory(id){
     try {
+      //FIXME:
+      //rightuserID
       const res = await axios({
         method: "GET",
-        url: RESERVATION_URL + "/users/" + 28,
+        url: RESERVATION_URL + "/users/" + 1
       });
       return res.data;
     } catch (error) {
@@ -261,6 +265,7 @@ export default class Api {
       method: "GET",
       url: RESERVATION_URL,
     });
+    console.log(data)
     return data;
   }catch(error){
     Swal.fire("Oops...", "Something went wrong!", "error");
@@ -285,14 +290,30 @@ export default class Api {
     ).then(() => window.location.reload(false));
   }
 
-  async checkAvilable(carid) {
+  async checkAvilable(carId, rentalDate, returnDate) {
     const response = await axios({
       method: "GET",
-      url: RESERVATION_URL+"/terms/"+carid,
+      url: RESERVATION_URL+"/terms/"+carId+'/'+rentalDate+'/'+returnDate,
     }).catch((error) => {
       console.log(error);
     });
     return response.data
+  }
+
+  async addReservation(fields){
+    try {
+      await axios({
+        url: RESERVATION_URL,
+        method: "POST",
+        data: fields,
+      }).catch((error) => {
+        Swal.fire("Oops...", error, "error");
+      });
+      Swal.fire("Success","You successfully reserved term", "success")
+    } catch (error) {
+      Swal.fire("Oops...", "Something went wrong...", "error");
+      console.log(error);
+    }
   }
 
 //AUTHORIZATION
