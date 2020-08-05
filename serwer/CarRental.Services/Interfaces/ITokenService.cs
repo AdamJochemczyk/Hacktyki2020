@@ -9,10 +9,8 @@ namespace CarRental.Services.Interfaces
 {
   public  interface ITokenService
     {
-        public Task<string> GenerateToken(int userId);
-        public string RefreshGenerateToken();
-        public Task<TokenClaimsDto> CheckAccessRefreshToken(string refresh);
-        public void SaveRefreshToken(int id, string refreshtoken, bool isvalid);
+         Task<TokenClaimsDto> CheckAccessRefreshToken(string refresh);
+         void SaveRefreshToken(int id, string refreshtoken, bool isvalid);
 
     }
 }

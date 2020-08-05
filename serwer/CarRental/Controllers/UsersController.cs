@@ -22,7 +22,7 @@ namespace CarRental.API.Controllers
             _usersService = usersService;
         }
         [HttpGet]
-        //  [Authorize]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetUsersAsync()
         {
             var result = await _usersService.GetAllUsers();
@@ -31,7 +31,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUserAsync(int id)
         {
  
@@ -43,7 +43,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
 
@@ -53,6 +53,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUserAsync(UsersDto usersDto)
         { 
             var result = await _usersService.UpdateUser(usersDto);

@@ -32,7 +32,7 @@ namespace CarRental.API.Controllers
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
             var cos = await _authorizationService.SignIn(userLoginDto);
-            if (cos.ErrorCode == 401 || cos.ErrorCode == 404)
+            if (cos.Code == 401)
                 return Unauthorized("Email/Password not correct");
             return Ok(cos);
         }

@@ -15,9 +15,11 @@ namespace CarRental.API.Controllers
     public class TokensController : Controller
     {
         public ITokenService _tokenService;
-        public TokensController(ITokenService tokenService)
+        public ITokenGeneratorService _tokenGeneratorService;
+        public TokensController(ITokenService tokenService, ITokenGeneratorService tokenGeneratorService)
         {
             _tokenService = tokenService;
+            _tokenGeneratorService = tokenGeneratorService;
         }
 
         [HttpPost]
@@ -28,8 +30,8 @@ namespace CarRental.API.Controllers
                 return Unauthorized("Your Refresh Token is bad");
             else
             {
-                var tokenRefresh = _tokenService.RefreshGenerateToken();
-                refreshToken.AccessToken = await _tokenService.GenerateToken(refresh.UserId);
+                var tokenRefresh = _tokenGeneratorService.RefreshGenerateToken();
+                refreshToken.AccessToken = await _tokenGeneratorService.GenerateToken(refresh.UserId);
                 refreshToken.RefreshToken = tokenRefresh;
                 _tokenService.SaveRefreshToken(refresh.UserId, refreshToken.RefreshToken, true);
             }

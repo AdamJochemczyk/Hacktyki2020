@@ -41,7 +41,7 @@ namespace CarRental.API.StartupExtensions
                 .AddSingleton<Profile, UserProfile>()
                 .AddSingleton<Profile, CarProfile>()
                 .AddSingleton<Profile, LocationProfile>()
-                .AddSingleton<Profile,DefectProfile>()
+                .AddSingleton<Profile, DefectProfile>()
                 .AddSingleton<IConfigurationProvider, AutoMapperConfiguration>(p =>
                     new AutoMapperConfiguration(p.GetServices<Profile>()))
                 .AddSingleton<IMapper, Mapper>();
@@ -59,6 +59,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IDefectsService, DefectService>();
             services.AddScoped<ITermService, TermService>();
+            services.AddScoped<ITokenGeneratorService, TokenGeneratorService>();
             return services;
         }
 
@@ -87,12 +88,18 @@ namespace CarRental.API.StartupExtensions
         }
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }
+                )
                             .AddJwtBearer(options =>
                             {
                                 options.RequireHttpsMetadata = true;
                                 options.TokenValidationParameters = new TokenValidationParameters
                                 {
+                                    NameClaimType = "Roles",
                                     ValidateIssuer = true,
                                     ValidIssuer = TokenOptions.ISSUER,
                                     ValidAudience = TokenOptions.AUDIENCE,

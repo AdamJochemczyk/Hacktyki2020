@@ -20,7 +20,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-        // [Authorize]
+        [Authorize(Roles ="Worker")]
         public async Task<IActionResult> RegisterDefect(RegisterDefectDto registerDefectDto)
         {
             if (registerDefectDto == null) { return BadRequest("Model is empty"); }
@@ -30,6 +30,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllDefects()
         {
             var defects = await _defectsService.GetAllDefectsAsync();
@@ -39,6 +40,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDefect(int id)
         {
             var defect = await _defectsService.GetDefectAsync(id);
@@ -47,6 +49,7 @@ namespace CarRental.API.Controllers
             return Ok(defect);
         }
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateDefectAsync(UpdateDefectDto updateDefectDto)
         {
           var defect =  await _defectsService.UpdateDefectAsync(updateDefectDto);

@@ -24,10 +24,10 @@ namespace CarRental.Services.Services
         private readonly IUserRepository _userRepository;
         private readonly IEmailServices _email;
         private readonly IMapper _mapper;
-        private readonly ITokenService _token;
+        private readonly ITokenGeneratorService _token;
         private readonly IRefreshRepository _refreshRepository;
         public AuthorizationService(IUserRepository userRepository, IEmailServices email, IMapper mapper
-            , ITokenService token, IRefreshRepository refreshRepository)
+            , ITokenGeneratorService token, IRefreshRepository refreshRepository)
         {
             _userRepository = userRepository;
             _email = email;
@@ -90,19 +90,19 @@ namespace CarRental.Services.Services
             if (user == null)
             {
                 TokenDto token_error = new TokenDto();
-                token_error.ErrorCode = 404;
+                token_error.Code = 401;
                 return token_error;
             }
             if (userLoginDto.Email != user.Email ||!VerifyPassword(userLoginDto.EncodePassword, user.HashPassword, user.Salt))
             {
                 TokenDto token_error = new TokenDto();
-                token_error.ErrorCode = 401;
+                token_error.Code = 401;
                 return token_error;
             }
             //Return two tokens Access , Refresh
             TokenDto token = new TokenDto();
-            token.ErrorCode = 200;
-            token.AccessToken = await _token.GenerateToken(user.UserId);
+            token.Code = 200;
+            token.AccessToken =  await _token.GenerateToken(user.UserId);
             token.RefreshToken = _token.RefreshGenerateToken();
             //Save To database Refresh token 
             RefreshToken refreshToken = new RefreshToken(token.RefreshToken, user.UserId, true);

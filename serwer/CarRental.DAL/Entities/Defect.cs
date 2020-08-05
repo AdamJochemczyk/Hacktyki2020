@@ -19,7 +19,7 @@ namespace CarRental.DAL.Entities
         public Car Car { get; set; }
         public User User { get; set; }
         public Defect(int userId ,int carId ,string name,string surname , string registrationNumber,
-                                string description, DateTime dateTimeReport,Status status)
+                                string description,Status status)
         {
             UserId = userId;
             CarId = carId;
@@ -27,7 +27,7 @@ namespace CarRental.DAL.Entities
             Surname = surname;
             RegistrationNumber =registrationNumber ;
             Description = description;
-            DateOfReport = dateTimeReport;
+            DateOfReport = DateTime.Now;
             Status = status;
 
         }
@@ -36,6 +36,7 @@ namespace CarRental.DAL.Entities
         {
             Description = description;
             Status = status;
+            DateModified = DateTime.Now;
         }
     }
  
