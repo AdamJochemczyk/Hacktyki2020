@@ -11,18 +11,47 @@ namespace CarRental.API.Controllers
     [ApiController]
     public class TermsController : Controller
     {
-        private readonly ITermService service;
-        public TermsController(ITermService service)
+        private readonly ITermService termService;
+        private readonly ICarService carService;
+        public TermsController(ITermService termService, ICarService carService)
         {
-            this.service = service;
+            this.termService = termService;
+            this.carService = carService;
         }
 
         [HttpGet("{id}")]
         [HttpGet("{id}/{rentalDate:datetime}/{returnDate:datetime}")]
         public async Task<IActionResult> GetFreeTermsByCarIdAsync(int id, DateTime? rentalDate, DateTime? returnDate)
         {
-            var result = await service.GetFreeTermsByCarIdAsync(id, rentalDate, returnDate);
-            return Ok(result);
+
+            if (!DatesHaveValue(rentalDate, returnDate) || DatesAreCorrect(rentalDate.Value, returnDate.Value))
+            {
+                var result = await termService.GetFreeTermsByCarIdAsync(id, rentalDate, returnDate);
+                return Ok(result);
+            }
+            return BadRequest("Bad dates orded");
+        }
+
+        //example: .../api/terms/2021-08-07/2021-09-07
+        [HttpGet, Route("{rentalDate:datetime}/{returnDate:datetime}")]
+        public async Task<IActionResult> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
+        {
+            if (DatesAreCorrect(rentalDate, returnDate))
+            {
+                var entities = await carService.GetAvailableCars(rentalDate, returnDate);
+                return Ok(entities);
+            }
+            return BadRequest("Bad dates orded");
+        }
+
+        private bool DatesAreCorrect(DateTime rentalDate, DateTime returnDate)
+        {
+            return rentalDate < returnDate && rentalDate.Date >= DateTime.Now.Date;
+        }
+
+        private bool DatesHaveValue(DateTime? rentalDate, DateTime? returnDate)
+        {
+            return rentalDate.HasValue && returnDate.HasValue;
         }
     }
 }
