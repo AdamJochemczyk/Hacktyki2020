@@ -3,6 +3,7 @@ using CarRental.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace CarRental.DAL.Repositories
 
         public  async Task<RefreshToken> FindByRefreshToken(string refresh)
         {
-            return await context.Set<RefreshToken>().FirstOrDefaultAsync(e => e.Refresh == refresh);
+            return await context.Set<RefreshToken>().Where(e=>e.IsValid==true).FirstOrDefaultAsync(e => e.Refresh == refresh);
         }
     }
 }

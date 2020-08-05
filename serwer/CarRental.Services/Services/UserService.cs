@@ -3,9 +3,7 @@ using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRental.Services.Services
@@ -21,56 +19,49 @@ namespace CarRental.Services.Services
             _userRepository = userRepository;
             _mapper = mapper;
         }
-        //For decode password @Zaneta
-        //public string DecodeFrom64(string encodeddata)
-        //{
-        //    System.Text.UTF8Encoding encoder = new System.Text.UTF8Encoding();
-        //    System.Text.Decoder utf8decode = encoder.GetDecoder();
-        //    byte[] todecode_byte = Convert.FromBase64String(encodeddata);
-        //    int charcount = utf8decode.GetCharCount(todecode_byte, 0, todecode_byte.Length);
-        //    char[] decoded_char = new char[charcount];
-        //    utf8decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
-        //    string result = new string(decoded_char);
-        //    return result;
-        //}
-        public async Task DeleteUser(int Id) 
+        public async Task<bool> DeleteUser(int id)
         {
-            
-            var user = await _userRepository.FindByIdAsync(Id);
-            _userRepository.Delete(user);
+
+            var user = await _userRepository.FindByIdAsync(id);
+            if (user.UserId == 0) { return false; }
+            user.Delete(true);
             await _userRepository.SaveChangesAsync();
+            return true;
         }
 
         public async Task<IEnumerable<UsersDto>> GetAllUsers()
         {
-           var all_users = await _userRepository.FindAllAsync();
+            var all_users = await _userRepository.FindAllUsers();
             return _mapper.Map<IEnumerable<UsersDto>>(all_users);
         }
 
-        public async Task<UsersDto> GetUser(int Id)
+        public async Task<UsersDto> GetUser(int id)
         {
-            var user = await _userRepository.FindByIdAsync(Id);
-           
+            var user = await _userRepository.FindByIdDetails(id);
+            if (user == null)
+                return _mapper.Map<UsersDto>(user);
             return _mapper.Map<UsersDto>(user);
         }
 
         public async Task<UsersDto> UpdateUser(UsersDto usersDto)
         {
-         
-                var user = await _userRepository.FindByIdAsync(usersDto.UserId);
-                var check_user = await _userRepository.FindByLogin(usersDto.Email);
-                if (check_user.Email == user.Email)
-                {
-                    user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);
-                    _userRepository.Update(user);
-                    await _userRepository.SaveChangesAsync();
-                }
-                else
+            var user = await _userRepository.FindByIdDetails(usersDto.UserId);
+            var check_user = await _userRepository.FindByLogin(usersDto.Email);
+            if (user == null || check_user == null)
+            {
+                usersDto.isValid = false;
+                return usersDto;
+            }
+            if (check_user.Email == user.Email)
+            {
+                usersDto.isValid = true;
+                user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);
+                _userRepository.Update(user);
+                await _userRepository.SaveChangesAsync();
+                return usersDto;
+            }
+            else
                 return _mapper.Map<UsersDto>(user);
-                  
-                user = await _userRepository.FindByIdAsync(usersDto.UserId);
-            return _mapper.Map<UsersDto>(user);
-
         }
 
 

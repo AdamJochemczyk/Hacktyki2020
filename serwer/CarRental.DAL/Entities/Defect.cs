@@ -18,12 +18,11 @@ namespace CarRental.DAL.Entities
         public Status Status { get; set; }
         public Car Car { get; set; }
         public User User { get; set; }
-
-        public Defect() { }
-        public Defect(int userId , string name,string surname , string registrationNumber,
+        public Defect(int userId ,int carId ,string name,string surname , string registrationNumber,
                                 string description, DateTime dateTimeReport,Status status)
         {
             UserId = userId;
+            CarId = carId;
             Name = name;
             Surname = surname;
             RegistrationNumber =registrationNumber ;
@@ -32,5 +31,12 @@ namespace CarRental.DAL.Entities
             Status = status;
 
         }
+        public Defect() { }
+        public void Update(string description, Status status)
+        {
+            Description = description;
+            Status = status;
+        }
     }
+ 
 }

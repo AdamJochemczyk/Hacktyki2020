@@ -24,5 +24,9 @@ namespace CarRental.DAL.Entities
             DateOfEnd = DateTime.Now.AddDays(100);
             IsValid = isvalid;
           }
+        public void Delete(bool isvalid)
+        {
+            IsValid = isvalid;
+        }
     }
 }

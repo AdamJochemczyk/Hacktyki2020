@@ -18,6 +18,7 @@ namespace CarRental.DAL.Entities
         public string StatusOfVerification { get; set; }
         public RoleOfWorker RoleOfUser { get; set; }
         public string CodeOfVerification { get; set; }
+        public bool isDeleted { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
         public User(string firstName, string lastName, string numberIdentificate, string email,
             string mobileNumber)
@@ -53,10 +54,15 @@ namespace CarRental.DAL.Entities
             MobileNumber = mobileNumber;
             DateModified = DateTime.Now;
         }
+        public void Delete(bool isdelete)
+        {
+            isDeleted = isdelete;
+        }
         public void SetPassword(string encodePassword,string salt)
         {
             Salt = salt;
             HashPassword = encodePassword;
+            CodeOfVerification = null;
             StatusOfVerification = "Account has been registered.";
 
         }

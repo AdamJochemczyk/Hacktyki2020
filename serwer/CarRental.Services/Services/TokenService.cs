@@ -24,13 +24,11 @@ namespace CarRental.Services.Services
         public async Task<string> GenerateToken(int UserId)
         {
             var user =  await _userRepository.FindByIdDetails(UserId);
-
             var claims = new List<Claim> {
                      new Claim(JwtRegisteredClaimNames.Email,user.Email),
                      new Claim(JwtRegisteredClaimNames.Sub , user.HashPassword),
                      new Claim(JwtRegisteredClaimNames.Jti,user.RoleOfUser.ToString())
             };
-
             var jwt = new JwtSecurityToken(
                   issuer: TokenOptions.ISSUER,
                   audience: TokenOptions.AUDIENCE,
@@ -51,7 +49,7 @@ namespace CarRental.Services.Services
                 token.CheckRefreshToken = false;
                 return token;
             }
-            _refreshRepository.Delete(check);
+            check.Delete(false);
             await _refreshRepository.SaveChangesAsync();
             token.UserId = check.UserId;
             token.CheckRefreshToken = true;
@@ -61,7 +59,7 @@ namespace CarRental.Services.Services
 
         public void SaveRefreshToken(int id,string refreshtoken,bool isvalid)
         {
-            RefreshToken refresh = new RefreshToken(refreshtoken, id, isvalid);
+            RefreshToken refresh = new RefreshToken(refreshtoken, id, isvalid );
             _refreshRepository.Create(refresh);
             _refreshRepository.SaveChangesAsync();
         }

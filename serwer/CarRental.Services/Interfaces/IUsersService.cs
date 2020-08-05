@@ -10,7 +10,7 @@ namespace CarRental.Services.Interfaces
     {
         Task<IEnumerable<UsersDto>> GetAllUsers();
         Task<UsersDto> GetUser(int Id);
-        Task DeleteUser(int Id);
+        Task<bool> DeleteUser(int Id);
         Task<UsersDto> UpdateUser(UsersDto Id);
     }
 }

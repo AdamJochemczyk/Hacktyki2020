@@ -9,7 +9,8 @@ namespace CarRental.Services.Interfaces
    public interface IDefectsService
     {
         public Task<DefectDto> RegisterDefectAsync(RegisterDefectDto registerDefectDto);
-        public Task<IEnumerable<DefectDto>> GetAllDefects();
-        public Task<DefectDto> GetDefect(int Id);
+        public Task<IEnumerable<DefectDto>> GetAllDefectsAsync();
+        public Task<DefectDto> GetDefectAsync(int Id);
+        public Task<DefectDto> UpdateDefectAsync(UpdateDefectDto updateDefectDto);
     }
 }

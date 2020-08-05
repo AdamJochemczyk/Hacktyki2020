@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarRental.DAL.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,8 +7,9 @@ namespace CarRental.Services.Models.Defect
 {
     public class UpdateDefectDto
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public int Id { get; set; }
+        public string Description { get; set; }
+        public Status Status { get; set; }
 
     }
 }

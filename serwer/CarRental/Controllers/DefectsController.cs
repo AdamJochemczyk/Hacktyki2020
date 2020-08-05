@@ -20,18 +20,18 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-       // [Authorize]
+        // [Authorize]
         public async Task<IActionResult> RegisterDefect(RegisterDefectDto registerDefectDto)
         {
-            if (registerDefectDto == null) { return BadRequest("Model is empty");}
-          var register_defect =  await _defectsService.RegisterDefectAsync(registerDefectDto);
+            if (registerDefectDto == null) { return BadRequest("Model is empty"); }
+            var register_defect = await _defectsService.RegisterDefectAsync(registerDefectDto);
             if (register_defect == null) { return BadRequest("Object car or user is empty;"); }
             return Ok(register_defect);
         }
         [HttpGet]
         public async Task<IActionResult> GetAllDefects()
         {
-            var defects = await _defectsService.GetAllDefects();
+            var defects = await _defectsService.GetAllDefectsAsync();
             if (defects == null)
                 return BadRequest("Database is empty");
             return Ok(defects);
@@ -39,15 +39,18 @@ namespace CarRental.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDefect(int id)
         {
-            var defect = await _defectsService.GetDefect(id);
+            var defect = await _defectsService.GetDefectAsync(id);
             if (defect == null)
-                return BadRequest("This is defect does not exist");
+                return NotFound("This is defect does not exist");
             return Ok(defect);
         }
-         //[HttpPut]
-         //public async Task<IActionResult> UpdateDefect()
-         // {
-
-         // }
+        [HttpPut]
+        public async Task<IActionResult> UpdateDefectAsync(UpdateDefectDto updateDefectDto)
+        {
+          var defect =  await _defectsService.UpdateDefectAsync(updateDefectDto);
+            if (defect == null)
+                return NotFound("Not found this object");
+            return Ok(defect);
+        }
     }
 }
