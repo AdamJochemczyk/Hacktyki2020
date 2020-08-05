@@ -7,6 +7,7 @@ using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
 using CarRental.Services.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
@@ -20,39 +21,43 @@ namespace CarRental.API.Controllers
         {
             _usersService = usersService;
         }
-
         [HttpGet]
         //  [Authorize]
         public async Task<IActionResult> GetUsersAsync()
         {
             var result = await _usersService.GetAllUsers();
-            if (result == null) return BadRequest("Database users is empty");
+            if (result == null) return NotFound("Database users is empty");
             return Ok(result);
         }
 
-        [HttpGet("{Id}")]
+        [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetUserAsync(int Id)
+        public async Task<IActionResult> GetUserAsync(int id)
         {
-            if (Id == 0) return BadRequest("This ID does not exist");
-            var user = await _usersService.GetUser(Id);
+ 
+            var user = await _usersService.GetUser(id);
+            if (user == null) return NotFound("This ID does not exist");
+            if (id == 0) return BadRequest("This ID does not exist");
+             user = await _usersService.GetUser(id);
             return Ok(user);
         }
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteUserAsync(int Id)
+        public async Task<IActionResult> DeleteUserAsync(int id)
         {
-            if (Id == 0) return BadRequest("This ID does not exist");
-            await _usersService.DeleteUser(Id);
+
+            if (!await _usersService.DeleteUser(id))
+                return NotFound("This ID does not exist");
             return Ok();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserAsync(int Id, UsersDto usersDto)
-        {
-            if (usersDto.UserId != Id || usersDto.UserId == 0) return BadRequest("This user does not exist");
+        public async Task<IActionResult> UpdateUserAsync(UsersDto usersDto)
+        { 
             var result = await _usersService.UpdateUser(usersDto);
+            if (result.isValid == false)
+                return NotFound("User Not Found");
             return Ok(result);
         }
     }

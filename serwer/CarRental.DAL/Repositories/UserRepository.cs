@@ -16,7 +16,11 @@ namespace CarRental.DAL.Repositories
         }
         public async Task<User> FindByIdDetails(int id)
         {
-              return await context.Set<User>().FirstOrDefaultAsync(e => e.UserId == id);    
+              return await context.Set<User>().Where(e=>e.isDeleted==false).FirstOrDefaultAsync(e => e.UserId == id);    
+        }
+        public async Task<IEnumerable<User>> FindAllUsers()
+        {
+            return await context.Set<User>().Where(e => e.isDeleted == false).ToListAsync();
         }
         public async Task<User> FindByCodeOfVerification(string code)
         {
@@ -25,7 +29,7 @@ namespace CarRental.DAL.Repositories
 
         public async Task<User> FindByLogin(string email )
         {
-            return await context.Set<User>().FirstOrDefaultAsync(e => e.Email == email);
+            return await context.Set<User>().Where(e => e.isDeleted == false).FirstOrDefaultAsync(e => e.Email == email);
         }
 
     } 

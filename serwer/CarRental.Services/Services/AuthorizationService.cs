@@ -26,14 +26,14 @@ namespace CarRental.Services.Services
         private readonly IMapper _mapper;
         private readonly ITokenService _token;
         private readonly IRefreshRepository _refreshRepository;
-        public AuthorizationService(IUserRepository userRepository,IEmailServices email , IMapper mapper
-            ,ITokenService token, IRefreshRepository refreshRepository )
+        public AuthorizationService(IUserRepository userRepository, IEmailServices email, IMapper mapper
+            , ITokenService token, IRefreshRepository refreshRepository)
         {
             _userRepository = userRepository;
             _email = email;
             _mapper = mapper;
             _token = token;
-            _refreshRepository=refreshRepository;
+            _refreshRepository = refreshRepository;
         }
         //Generate Hash Password
         public static HashSaltDto GenerateSaltedHash(int size, string password)
@@ -56,11 +56,11 @@ namespace CarRental.Services.Services
             var rfc2898DeriveBytes = new Rfc2898DeriveBytes(enteredPassword, saltBytes, 10000);
             return Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256)) == storedHash;
         }
-            public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
+        public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
         {
             var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.NumberIdentificate,
                 createUserDto.Email, createUserDto.MobileNumber);
-                var check_user = await _userRepository.FindByLogin(createUserDto.Email);
+            var check_user = await _userRepository.FindByLogin(createUserDto.Email);
             if (check_user == null)
             {
                 _userRepository.Create(new_user);
@@ -70,7 +70,7 @@ namespace CarRental.Services.Services
                 _email.EmailAfterRegistration(createUserDto);
             }
             else
-                return createUserDto;                
+                return createUserDto;
             return _mapper.Map<CreateUserDto>(new_user);
         }
 
@@ -80,28 +80,34 @@ namespace CarRental.Services.Services
             var saltHashPassword = GenerateSaltedHash(16, updateUserPassword.EncodePassword);
             user.SetPassword(saltHashPassword.Hash, saltHashPassword.Salt);
             _userRepository.Update(user);
-           await _userRepository.SaveChangesAsync();
+            await _userRepository.SaveChangesAsync();
             return true;
         }
 
         public async Task<TokenDto> SignIn(UserLoginDto userLoginDto)
         {
             var user = await _userRepository.FindByLogin(userLoginDto.Email);
-            if (userLoginDto.Email!=user.Email||!VerifyPassword(userLoginDto.EncodePassword, user.HashPassword,user.Salt))
+            if (user == null)
+            {
+                TokenDto token_error = new TokenDto();
+                token_error.ErrorCode = 404;
+                return token_error;
+            }
+            if (userLoginDto.Email != user.Email ||!VerifyPassword(userLoginDto.EncodePassword, user.HashPassword, user.Salt))
             {
                 TokenDto token_error = new TokenDto();
                 token_error.ErrorCode = 401;
                 return token_error;
-            } 
+            }
             //Return two tokens Access , Refresh
             TokenDto token = new TokenDto();
             token.ErrorCode = 200;
-            token.AccessToken =await _token.GenerateToken(user.UserId);
-            token.RefreshToken = _token.RefreshGenerateToken();           
+            token.AccessToken = await _token.GenerateToken(user.UserId);
+            token.RefreshToken = _token.RefreshGenerateToken();
             //Save To database Refresh token 
             RefreshToken refreshToken = new RefreshToken(token.RefreshToken, user.UserId, true);
             _refreshRepository.Create(refreshToken);
-           await _refreshRepository.SaveChangesAsync();
+            await _refreshRepository.SaveChangesAsync();
             return token;
         }
     }

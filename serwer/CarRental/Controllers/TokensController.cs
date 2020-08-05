@@ -25,7 +25,7 @@ namespace CarRental.API.Controllers
         {
             var refresh = await _tokenService.CheckAccessRefreshToken(refreshToken.RefreshToken);
             if (!refresh.CheckRefreshToken)
-                return BadRequest("Your Refresh Token is bad");
+                return Unauthorized("Your Refresh Token is bad");
             else
             {
                 var tokenRefresh = _tokenService.RefreshGenerateToken();
