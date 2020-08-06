@@ -70,11 +70,11 @@ namespace CarRental.API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}")] 
         public async Task<IActionResult> DeleteReservationAsync(int id)
         {
             var entity = await service.GetReservationByIdAsync(id);
-            if (entity != null && Convert.ToDateTime(entity.RentalDate) > DateTime.Now)
+            if (entity != null)
             {
                 await service.DeleteReservationAsync(id);
                 return Ok();
