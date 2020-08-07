@@ -21,7 +21,14 @@ export default class UserApi extends Api{
           await this.createAxios.post('',params)
           Swal.fire("Good job!", "You successfully added new user!", "success");
         } catch (error) {
-          console.log(error);
+          console.log(error)
+          /*if(error.response===500)
+          {
+            console.log("Srutututu")
+          }
+          else{
+          console.log(error.response.data);
+          }*/
         }
       }
 

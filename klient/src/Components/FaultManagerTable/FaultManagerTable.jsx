@@ -9,7 +9,6 @@ export default function FaultManagerTable({ columns, data }) {
     name: "",
     surname: "",
     phone: "",
-    status: "",
     dateofreport: "",
   });
 
@@ -97,14 +96,6 @@ export default function FaultManagerTable({ columns, data }) {
               onChange={filterBy}
               placeholder={"Search by date of report"}
               name="dateofreport"
-            />
-          </td>
-          <td>
-            <Input
-              value={filter.status}
-              onChange={filterBy}
-              placeholder={"Search by status"}
-              name="status"
             />
           </td>
         </tr>

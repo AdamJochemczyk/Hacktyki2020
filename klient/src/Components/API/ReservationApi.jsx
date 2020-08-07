@@ -10,7 +10,7 @@ export default class ReservationsApi {
 
   async fetchUsersHistory() {
     try {
-      const { data } = this.reservationAxios.get('/reservations');
+      const { data } = await this.reservationAxios.get('/reservations');
       return data;
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong!", "error");
@@ -19,9 +19,7 @@ export default class ReservationsApi {
   
   async fetchUserHistory(id) {
     try {
-      //FIXME:
-      //rightuserID
-      const res = this.reservationAxios.get("/reservations/users/" + 1);
+      const res = await this.reservationAxios.get("/reservations/users/" + id);
       return res.data;
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong!", "error");
@@ -59,6 +57,16 @@ export default class ReservationsApi {
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong...", "error");
       console.log(error);
+    }
+  }
+
+  async finishReservationNow(reservationid,fields)
+  {
+    try{
+      await this.reservationAxios.delete('/reservations/'+reservationid)
+      Swal.fire("Success", "You successfully finieshed reservation", "success");
+    }catch (error){
+      console.log(error)
     }
   }
 }

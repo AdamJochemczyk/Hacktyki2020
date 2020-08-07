@@ -22,9 +22,9 @@ export default function useAdminHistory() {
     }
   }
 
-  async function returnNow(reservationId){
+  async function finishReservationNow(reservationId){
     let api=new Api()
-    await api.cancelReservation(reservationId)
+    await api.finishReservationNow(reservationId)
   }
 
   const columns = useMemo(
@@ -69,8 +69,9 @@ export default function useAdminHistory() {
                 <Button
                   color="primary"
                   onClick={() =>
-                    returnNow(
-                      row.original.reservationId
+                    finishReservationNow(
+                      row.original.reservationId,
+                      row.original.carId
                     )
                   }
                 >

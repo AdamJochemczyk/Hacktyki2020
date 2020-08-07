@@ -8,7 +8,6 @@ import Swal from "sweetalert2"
 
 export default function UserReportFault({history}){
   let data = history.location.state;
-  console.log(data)
 
   let redirect = useHistory()
   const initialValues={
@@ -19,14 +18,12 @@ export default function UserReportFault({history}){
     description: Yup.string()
       .required("Required"),
   });
-  function onSubmit(fields) {
+  async function onSubmit(fields) {
     fields.carId=data.carId;
-    //FIXME:
-    //get id from localstorage
-    fields.userId=28;
+    fields.userId=parseInt(sessionStorage.getItem("userID"));
       try{
         let api=new Api()
-        api.createReport(fields)
+        await api.createReport(fields)
         Swal.fire("Thank you!", 'You succesfully reported problem!', 'success')
         redirect.push('/')
       }
@@ -72,7 +69,7 @@ export default function UserReportFault({history}){
                 Save
               </button>
 
-              <Link to={"."} className="btn btn-link">
+              <Link to={".."} className="btn btn-link">
                 Cancel
               </Link>
             </div>

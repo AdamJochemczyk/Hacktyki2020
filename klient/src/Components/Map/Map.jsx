@@ -1,29 +1,48 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import useMap from "./Map.utils";
+import LocationApi from "../API/LocationApi";
 
-export default function App() {
+export default function App({history}) {
+  
   const {
     isLoaded,
     loadError,
     mapContainerStyle,
     center,
     options,
-    onMapClick,
     onMapLoad,
     marker,
     fetchMarker,
+    setMarker
   } = useMap();
 
+  const onMapClick = useCallback((e) => {
+
+    let props={
+      latitude: e.latLng.lat(),
+      longitude: e.latLng.lng(),
+      reservationid: history.location.state
+    }
+
+    let api=new LocationApi()
+    api.setLocalization(props)
+
+    setMarker({
+      latitude: e.latLng.lat(),
+      longitude: e.latLng.lng(),
+    });
+  }, []);
+
   useEffect(()=>{
-    fetchMarker()
+    fetchMarker(history.location.state)
   },[])
 
   if (loadError) return "Error";
   if (!isLoaded) return "Loading...";
 
   return (
-    <div>
+    <div className="d-flex justify-content-center">
       <GoogleMap
         id="map"
         mapContainerStyle={mapContainerStyle}

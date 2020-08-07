@@ -20,25 +20,6 @@ export default function useMap() {
   };
   const [marker, setMarker] = useState();
 
-  const onMapClick = useCallback((e) => {
-
-    let props={
-      latitude: e.latLng.lat(),
-      longitude: e.latLng.lng(),
-      //TODO:
-      //get reservationid from history
-      reservationid: 1
-    }
-
-    let api=new LocationApi()
-    api.setLocalization(props)
-
-    setMarker({
-      latitude: e.latLng.lat(),
-      longitude: e.latLng.lng(),
-    });
-  }, []);
-
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
@@ -61,9 +42,9 @@ export default function useMap() {
     mapContainerStyle,
     center,
     options,
-    onMapClick,
     onMapLoad,
     marker,
     fetchMarker,
+    setMarker
   };
 }

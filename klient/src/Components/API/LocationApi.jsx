@@ -1,7 +1,7 @@
 import Api from "./API";
 import axios from "axios";
 
-export default class LocationApi extends Api {
+export default class LocationApi {
   constructor() {
     this.locationAxios = axios.create({
       baseURL: "https://localhost:44390/api",
@@ -9,9 +9,7 @@ export default class LocationApi extends Api {
   }
   async fetchLocalization(reservationid) {
     try {
-      //FIXME:
-      //right reservation ID
-      const res = await this.locationAxios.get("/locations/1");
+      const res = await this.locationAxios.get("/locations/"+reservationid);
       return res.data;
     } catch (error) {
       console.log(error);

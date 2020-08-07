@@ -5,15 +5,11 @@ import useUserHistory from "./UserHistory.utils";
 
 export default function UserHistory() {
   
-  const {data, isLoading, columns, fetchUserHistory}=useUserHistory();
+  const {data, isLoading, columns, userId, fetchUserHistory}=useUserHistory();
 
-  
-  //FIXME:
-  //get userID from localstorage
   useEffect(() => {
-    //fetchUserHistory(id);
-    fetchUserHistory(28)
-  }, []);
+    fetchUserHistory(userId);
+  }, [userId]);
 
 
   return (
@@ -22,8 +18,8 @@ export default function UserHistory() {
         <div className="loader">
           <Loader type="Oval" color="#00BFFF" />
         </div>
-      ) : (
-        <TableUserHistory columns={columns} data={data} />
+      ) : (data ?
+        <TableUserHistory columns={columns} data={data} /> : "You don't have reservations"
       )}
     </div>
   );

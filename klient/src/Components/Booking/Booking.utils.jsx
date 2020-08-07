@@ -19,17 +19,13 @@ export default function useBooking() {
       
     let api = new Api();
     const response = await api.checkAvilable(carid,rentaldate,returndate);
-    console.log(response);
     setFreeTerms(response);
     setCheckAvilable(true);
   }
 
   async function onSubmit(fields) {
-    fields.userId = 2;
-    fields.carId = 1;
-    //FIXME:
-    //get right userID from localstorage
-    //get right carID from localstorage
+    fields.userId = parseInt(sessionStorage.getItem("userID"));
+    fields.carId = parseInt(sessionStorage.getItem("carID"));
     try {
       let api = new Api();
       await api.addReservation(fields);

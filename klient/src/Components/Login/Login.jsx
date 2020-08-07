@@ -1,13 +1,15 @@
 import React from "react";
 import "../styles/componentsstyle.css";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import useLogin from "./Login.utils";
 
 export default function Login() {
   const { initialValues, validationSchema, onSubmit } = useLogin();
 
   return (
+    <div>
+    {sessionStorage.getItem("isLoggedIn")===null ? 
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
@@ -17,7 +19,7 @@ export default function Login() {
       {({ errors, touched, isSubmitting }) => {
         return (
           <Form className="upsertforms" id="loginform">
-            <h1>Sign In</h1>
+            <h1>Sign in</h1>
             <img
               src="https://image.flaticon.com/icons/svg/3190/3190448.svg"
               alt="secure"
@@ -67,6 +69,8 @@ export default function Login() {
           </Form>
         );
       }}
-    </Formik>
+    </Formik> :
+      <Redirect to='/home' /> }
+    </div>
   );
 }

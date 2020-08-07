@@ -1,52 +1,62 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'; 
-import Header from './Components/Header/Header'
-import Footer from './Components/Footer/Footer'
+import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'; 
 import 'bootstrap/dist/css/bootstrap.css';
-import UserReportFault from './Components/UserReportFault/UserReportFault'
-import ReserveCar from './Components/ReserveCar/ReserveCar'
-import Home from './Components/Home/Home'
 import Login from './Components/Login/Login'
-import FaultManager from './Components/FaultManager/FaultManager'
-import CarManager from './Components/CarManager/CarManager'
-import EditUser from './Components/EditUser/EditUser';
-import EditCar from './Components/EditCar/EditCar';
 import GenericNotFound from './Components/GenericNotFound/GenericNotFound'
 import SetPassword from './Components/SetPassword/SetPassword';
-import UserManager from './Components/UserManager/UserManager';
+import Home from "./Components/Home/Home";
+import ReserveCar from "./Components/ReserveCar/ReserveCar";
 import Booking from './Components/Booking/Booking'
-import UserHistory from './Components/UserHistory/UserHistory'
+import UserManager from './Components/UserManager/UserManager'
+import EditUser from './Components/EditUser/EditUser'
+import FaultManager from './Components/FaultManager/FaultManager'
+import CarManager from './Components/CarManager/CarManager'
+import EditCar from './Components/EditCar/EditCar'
 import AdminHistory from './Components/AdminHistory/AdminHistory'
-import Map from "./Components/Map/Map"
+import Map from './Components/Map/Map'
+import UserHistory from './Components/UserHistory/UserHistory'
+import UserReportFault from './Components/UserReportFault/UserReportFault'
+import UserHeader from './Components/UserHeader/UserHeader'
+import AdminHeader from './Components/AdminHeader/AdminHeader';
+import Footer from './Components/Footer/Footer'
 
 function App() {
+  let userRole=sessionStorage.getItem('userRole');
+  let isLoggedIn=sessionStorage.getItem("isLoggedIn");
+
   return (
-    <div>
-    <Header />
-    <Router>  
+    <Router>
+    {userRole ? 
+    (userRole==="user" && <UserHeader />) || (userRole==="admin" && <AdminHeader />):
+    <Redirect to='/' /> }
         <Switch>
-          <Route exact path='/' component={Home} />  
-          <Route exact path='/reserve-car' component={ReserveCar} />
-          <Route path='/reserve-car/booking' component={Booking} />  
-          <Route path='/sign-in' component={Login}/>
-          <Route exact path='/user-manager' component={UserManager} />
-          <Route path='/user-manager/edit' component={EditUser}/>
-          <Route exact path='/fault-manager' component={FaultManager} />
-          <Route exact path='/car-manager' component={CarManager} />
-          <Route path='/car-manager/edit' component={EditCar} />
-          <Route path='/add-user' component={EditUser} />
-          <Route path='/add-car' component={EditCar} />
-          <Route path='/user-history' component={UserHistory} />
-          <Route path='/admin-history' component={AdminHistory} />
-          <Route path='/history/edit' component={UserReportFault} />
+          <Route exact path='/' component={Login}/>  
           <Route path='/set-password/:code' component={SetPassword} />
-          <Route path='/map' component={Map} />
+          <Route path='/admin' component={Home} />
+          <Route exact path="/home" component={Home} />
+          <Route exact path="/reserve-car" component={ReserveCar} />
+          <Route path="/reserve-car/booking" component={Booking} />
+          <Route exact path='/history' component={UserHistory} />
+          <Route path="/history/map" component={Map} />
+          <Route path="/history/report" component={UserReportFault} />
+          <Route exact path="/admin" component={Home} />
+          <Route exact path="/admin/reserve-car" component={ReserveCar} />
+          <Route path="/admin/reserve-car/booking" component={Booking} />
+          <Route exact path="/admin/user-manager" component={UserManager} />
+          <Route path="/admin/user-manager/edit" component={EditUser} />
+          <Route path="/admin/add-user" component={EditUser} />
+          <Route exact path="/admin/defects-manager" component={FaultManager} />
+          <Route exact path="/admin/car-manager" component={CarManager} />
+          <Route path="/admin/car-manager/edit" component={EditCar} />
+          <Route path="/admin/add-car" component={EditCar} />
+          <Route path="/admin/admin-history" component={AdminHistory} />
+          <Route path='/admin/user-history' component={UserHistory} />
+          <Route path='/admin/user-history/map' component={Map} />
           <Route component={GenericNotFound} />
-        </Switch>    
+        </Switch>
+    {isLoggedIn ? <Footer /> : <Redirect to='/'/>}    
     </Router>
-    <Footer />
-    </div>
   );
 }
 

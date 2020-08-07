@@ -7,10 +7,9 @@ export default function FaultManager() {
 
   const {data,isLoading, columns, fetchFaults} = useFaultManager()
 
-
   useEffect(() => {
     fetchFaults()
-    });
+    },[]);
 
   return (
     <div>
@@ -19,7 +18,7 @@ export default function FaultManager() {
           <Loader type="Oval" color="#00BFFF" />
         </div>
       ) : (
-        <FaultManagerTable columns={columns} data={data} />
+        data ? <FaultManagerTable columns={columns} data={data} /> : "We don't have faults now"
       )}
     </div>
   );

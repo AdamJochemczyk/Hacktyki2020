@@ -13,6 +13,7 @@ export default function Booking({ history }) {
     checkAvilable,
   } = useBooking();
   let data = history.location.state;
+  sessionStorage.setItem("carID", data.car)
   let initialValues = {
     rentaldate: data.startdate,
     returndate: data.enddate,
@@ -116,15 +117,17 @@ export default function Booking({ history }) {
                     <td>Available terms</td>
                   </tr>
                 </thead>
+                <tbody>
                 {freeTerms &&
                   freeTerms.length !== 0 &&
-                  freeTerms.map((reservation) => {
+                  freeTerms.map((reservation, i) => {
                     return (
-                      <tr>
+                      <tr key={i}>
                         <td>{reservation}</td>
                       </tr>
                     );
                   })}
+                  </tbody>
               </Table>
             </div>
           )}

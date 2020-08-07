@@ -16,9 +16,12 @@ export default class AuthorizationApi {
         "/authorization/signin",
         params
       );
+      sessionStorage.setItem("isLoggedIn", true)
       return response.data;
     } catch (error) {
-      console.log(error);
+      if (error.response) {
+        Swal.fire("Oops...", error.response.data, "error");
+      }
     }
   }
 
