@@ -7,6 +7,7 @@ namespace CarRental.Services.Models.Defect
 {
     public class DefectDto
     {
+        public int DefectId { get; set; }
         public int UserId { get; set; }
         public int CarId { get; set; }
         public string Name { get; set; }

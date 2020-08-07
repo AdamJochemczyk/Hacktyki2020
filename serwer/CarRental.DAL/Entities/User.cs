@@ -31,14 +31,8 @@ namespace CarRental.DAL.Entities
             DateCreated = DateTime.Now;
             RoleOfUser = RoleOfWorker.Worker;
             StatusOfVerification = "Processing...";
+              CodeOfVerification = GetRandomString(32);
             
-            using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
-            {
-                byte[] tokenData = new byte[32];
-                rng.GetBytes(tokenData);
-
-                CodeOfVerification = Convert.ToBase64String(tokenData);
-            }
         }
         public User()
         {
@@ -65,6 +59,26 @@ namespace CarRental.DAL.Entities
             CodeOfVerification = null;
             StatusOfVerification = "Account has been registered.";
 
+        }
+        const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+        static string GetRandomString(int length)
+        {
+            string s = "";
+            using (RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider())
+            {
+                while (s.Length != length)
+                {
+                    byte[] oneByte = new byte[1];
+                    provider.GetBytes(oneByte);
+                    char character = (char)oneByte[0];
+                    if (valid.Contains(character))
+                    {
+                        s += character;
+                    }
+                }
+            }
+            return s;
         }
     }
 }

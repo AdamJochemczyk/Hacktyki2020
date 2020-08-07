@@ -38,8 +38,6 @@ namespace CarRental.Services.Services
         public async Task<UsersDto> GetUser(int id)
         {
             var user = await _userRepository.FindByIdDetails(id);
-            if (user == null)
-                return _mapper.Map<UsersDto>(user);
             return _mapper.Map<UsersDto>(user);
         }
 
