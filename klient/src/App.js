@@ -19,7 +19,6 @@ import UserHistory from './Components/UserHistory/UserHistory'
 import UserReportFault from './Components/UserReportFault/UserReportFault'
 import UserHeader from './Components/UserHeader/UserHeader'
 import AdminHeader from './Components/AdminHeader/AdminHeader';
-import Footer from './Components/Footer/Footer'
 
 function App() {
   let userRole=sessionStorage.getItem('userRole');
@@ -27,21 +26,32 @@ function App() {
 
   return (
     <Router>
-    {userRole ? 
-    (userRole==="user" && <UserHeader />) || (userRole==="admin" && <AdminHeader />):
-    <Redirect to='/' /> }
-        <Switch>
-          <Route exact path='/' component={Login}/>  
-          <Route path='/set-password/:code' component={SetPassword} />
-          <Route path='/admin' component={Home} />
+        {isLoggedIn ? 
+        (userRole ? 
+        (
+          userRole==="user" && <div>
+          <UserHeader />
+          <Switch>
+          <Route exact path='/' component={Login}/>
           <Route exact path="/home" component={Home} />
           <Route exact path="/reserve-car" component={ReserveCar} />
           <Route path="/reserve-car/booking" component={Booking} />
           <Route exact path='/history' component={UserHistory} />
           <Route path="/history/map" component={Map} />
           <Route path="/history/report" component={UserReportFault} />
-          <Route exact path="/admin" component={Home} />
-          <Route exact path="/admin/reserve-car" component={ReserveCar} />
+          <Route component={GenericNotFound} />
+          </Switch>
+          </div>
+        ) ||
+         (
+           userRole==="admin" && <div>
+           <AdminHeader />
+           <Switch>
+           <Route exact path='/' component={Login}/>
+           <Route exact path='/admin' component={Home} />
+           <Route exact path='/history' component={UserHistory} />
+           <Route path="/history/map" component={Map} />
+          <Route path="/history/report" component={UserReportFault} />
           <Route path="/admin/reserve-car/booking" component={Booking} />
           <Route exact path="/admin/user-manager" component={UserManager} />
           <Route path="/admin/user-manager/edit" component={EditUser} />
@@ -53,9 +63,23 @@ function App() {
           <Route path="/admin/admin-history" component={AdminHistory} />
           <Route path='/admin/user-history' component={UserHistory} />
           <Route path='/admin/user-history/map' component={Map} />
+          <Route exact path="/reserve-car" component={ReserveCar} />
+          <Route path="/reserve-car/booking" component={Booking} />
+          <Route exact path='/history' component={UserHistory} />
+          <Route path="/history/map" component={Map} />
+          <Route path="/history/report" component={UserReportFault} />
           <Route component={GenericNotFound} />
-        </Switch>
-    {isLoggedIn ? <Footer /> : <Redirect to='/'/>}    
+          </Switch>
+           </div>
+           ): <Redirect to='/' />)
+         : <div>
+         <Switch>
+         <Route exact path='/' component={Login}/>
+         <Route path='/set-password/:code' component={SetPassword} />
+         <Route component={GenericNotFound} />
+         </Switch>
+         </div>}
+       
     </Router>
   );
 }

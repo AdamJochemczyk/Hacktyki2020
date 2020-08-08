@@ -40,8 +40,7 @@ export default function SetPassword() {
     try {
       let api=new Api()
       await api.sendPassword(fields)
-      //let history=useHistory()
-      //history.push('/sign-in')
+      history.push('/')
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error");
     }

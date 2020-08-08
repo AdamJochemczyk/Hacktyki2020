@@ -62,7 +62,7 @@ export default function useEditCar() {
     let api = new Api();
     api.updateCar(id,fields);
     setSubmitting(false);
-    setTimeout(() => redirect.push("/car-manager"), 2000);
+    setTimeout(() => redirect.push("/admin/car-manager"), 2000);
     }
     catch(error){
       console.log(error)

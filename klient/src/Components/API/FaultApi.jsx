@@ -1,16 +1,11 @@
-import axios from "axios";
 import Swal from "sweetalert2"
+import Api from './API'
 
-export default class FaultApi {
-  constructor() {
-    this.faultAxios = axios.create({
-      baseURL: process.env.REACT_APP_BASE_URL,
-    });
-  }
+export default class FaultApi extends Api{
 
   async createReport(fields){
       try{
-        await this.faultAxios.post('/defects',fields)
+        await this.baseAxios.post('/defects',fields)
       }catch(error){
         Swal.fire("Oops..",error,"error")
       }
@@ -18,7 +13,7 @@ export default class FaultApi {
 
   async fetchFaults(){
     try {
-        const response = await this.faultAxios.get('/defects')
+        const response = await this.baseAxios.get('/defects')
         return response.data
     }catch (error){
         console.log(error)
@@ -26,14 +21,14 @@ export default class FaultApi {
   }
   async updateStatus(fields) {
     try {
-      await this.faultAxios.put('/defects', fields);
+      await this.baseAxios.put('/defects', fields);
     } catch (error) {
       console.log(error);
     }
   }
   async deleteFault(fields) {
     try {
-      await this.faultAxios.put('/defects', fields);
+      await this.baseAxios.put('/defects', fields);
     } catch (error) {
       console.log(error);
     }

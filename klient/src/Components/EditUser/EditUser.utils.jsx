@@ -51,10 +51,10 @@ export default function useEditUser() {
       let api = new Api();
       api.updateUser(id, fields);
       setSubmitting(true);
-      setTimeout(() => redirect.push("/user-manager"), 2500);
+      setTimeout(() => redirect.push("/admin/user-manager"), 2500);
     } catch (error) {
       setSubmitting(false);
-      console.log(error);
+      console.log(error.response.status);
     }
   }
 

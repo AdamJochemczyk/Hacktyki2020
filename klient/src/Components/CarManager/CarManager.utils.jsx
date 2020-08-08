@@ -43,7 +43,7 @@ export default function useCarManager() {
             <Button color="success">
               <Link
                 to={{
-                  pathname: "/car-manager/edit",
+                  pathname: "/admin/car-manager/edit",
                   state: row.original.carId,
                 }}
                 style={{ textDecoration: "none", color: "white" }}

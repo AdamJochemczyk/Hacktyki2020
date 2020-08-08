@@ -1,17 +1,11 @@
-import axios from "axios"
 import Swal from "sweetalert2"
+import Api from "./API"
 
-export default class CarApi {
-
-    constructor(){
-        this.axiosInstance=axios.create({
-            baseURL: "https://localhost:44390/api"
-        })
-    }
+export default class CarApi extends Api{
 
     async createCar(params) {
         try {
-          await this.axiosInstance.post('/cars', params)
+          await this.baseAxios.post('/cars', params)
           Swal.fire("Good job!", "You successfully added new car!", "success");
         } catch (error) {
           Swal.fire("Oops...", "Something went wrong...", "error");
@@ -20,7 +14,7 @@ export default class CarApi {
 
       async fetchCars() {
         try {
-          const res = await this.axiosInstance.get('/cars');
+          const res = await this.baseAxios.get('/cars');
           return res.data;
         } catch (error) {
           Swal.fire("Oops...", "Something went wrong!", "error");
@@ -29,7 +23,7 @@ export default class CarApi {
 
       async fetchCar(id) {
         try {
-          const res = await this.axiosInstance.get('/cars/'+id)
+          const res = await this.baseAxios.get('/cars/'+id)
           return res.data;
         } catch (error) {
           alert(error.message);
@@ -38,7 +32,7 @@ export default class CarApi {
 
       async updateCar(id, params) {
         try {
-            await this.axiosInstance.put('/cars/'+id,params)
+            await this.baseAxios.put('/cars/'+id,params)
           Swal.fire("Good job!", "You successfully edited a car!", "success");
         } catch (error) {
           Swal.fire("Oops...", "Something went wrong", "error");
@@ -47,7 +41,7 @@ export default class CarApi {
       
       async deleteCar(id) {
         try {
-            await this.axiosInstance.delete('/cars/'+id)
+            await this.baseAxios.delete('/cars/'+id)
         } catch (error) {
           console.log(error);
         }
@@ -55,7 +49,7 @@ export default class CarApi {
     
       async fetchCarByDate(startdate, enddate) {
         try {
-          const res = await this.axiosInstance.get('/terms/'+ startdate + "/" + enddate)
+          const res = await this.baseAxios.get('/terms/'+ startdate + "/" + enddate)
           return res.data;
         } catch (error) {
           Swal.fire("Oops...", "Something went wrong!", "error");

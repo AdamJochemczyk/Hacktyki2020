@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
-import mapStyles from "./mapStyles";
 import LocationApi from "../API/LocationApi";
 
 export default function useMap() {
@@ -9,15 +8,17 @@ export default function useMap() {
     height: "90vh",
     width: "90vw",
   };
+
   const options = {
-    styles: mapStyles,
     disableDefaultUI: true,
     zoomControl: true,
   };
-  const center = {
+
+  const [center,setCenter]=useState({
     lat: 50.290971,
     lng: 18.704721,
-  };
+  })
+
   const [marker, setMarker] = useState();
 
   const { isLoaded, loadError } = useLoadScript({
@@ -33,6 +34,11 @@ export default function useMap() {
   async function fetchMarker(reservationid) {
     let api = new LocationApi();
     const response=await api.fetchLocalization(reservationid);
+    console.log("fetchMarker -> response", response)
+    setCenter({
+      lat: response.latitude,
+      lng: response.longitude,
+    })
     setMarker(response)
   }
 

@@ -1,15 +1,10 @@
 import Api from "./API";
-import axios from "axios";
 
-export default class LocationApi {
-  constructor() {
-    this.locationAxios = axios.create({
-      baseURL: "https://localhost:44390/api",
-    });
-  }
+export default class LocationApi extends Api{
+ 
   async fetchLocalization(reservationid) {
     try {
-      const res = await this.locationAxios.get("/locations/"+reservationid);
+      const res = await this.baseAxios.get("/locations/"+reservationid);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -18,7 +13,7 @@ export default class LocationApi {
 
   async setLocalization(props) {
     try {
-      await this.locationAxios.post('/locations/', props)
+      await this.baseAxios.post('/locations/', props)
     } catch (error) {
       console.log(error);
     }

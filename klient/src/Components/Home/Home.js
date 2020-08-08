@@ -5,6 +5,7 @@ import calendar from '../img/calendar.png'
 import target from '../img/target.png'
 import green from '../img/green.png'
 import Feature from '../Feature/Feature'
+import Footer from '../Footer/Footer'
 
 const features =[
     {id: 1, icon: calendar, text: "Simple check calendar and book avilable car"},
@@ -25,6 +26,7 @@ function CreateFeatures(features){
 export default function Home(){
 
     return (
+        <>
         <Container>
         <Row>
             <Col sm={6}>
@@ -47,5 +49,7 @@ export default function Home(){
         {features.map(CreateFeatures)}
         </Row>
         </Container>
+        <Footer/>
+        </>
     )
 }

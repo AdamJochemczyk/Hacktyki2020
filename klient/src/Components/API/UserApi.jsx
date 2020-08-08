@@ -1,34 +1,15 @@
-import axios from "axios"
 import Api from "./API"
 import Swal from "sweetalert2"
 
-const REGISTER_URL=process.env.REACT_APP_REGISTER_API
-
 export default class UserApi extends Api{
-
-    constructor(){
-      super()
-      this.createAxios=axios.create({
-        baseURL: REGISTER_URL,
-      })
-    }
-
-    //TODO:
-    //create user with token
    
     async createUser(params) {
         try {
-          await this.createAxios.post('',params)
+          await this.baseAxios.post('/authorization/register',params)
           Swal.fire("Good job!", "You successfully added new user!", "success");
         } catch (error) {
-          console.log(error)
-          /*if(error.response===500)
-          {
-            console.log("Srutututu")
-          }
-          else{
-          console.log(error.response.data);
-          }*/
+          if(error.response.status===400 || 401 || 403)
+          Swal.fire("Oops...","Can't create this user","error")
         }
       }
 

@@ -18,8 +18,7 @@ export default function useUserManager(){
     setData(res);
     setIsLoading(false)
       }catch(error){
-       // history.goBack()
-          console.log(error)
+        history.goBack()
       }
   }
 
@@ -87,7 +86,7 @@ export default function useUserManager(){
               <Button color="success">
               <Link
                   to={{
-                    pathname: "/user-manager/edit",
+                    pathname: "/admin/user-manager/edit",
                     state: row.original.userId
                     }}
                   style={{ textDecoration: "none", color: "white" }}

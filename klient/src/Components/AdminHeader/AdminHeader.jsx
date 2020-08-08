@@ -12,7 +12,7 @@ const AdminHeader = ()=>{
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav" className="ml-auto">
     <Nav className="ml-auto">
-      <Nav.Link href="/admin/reserve-car">Reserve car</Nav.Link>
+      <Nav.Link href="/reserve-car">Reserve car</Nav.Link>
       <Nav.Link href="/admin/user-history">Reservations</Nav.Link>
       <NavDropdown title="Add" id="basic-nav-dropdown">
         <NavDropdown.Item href="/admin/add-car">Car</NavDropdown.Item>

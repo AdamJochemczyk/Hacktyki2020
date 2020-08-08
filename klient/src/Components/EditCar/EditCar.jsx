@@ -20,6 +20,7 @@ export default function EditCar({ history }) {
   function onSubmit(fields, {setSubmitting}) {
     if (isAddMode) {
       createCar(fields, setSubmitting);
+      document.getElementById("carUpsert").reset();
     } else {
       updateCar(id, fields, setSubmitting);
     }

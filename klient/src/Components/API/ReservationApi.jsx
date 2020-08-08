@@ -1,16 +1,11 @@
-import axios from "axios";
 import Swal from "sweetalert2";
+import Api from './API' 
 
-export default class ReservationsApi {
-  constructor() {
-    this.reservationAxios = axios.create({
-      baseURL: "https://localhost:44390/api",
-    });
-  }
+export default class ReservationsApi extends Api{
 
   async fetchUsersHistory() {
     try {
-      const { data } = await this.reservationAxios.get('/reservations');
+      const { data } = await this.baseAxios.get('/reservations');
       return data;
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong!", "error");
@@ -19,7 +14,7 @@ export default class ReservationsApi {
   
   async fetchUserHistory(id) {
     try {
-      const res = await this.reservationAxios.get("/reservations/users/" + id);
+      const res = await this.baseAxios.get("/reservations/users/" + id);
       return res.data;
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong!", "error");
@@ -28,7 +23,7 @@ export default class ReservationsApi {
 
   async cancelReservation(id) {
     try {
-      await this.reservationAxios.delete("/reservations/" + id);
+      await this.baseAxios.delete("/reservations/" + id);
       Swal.fire(
         "Deleted!",
         "Your reservation has been deleted.",
@@ -41,7 +36,7 @@ export default class ReservationsApi {
 
   async checkAvilable(carId, rentalDate, returnDate) {
     try {
-      const response = await this.reservationAxios.get(
+      const response = await this.baseAxios.get(
         "/terms/" + carId + "/" + rentalDate + "/" + returnDate
       );
       return response.data;
@@ -52,7 +47,7 @@ export default class ReservationsApi {
 
   async addReservation(fields) {
     try {
-      await this.reservationAxios.post('/reservations', fields);
+      await this.baseAxios.post('/reservations', fields);
       Swal.fire("Success", "You successfully reserved term", "success");
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong...", "error");
@@ -63,7 +58,7 @@ export default class ReservationsApi {
   async finishReservationNow(reservationid,fields)
   {
     try{
-      await this.reservationAxios.delete('/reservations/'+reservationid)
+      await this.baseAxios.delete('/reservations/'+reservationid)
       Swal.fire("Success", "You successfully finieshed reservation", "success");
     }catch (error){
       console.log(error)

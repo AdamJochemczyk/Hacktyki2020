@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import CardCar from "../CardCar/CardCar";
 import Api from "../API/CarApi";
+import moment from "moment";
+import Swal from "sweetalert2";
 
 export default function useReserveCar() {
-
   const [data, setData] = useState([]);
   const [filters, setFilter] = useState({
     brand: "",
@@ -30,15 +31,19 @@ export default function useReserveCar() {
   }
 
   async function checkAvailability(startdate, enddate) {
-    try {
-      setIsLoading(true);
-      let api = new Api();
-      const response = await api.fetchCarByDate(startdate, enddate);
-      setData(response);
-      console.log(response);
-      setIsLoading(false)
-    } catch (error) {
-      console.log(error);
+    if (moment.utc(startdate).isBefore(moment.utc(enddate))) {
+      try {
+        setIsLoading(true);
+        let api = new Api();
+        const response = await api.fetchCarByDate(startdate, enddate);
+        setData(response);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    else{
+      Swal.fire("Oops...", 'End date must be after start date','error')
     }
   }
 

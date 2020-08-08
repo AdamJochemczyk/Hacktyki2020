@@ -105,7 +105,6 @@ export default function useUserHistory() {
       let api = new Api();
       const res = await api.fetchUserHistory(id);
       setIsLoading(false);
-      console.log(res);
       setData(res);
     } catch (error) {
       history.push(".");

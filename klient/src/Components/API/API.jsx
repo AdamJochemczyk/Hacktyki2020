@@ -2,12 +2,12 @@ import axios from "axios";
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export default class Api {
+
   //TODO:
-  //get tokens from cookie and check if token valid
+  //refresh token
   constructor() {
-    this.token = sessionStorage.getItem("accesstoken");
-    console.log(this.token);
-    this.refreshToken = "bbb";
+    this.token = sessionStorage.getItem("accessToken");
+    this.refreshToken = sessionStorage.getItem("refreshToken");
     this.baseAxios = axios.create({
       baseURL: BASE_URL,
       headers: {

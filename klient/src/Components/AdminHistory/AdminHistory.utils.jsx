@@ -25,6 +25,7 @@ export default function useAdminHistory() {
   async function finishReservationNow(reservationId){
     let api=new Api()
     await api.finishReservationNow(reservationId)
+    window.location.reload(false)
   }
 
   const columns = useMemo(
@@ -66,6 +67,7 @@ export default function useAdminHistory() {
         Cell: ({ row }) => (
           <div>
             {moment().utc().isBefore(moment.utc(row.original.returnDate)) &&
+            row.original.isFinished===false &&
                 <Button
                   color="primary"
                   onClick={() =>
@@ -77,6 +79,9 @@ export default function useAdminHistory() {
                 >
                   Return
                 </Button>
+              }
+              {
+                row.original.isFinished===true && "Reservation finished"
               }
           </div>
         ),

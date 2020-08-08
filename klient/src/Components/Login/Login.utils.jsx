@@ -45,17 +45,18 @@ export default function useLogin() {
             break;
           case "Admin":
             sessionStorage.setItem("userRole", "admin");
+            history.push('/admin');
+            window.location.reload()
             break;
           default:
-            Swal.fire("Oops...", "Something went wrong");
-            break;
-        }
-        if (sessionStorage.getItem("userRole") === "Worker") {
-          console.log(sessionStorage.getItem("userRole"));
+            throw new Error("Bad response from server");
         }
       }
+      else{
+        throw new Error("Can't loggin");
+      }
     } catch (error) {
-      Swal.fire("Oops...", "Something went wrong", "error");
+      Swal.fire("Oops...", error.message, "error");
     }
   }
 
