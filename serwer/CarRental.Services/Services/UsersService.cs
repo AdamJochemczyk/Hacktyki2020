@@ -21,9 +21,8 @@ namespace CarRental.Services.Services
         }
         public async Task<bool> DeleteUser(int id)
         {
-
             var user = await _userRepository.FindByIdAsync(id);
-            if (user.UserId == 0) { return false; }
+            if (user == null) { return false; }
             user.Delete(true);
             await _userRepository.SaveChangesAsync();
             return true;
@@ -44,13 +43,12 @@ namespace CarRental.Services.Services
         public async Task<UsersDto> UpdateUser(UsersDto usersDto)
         {
             var user = await _userRepository.FindByIdDetails(usersDto.UserId);
-            var check_user = await _userRepository.FindByLogin(usersDto.Email);
-            if (user == null || check_user == null)
+            if (user == null)
             {
                 usersDto.isValid = false;
                 return usersDto;
             }
-            if (check_user.Email == user.Email)
+            if (usersDto.Email == user.Email)
             {
                 usersDto.isValid = true;
                 user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);

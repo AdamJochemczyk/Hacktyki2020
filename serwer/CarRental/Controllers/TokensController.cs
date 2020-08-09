@@ -30,12 +30,10 @@ namespace CarRental.API.Controllers
                 return Unauthorized("Your Refresh Token is bad");
             else
             {
-                var tokenRefresh = _tokenGeneratorService.RefreshGenerateToken();
-                refreshToken.AccessToken = await _tokenGeneratorService.GenerateToken(refresh.UserId);
-                refreshToken.RefreshToken = tokenRefresh;
-                _tokenService.SaveRefreshToken(refresh.UserId, refreshToken.RefreshToken, true);
+                 var newToken = await _tokenService.GenerateRefreshToken(refresh);
+                _tokenService.SaveRefreshToken(refresh.UserId, newToken.RefreshToken, true);
+                return Ok(newToken);
             }
-            return Ok(refreshToken);
         }
     }
 }

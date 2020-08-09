@@ -12,21 +12,16 @@ using System.Threading.Tasks;
 
 namespace CarRental.Services.Services
 {
-   public class TokenGeneratorService:ITokenGeneratorService
+    public class TokenGeneratorService : ITokenGeneratorService
     {
-        private readonly IUserRepository _userRepository;
-        public TokenGeneratorService(IUserRepository userRepository)
+        public TokenGeneratorService() { }
+        public string GenerateToken(User _user)
         {
-            _userRepository = userRepository;
-        }
-        public async Task<string> GenerateToken(int userId)
-        {
-            var user = await  _userRepository.FindByIdDetails(userId);
             var claims = new List<Claim> {
-                     new Claim(ClaimTypes.Email,user.Email),
-                     new Claim(ClaimTypes.Hash , user.HashPassword),
-                     new Claim(ClaimTypes.Role,user.RoleOfUser.ToString()),
-                     new Claim(JwtRegisteredClaimNames.Sub,user.UserId.ToString())
+                     new Claim(ClaimTypes.Email,_user.Email),
+                     new Claim(ClaimTypes.Hash , _user.HashPassword),
+                     new Claim(ClaimTypes.Role,_user.RoleOfUser.ToString()),
+                     new Claim(JwtRegisteredClaimNames.Sub,_user.UserId.ToString())
             };
             var jwt = new JwtSecurityToken(
                   issuer: TokenOptions.ISSUER,

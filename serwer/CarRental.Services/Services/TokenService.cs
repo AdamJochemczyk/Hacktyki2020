@@ -10,9 +10,14 @@ namespace CarRental.Services.Services
     public class TokenService : ITokenService
     {
         private readonly IRefreshRepository _refreshRepository;
-        public TokenService(IRefreshRepository refreshRepository)
+        private readonly IUserRepository _userRepository;
+        private readonly ITokenGeneratorService _tokenGeneratorService;
+        public TokenService(IRefreshRepository refreshRepository,IUserRepository userRepository,
+                                                   ITokenGeneratorService tokenGeneratorService)
         {
             _refreshRepository = refreshRepository;
+            _userRepository = userRepository;
+            _tokenGeneratorService = tokenGeneratorService;
         }
         public async Task<TokenClaimsDto> CheckAccessRefreshToken(string refresh)
         {
@@ -30,12 +35,21 @@ namespace CarRental.Services.Services
             return token;
 
         }
-
-        public void SaveRefreshToken(int id, string refreshtoken, bool isvalid)
+        public async Task<TokenDto> GenerateRefreshToken(TokenClaimsDto token)
+        {
+            TokenDto tokenDto = new TokenDto();
+            var user = await _userRepository.FindByIdDetails(token.UserId);
+            tokenDto.AccessToken = _tokenGeneratorService.GenerateToken(user);
+            tokenDto.RefreshToken = _tokenGeneratorService.RefreshGenerateToken();
+            tokenDto.Code = 200;
+            return tokenDto;
+        }
+        public async Task<TokenDto> SaveRefreshToken(int id, string refreshtoken, bool isvalid)
         {
             RefreshToken refresh = new RefreshToken(refreshtoken, id, isvalid);
             _refreshRepository.Create(refresh);
-            _refreshRepository.SaveChangesAsync();
+           await _refreshRepository.SaveChangesAsync();
+            return new TokenDto() { RefreshToken = refresh.Refresh };
         }
     }
 }

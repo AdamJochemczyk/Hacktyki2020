@@ -54,7 +54,7 @@ namespace CarRental.Services.Services
         {
             var saltBytes = Convert.FromBase64String(storedSalt);
             var rfc2898DeriveBytes = new Rfc2898DeriveBytes(enteredPassword, saltBytes, 10000);
-            return Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256)) == storedHash;
+            return  Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256))== storedHash; 
         }
         public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
         {
@@ -65,7 +65,6 @@ namespace CarRental.Services.Services
             {
                 _userRepository.Create(new_user);
                 await _userRepository.SaveChangesAsync();
-                createUserDto.UserId = new_user.UserId;
                 createUserDto.CodeOfVerification = new_user.CodeOfVerification;
                 _email.EmailAfterRegistration(createUserDto);
             }
@@ -80,7 +79,7 @@ namespace CarRental.Services.Services
             var saltHashPassword = GenerateSaltedHash(16, updateUserPassword.EncodePassword);
             user.SetPassword(saltHashPassword.Hash, saltHashPassword.Salt);
             _userRepository.Update(user);
-            await _userRepository.SaveChangesAsync();
+             await _userRepository.SaveChangesAsync();
             return true;
         }
 
@@ -93,7 +92,7 @@ namespace CarRental.Services.Services
                 token_error.Code = 401;
                 return token_error;
             }
-            if (userLoginDto.Email != user.Email ||!VerifyPassword(userLoginDto.EncodePassword, user.HashPassword, user.Salt))
+            if (userLoginDto.Email != user.Email || !VerifyPassword(userLoginDto.EncodePassword, user.HashPassword, user.Salt))
             {
                 TokenDto token_error = new TokenDto();
                 token_error.Code = 401;
@@ -102,7 +101,7 @@ namespace CarRental.Services.Services
             //Return two tokens Access , Refresh
             TokenDto token = new TokenDto();
             token.Code = 200;
-            token.AccessToken =  await _token.GenerateToken(user.UserId);
+            token.AccessToken = _token.GenerateToken(user);
             token.RefreshToken = _token.RefreshGenerateToken();
             //Save To database Refresh token 
             RefreshToken refreshToken = new RefreshToken(token.RefreshToken, user.UserId, true);

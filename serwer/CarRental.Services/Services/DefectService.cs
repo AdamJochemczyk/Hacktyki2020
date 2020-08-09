@@ -26,8 +26,7 @@ namespace CarRental.Services.Services
         }
         public async Task<IEnumerable<DefectDto>> GetAllDefectsAsync()
         {
-            var defects = await _defectRepository.FindAllAsync();
-            if (defects == null) { return null; }
+            var defects = await _defectRepository.FindAllDefects();
             return _mapper.Map<IEnumerable<DefectDto>>(defects);
         }
 
@@ -41,7 +40,6 @@ namespace CarRental.Services.Services
 
         public async Task<DefectDto> RegisterDefectAsync(RegisterDefectDto registerDefectDto)
         {
-
             var user = await _userRepository.FindByIdDetails(registerDefectDto.UserId);
             var car = await _carRepository.FindByIdAsync(registerDefectDto.CarId);
             if (user == null || car == null) { return null; }
@@ -56,7 +54,12 @@ namespace CarRental.Services.Services
         {
             var defect = await _defectRepository.FindDefectById(updateDefectDto.Id);
             if (defect == null)
-                return _mapper.Map<DefectDto>(defect);
+                return new DefectDto()
+                {
+                    Status = updateDefectDto.Status,
+                    Description = updateDefectDto.Description,
+                    DefectId = updateDefectDto.Id
+                };
             defect.Update(updateDefectDto.Description, updateDefectDto.Status);
             await _defectRepository.SaveChangesAsync();
 

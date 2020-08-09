@@ -8,7 +8,7 @@ namespace CarRental.Services.Interfaces
 {
    public interface ITokenGeneratorService
     {
-         Task<string> GenerateToken(int userId);
+         string GenerateToken(User user);
          string RefreshGenerateToken();
     }
 }
