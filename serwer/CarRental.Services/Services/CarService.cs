@@ -42,8 +42,9 @@ namespace CarRental.Services.Services
             return mapper.Map<CarDto>(entity);
         }
 
-        public async Task DeleteCar(CarDto entity)
+        public async Task DeleteCar(int id)
         {
+            var entity = await repository.FindByIdAsync(id);
             entity.IsDeleted = true;
             await repository.SaveChangesAsync();
         }

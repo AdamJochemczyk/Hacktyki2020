@@ -11,6 +11,6 @@ namespace CarRental.Services.Interfaces
         Task<LocationDto> GetActualLocationByReservationIdAsync(int id);
         Task<LocationDto> GetLocationByIdAsync(int id);
         Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto);
-        Task DeleteLocationAsync(LocationDto location);
+        Task DeleteLocationAsync(int id);
     }
 }

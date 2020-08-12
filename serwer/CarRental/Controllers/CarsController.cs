@@ -66,7 +66,7 @@ namespace CarRental.API.Controllers
             var entity = await service.GetCarByIdAsync(id);
             if (entity != null && entity.IsDeleted != true)
             {
-                await service.DeleteCar(entity);
+                await service.DeleteCar(id);
                 return Ok();
             }
             return BadRequest();
