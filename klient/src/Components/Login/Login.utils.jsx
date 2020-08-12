@@ -1,3 +1,4 @@
+import {useState} from "react"
 import * as Yup from "yup";
 import Api from "../API/AuthorizationApi";
 import jwt_decode from "jwt-decode";
@@ -11,6 +12,7 @@ export default function useLogin() {
     email: "",
     encodePassword: "",
   };
+  const [isSended,setIsSended]=useState(false)
 
   const validationSchema = Yup.object().shape({
     encodePassword: Yup.string().required("Required"),
@@ -20,12 +22,14 @@ export default function useLogin() {
   async function onSubmit(fields, { resetForm }) {
     signIn(fields);
     resetForm({ state: "" });
+    setIsSended(true)
   }
 
   async function signIn(params) {
     try {
       let api = new Api();
       const response = await api.signIn(params);
+      setIsSended(false)
       if (sessionStorage.getItem("isLoggedIn")) {
         let decodedToken = jwt_decode(response.accessToken);
         sessionStorage.setItem(
@@ -40,25 +44,25 @@ export default function useLogin() {
         switch (sessionStorage.getItem("userRole")) {
           case "Worker":
             sessionStorage.setItem("userRole", "user");
-            history.push('/home');
             window.location.reload()
+            history.push('/home');
             break;
           case "Admin":
             sessionStorage.setItem("userRole", "admin");
-            history.push('/admin');
             window.location.reload()
+            history.push('/admin');
             break;
           default:
             throw new Error("Bad response from server");
         }
       }
       else{
-        throw new Error("Can't loggin");
+        throw new Error("Try again");
       }
     } catch (error) {
       Swal.fire("Oops...", error.message, "error");
     }
   }
 
-  return { initialValues, validationSchema, signIn, onSubmit };
+  return { initialValues,isSended, validationSchema, signIn, onSubmit };
 }

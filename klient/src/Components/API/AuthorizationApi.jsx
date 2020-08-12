@@ -1,7 +1,13 @@
 import Swal from "sweetalert2"
-import Api from "./API";
+import Axios from "axios";
 
-export default class AuthorizationApi extends Api{
+export default class AuthorizationApi{
+
+  constructor(){
+    this.baseAxios = Axios.create({
+      baseURL: process.env.REACT_APP_BASE_URL
+    })
+  }
 
   async signIn(params) {
     try {
@@ -21,9 +27,10 @@ export default class AuthorizationApi extends Api{
   async sendPassword(fields) {
     try {
       await this.baseAxios.put("/authorization", fields);
-      Swal.fire("Good job!", "You succesfully set your password!", "success");
+      Swal.fire("Good job!", "You successfully set your password!", "success");
+      return true
     } catch (error) {
-      console.log(error.response.data);
+      return false
     }
   }
 }
