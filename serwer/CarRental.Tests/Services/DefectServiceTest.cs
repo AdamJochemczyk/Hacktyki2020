@@ -29,6 +29,7 @@ namespace CarRental.Tests.Services
             });
             _mapper = config.CreateMapper();
         }
+
         [Fact]
         public async Task GetAllDefects_ExcitingObjects_ReturnAllDefects()
         {
@@ -44,6 +45,7 @@ namespace CarRental.Tests.Services
             var assertResult = Assert.IsType<List<DefectDto>>(result);
             Assert.Equal(defects.Count, assertResult.Count);
         }
+
         [Fact]
         public async Task GetDefectAsync_ExcitingId_ReturnDefect()
         {
@@ -59,6 +61,7 @@ namespace CarRental.Tests.Services
             var assertResult = Assert.IsType<DefectDto>(result);
             Assert.Equal(DefectId, assertResult.DefectId);
         }
+
         [Fact]
         public async Task GetDefectAsync_IdNotExciting_ReturnNullDefect()
         {
@@ -73,6 +76,7 @@ namespace CarRental.Tests.Services
             //Assert
             Assert.Null(result);
         }
+
         [Fact]
         public async Task RegisterDefect_ExcitingUserCar_ReturnDefect()
         {
@@ -103,6 +107,7 @@ namespace CarRental.Tests.Services
             Assert.Equal(result.UserId, assertResult.UserId);
             Assert.Equal(result.Description, assertResult.Description);
         }
+
         [Fact]
         public async Task RegisterDefect_UserIdCarIdNotExciting_ReturnNull()
         {
@@ -124,6 +129,7 @@ namespace CarRental.Tests.Services
             //Assert
             Assert.Null(result);
         }
+
         [Fact]
         public async Task UpdateDefect_CorrectObject_ReturnMapObject()
         {
@@ -158,6 +164,7 @@ namespace CarRental.Tests.Services
             Assert.Equal(result.Description, updateDefectDto.Description);
             Assert.Equal(result.Status, updateDefectDto.Status);
         }
+
         [Fact]
         public async Task UpdateDefect_DefectNotFound_ReturnMapObject()
         {

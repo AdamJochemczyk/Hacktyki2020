@@ -59,7 +59,5 @@ namespace CarRental.Services.Services
             else
                 return _mapper.Map<UsersDto>(user);
         }
-
-
     }
 }

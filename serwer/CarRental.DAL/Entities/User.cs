@@ -18,8 +18,9 @@ namespace CarRental.DAL.Entities
         public string StatusOfVerification { get; set; }
         public RoleOfWorker RoleOfUser { get; set; }
         public string CodeOfVerification { get; set; }
-        public bool isDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
+
         public User(string firstName, string lastName, string numberIdentificate, string email,
             string mobileNumber)
         {
@@ -33,8 +34,9 @@ namespace CarRental.DAL.Entities
             StatusOfVerification = "Processing...";
             CodeOfVerification = GetRandomString(32);
         }
+
         public User()
-        { 
+        {
         }
         public void Update(string firstName, string lastName, string numberIdentificate, string email,
             string mobileNumber)
@@ -48,7 +50,7 @@ namespace CarRental.DAL.Entities
         }
         public void Delete(bool isdelete)
         {
-            isDeleted = isdelete;
+            IsDeleted = isdelete;
         }
         public void SetPassword(string encodePassword, string salt)
         {
@@ -57,6 +59,7 @@ namespace CarRental.DAL.Entities
             CodeOfVerification = null;
             StatusOfVerification = "Account has been registered.";
         }
+
         const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         static string GetRandomString(int length)
         {

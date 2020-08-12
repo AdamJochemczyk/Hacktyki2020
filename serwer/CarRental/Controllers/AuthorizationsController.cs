@@ -28,6 +28,7 @@ namespace CarRental.API.Controllers
                 return BadRequest("This Email already exists");
             return Ok(user);
         }
+
         [HttpPost("signIn")]
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
@@ -42,7 +43,6 @@ namespace CarRental.API.Controllers
         {
             if (!await _authorizationService.SetPassword(updateUserPassword))
                 return NotFound("Code of Verification is bad");
-
             return Ok();
         }
     }

@@ -23,6 +23,5 @@ namespace CarRental.DAL.Repositories
         {
             return await context.Set<Defect>().ToListAsync();
         }
-
     }
 }

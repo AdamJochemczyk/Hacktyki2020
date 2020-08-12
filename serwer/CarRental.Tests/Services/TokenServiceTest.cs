@@ -21,6 +21,7 @@ namespace CarRental.Tests.Services
             _refreshRepository = new Mock<IRefreshRepository>();
             _userRepository = new Mock<IUserRepository>();
         }
+
         [Fact]
         public async Task CheckAccessRefreshToken_RefreshTokenBad_ReturnFalse()
         {
@@ -36,6 +37,7 @@ namespace CarRental.Tests.Services
             //Assert
             Assert.False(result.CheckRefreshToken);
         }
+
         [Fact]
         public async Task CheckAccessRefreshToken_RefreshTokenDateNotCorrect_ReturnFalse()
         {
@@ -51,6 +53,7 @@ namespace CarRental.Tests.Services
             //Assert
             Assert.False(result.CheckRefreshToken);
         }
+
         [Fact]
         public async Task CheckAccessRefreshToken_RefreshTokenCorrect_ReturnTrue()
         {

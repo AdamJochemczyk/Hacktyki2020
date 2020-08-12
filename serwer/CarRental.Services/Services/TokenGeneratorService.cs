@@ -30,10 +30,8 @@ namespace CarRental.Services.Services
                   expires: DateTime.Now.AddMinutes(TokenOptions.LIFETIME),
                   signingCredentials: new SigningCredentials(TokenOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
             return encodedJwt;
         }
-
 
         public string RefreshGenerateToken()
         {
@@ -41,7 +39,6 @@ namespace CarRental.Services.Services
             {
                 byte[] tokenData = new byte[128];
                 rng.GetBytes(tokenData);
-
                 var refresh = Convert.ToBase64String(tokenData);
                 return refresh;
             }

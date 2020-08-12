@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CarRental.DAL.Entities;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Location;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
@@ -20,6 +21,8 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetLocationByReservationIdAsync(int id)
         {
             var entity = await service.GetActualLocationByReservationIdAsync(id);
@@ -27,6 +30,8 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> CreateLocationAsync(LocationCreateDto location)
         {
             var entity = await service.CreateLocationAsync(location);
@@ -34,9 +39,10 @@ namespace CarRental.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteLocationAsync(int id)
         {
-            var entity = await service.GetLocationByIdAsync(id);
+            var entity = await service.GetActualLocationByReservationIdAsync(id);
             if (entity != null)
             {
                 await service.DeleteLocationAsync(entity);

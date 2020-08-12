@@ -23,9 +23,11 @@ namespace CarRental.API.Controllers
         [Authorize(Roles ="Worker")]
         public async Task<IActionResult> RegisterDefect(RegisterDefectDto registerDefectDto)
         {
-            if (registerDefectDto == null) { return BadRequest("Model is empty"); }
+            if (registerDefectDto == null) 
+                return BadRequest("Model is empty"); 
             var register_defect = await _defectsService.RegisterDefectAsync(registerDefectDto);
-            if (register_defect == null) { return BadRequest("Object car or user is empty;"); }
+            if (register_defect == null)
+                return BadRequest("Object car or user is empty;"); 
             return Ok(register_defect);
         }
 

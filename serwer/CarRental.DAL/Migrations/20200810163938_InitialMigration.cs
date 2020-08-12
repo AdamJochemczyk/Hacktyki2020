@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarRental.DAL.Migrations
 {
-    public partial class initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,7 +23,8 @@ namespace CarRental.DAL.Migrations
                     NumberOfDoor = table.Column<int>(nullable: false),
                     NumberOfSits = table.Column<int>(nullable: false),
                     YearOfProduction = table.Column<int>(nullable: false),
-                    ImagePath = table.Column<string>(nullable: true)
+                    ImagePath = table.Column<string>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,7 +49,8 @@ namespace CarRental.DAL.Migrations
                     Salt = table.Column<string>(nullable: true),
                     StatusOfVerification = table.Column<string>(nullable: true),
                     RoleOfUser = table.Column<int>(nullable: false),
-                    CodeOfVerification = table.Column<string>(nullable: true)
+                    CodeOfVerification = table.Column<string>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -173,23 +175,23 @@ namespace CarRental.DAL.Migrations
 
             migrationBuilder.InsertData(
                 table: "Cars",
-                columns: new[] { "CarId", "Brand", "DateCreated", "DateModified", "ImagePath", "Model", "ModifiedBy", "NumberOfDoor", "NumberOfSits", "RegistrationNumber", "TypeOfCar", "YearOfProduction" },
-                values: new object[] { 1, "Audi", new DateTime(2020, 8, 3, 13, 29, 42, 951, DateTimeKind.Local).AddTicks(435), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "https://pngimg.com/uploads/audi/audi_PNG1737.png", "Q5", null, 0, 0, null, 0, 2019 });
+                columns: new[] { "CarId", "Brand", "DateCreated", "DateModified", "ImagePath", "IsDeleted", "Model", "ModifiedBy", "NumberOfDoor", "NumberOfSits", "RegistrationNumber", "TypeOfCar", "YearOfProduction" },
+                values: new object[] { 1, "Audi", new DateTime(2020, 8, 10, 18, 39, 37, 579, DateTimeKind.Local).AddTicks(4490), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "https://pngimg.com/uploads/audi/audi_PNG1737.png", false, "Q5", null, 5, 5, "SZE4562", 1, 2019 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "UserId", "CodeOfVerification", "DateCreated", "DateModified", "Email", "FirstName", "HashPassword", "LastName", "MobileNumber", "ModifiedBy", "NumberIdentificate", "RoleOfUser", "Salt", "StatusOfVerification" },
-                values: new object[] { 1, null, new DateTime(2020, 8, 3, 13, 29, 42, 958, DateTimeKind.Local).AddTicks(3295), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "John", null, "Doe", null, null, null, 0, null, null });
+                columns: new[] { "UserId", "CodeOfVerification", "DateCreated", "DateModified", "Email", "FirstName", "HashPassword", "IsDeleted", "LastName", "MobileNumber", "ModifiedBy", "NumberIdentificate", "RoleOfUser", "Salt", "StatusOfVerification" },
+                values: new object[] { 1, null, new DateTime(2020, 8, 10, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(255), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "John", null, false, "Doe", null, null, null, 0, null, null });
 
             migrationBuilder.InsertData(
                 table: "Reservations",
                 columns: new[] { "ReservationId", "CarId", "DateCreated", "DateModified", "IsFinished", "ModifiedBy", "RentalDate", "ReturnDate", "UserId" },
-                values: new object[] { 1, 1, new DateTime(2020, 8, 3, 13, 29, 42, 958, DateTimeKind.Local).AddTicks(7638), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, new DateTime(2020, 8, 5, 13, 29, 42, 958, DateTimeKind.Local).AddTicks(5022), new DateTime(2020, 8, 8, 13, 29, 42, 958, DateTimeKind.Local).AddTicks(5710), 1 });
+                values: new object[] { 1, 1, new DateTime(2020, 8, 10, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(2689), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false, null, new DateTime(2020, 8, 12, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(1423), new DateTime(2020, 8, 15, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(1770), 1 });
 
             migrationBuilder.InsertData(
                 table: "Locations",
                 columns: new[] { "LocationId", "DateCreated", "DateModified", "IsActual", "Latitude", "Longitude", "ModifiedBy", "ReservationId" },
-                values: new object[] { 1, new DateTime(2020, 8, 3, 13, 29, 42, 959, DateTimeKind.Local).AddTicks(836), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, 50.5, 43.299999999999997, null, 1 });
+                values: new object[] { 1, new DateTime(2020, 8, 10, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(4391), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, 50.5, 43.299999999999997, null, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Defects_CarId",

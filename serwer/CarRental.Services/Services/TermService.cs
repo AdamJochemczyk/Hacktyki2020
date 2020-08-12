@@ -25,7 +25,7 @@ namespace CarRental.Services.Services
             return GetConvertedDates(freeDays);
         }
 
-        private List<int> PrepareFreeDaysArray(DateTime? rentalDate, DateTime? returnDate)
+        public List<int> PrepareFreeDaysArray(DateTime? rentalDate, DateTime? returnDate)
         {
             int week = 7;
             var startRange
@@ -36,7 +36,7 @@ namespace CarRental.Services.Services
             return freeDays;
         }
 
-        private List<int> RemoveUnavailableDates(IEnumerable<Reservation> reservations, List<int> freeDays)
+        public List<int> RemoveUnavailableDates(IEnumerable<Reservation> reservations, List<int> freeDays)
         {
             foreach (var reservation in reservations)
             {
@@ -48,7 +48,7 @@ namespace CarRental.Services.Services
             return freeDays;
         }
 
-        private IEnumerable<string> GetConvertedDates(List<int> freeDays)
+        public IEnumerable<string> GetConvertedDates(List<int> freeDays)
         {
             var dates = new List<string>();
             foreach (var dayOfYear in freeDays)

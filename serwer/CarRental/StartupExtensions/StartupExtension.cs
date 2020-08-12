@@ -22,6 +22,8 @@ using System.Threading.Tasks;
 using CarRental.Services.Models.Car;
 using CarRental.DAL.Entities;
 using CarRental.Services.Models.Location;
+using CarRental.DAL.Configurations;
+using CarRental.Services;
 
 namespace CarRental.API.StartupExtensions
 {
@@ -60,6 +62,7 @@ namespace CarRental.API.StartupExtensions
             services.AddScoped<IDefectsService, DefectService>();
             services.AddScoped<ITermService, TermService>();
             services.AddScoped<ITokenGeneratorService, TokenGeneratorService>();
+            services.AddTransient<ApplicationDbContextDataSeed>();
             return services;
         }
 
@@ -92,22 +95,21 @@ namespace CarRental.API.StartupExtensions
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }
-                )
-                            .AddJwtBearer(options =>
-                            {
-                                options.RequireHttpsMetadata = true;
-                                options.TokenValidationParameters = new TokenValidationParameters
-                                {
-                                    NameClaimType = "Roles",
-                                    ValidateIssuer = true,
-                                    ValidIssuer = TokenOptions.ISSUER,
-                                    ValidAudience = TokenOptions.AUDIENCE,
-                                    ValidateLifetime = true,
-                                    IssuerSigningKey = TokenOptions.GetSymmetricSecurityKey(),
-                                    ValidateIssuerSigningKey = true,
-                                };
-                            });
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "Roles",
+                        ValidateIssuer = true,
+                        ValidIssuer = TokenOptions.ISSUER,
+                        ValidAudience = TokenOptions.AUDIENCE,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = TokenOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true,
+                    };
+                });
             return services;
         }
     }

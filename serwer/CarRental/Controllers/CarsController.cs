@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Car;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
@@ -19,6 +20,8 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetAllCarsAsync()
         {
             var entities = await service.GetAllCarsAsync();
@@ -26,6 +29,8 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetById")]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetCarByIdAsync(int id)
         {
             var entity = await service.GetCarByIdAsync(id);
@@ -33,6 +38,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateCarAsync(CarCreateDto carDto)
         {
             var result = await service.CreateCarAsync(carDto);
@@ -46,6 +52,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCarAsync(int id, CarDto carDto)
         {
             if (id != carDto.CarId)
@@ -55,6 +62,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCarAsync(int id)
         {
             var entity = await service.GetCarByIdAsync(id);

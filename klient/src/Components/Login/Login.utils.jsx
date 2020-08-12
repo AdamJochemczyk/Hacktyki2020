@@ -25,7 +25,9 @@ export default function useLogin() {
   async function signIn(params) {
     try {
       let api = new Api();
+      console.log(params);
       const response = await api.signIn(params);
+      console.log(response);
       if (sessionStorage.getItem("isLoggedIn")) {
         let decodedToken = jwt_decode(response.accessToken);
         sessionStorage.setItem(
