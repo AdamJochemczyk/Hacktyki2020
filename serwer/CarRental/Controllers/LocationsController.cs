@@ -43,7 +43,7 @@ namespace CarRental.API.Controllers
             var entity = await service.GetActualLocationByReservationIdAsync(id);
             if (entity != null)
             {
-                await service.DeleteLocationAsync(entity);
+                await service.DeleteLocationAsync(id);
             }
             return Ok();
         }

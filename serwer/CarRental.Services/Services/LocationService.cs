@@ -52,8 +52,9 @@ namespace CarRental.Services.Services
             return mapper.Map<LocationDto>(location);
         }
 
-        public async Task DeleteLocationAsync(LocationDto location)
+        public async Task DeleteLocationAsync(int id)
         {
+            var location = await repository.FindByIdAsync(id);
             location.IsActual = false;
             await repository.SaveChangesAsync();
         }
