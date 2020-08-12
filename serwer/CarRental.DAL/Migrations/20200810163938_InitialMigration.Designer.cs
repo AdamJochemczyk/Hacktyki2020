@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRental.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200806122405_IsDeletedProperitiesAdded")]
-    partial class IsDeletedProperitiesAdded
+    [Migration("20200810163938_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,7 +73,7 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 8, 6, 14, 24, 4, 521, DateTimeKind.Local).AddTicks(3585),
+                            DateCreated = new DateTime(2020, 8, 10, 18, 39, 37, 579, DateTimeKind.Local).AddTicks(4490),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             IsDeleted = false,
@@ -176,7 +176,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             LocationId = 1,
-                            DateCreated = new DateTime(2020, 8, 6, 14, 24, 4, 527, DateTimeKind.Local).AddTicks(620),
+                            DateCreated = new DateTime(2020, 8, 10, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(4391),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActual = true,
                             Latitude = 50.5,
@@ -258,11 +258,11 @@ namespace CarRental.DAL.Migrations
                         {
                             ReservationId = 1,
                             CarId = 1,
-                            DateCreated = new DateTime(2020, 8, 6, 14, 24, 4, 526, DateTimeKind.Local).AddTicks(8559),
+                            DateCreated = new DateTime(2020, 8, 10, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(2689),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsFinished = false,
-                            RentalDate = new DateTime(2020, 8, 8, 14, 24, 4, 526, DateTimeKind.Local).AddTicks(6911),
-                            ReturnDate = new DateTime(2020, 8, 11, 14, 24, 4, 526, DateTimeKind.Local).AddTicks(7338),
+                            RentalDate = new DateTime(2020, 8, 12, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(1423),
+                            ReturnDate = new DateTime(2020, 8, 15, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(1770),
                             UserId = 1
                         });
                 });
@@ -292,6 +292,9 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("HashPassword")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -313,9 +316,6 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("StatusOfVerification")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
@@ -324,12 +324,12 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             UserId = 1,
-                            DateCreated = new DateTime(2020, 8, 6, 14, 24, 4, 526, DateTimeKind.Local).AddTicks(5845),
+                            DateCreated = new DateTime(2020, 8, 10, 18, 39, 37, 584, DateTimeKind.Local).AddTicks(255),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "John",
+                            IsDeleted = false,
                             LastName = "Doe",
-                            RoleOfUser = 0,
-                            isDeleted = false
+                            RoleOfUser = 0
                         });
                 });
 

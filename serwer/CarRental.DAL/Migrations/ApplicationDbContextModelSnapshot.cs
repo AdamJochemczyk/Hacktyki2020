@@ -71,7 +71,7 @@ namespace CarRental.DAL.Migrations
                         {
                             CarId = 1,
                             Brand = "Audi",
-                            DateCreated = new DateTime(2020, 8, 6, 14, 24, 4, 521, DateTimeKind.Local).AddTicks(3585),
+                            DateCreated = new DateTime(2020, 8, 10, 19, 27, 2, 36, DateTimeKind.Local).AddTicks(9254),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             ImagePath = "https://pngimg.com/uploads/audi/audi_PNG1737.png",
                             IsDeleted = false,
@@ -174,7 +174,7 @@ namespace CarRental.DAL.Migrations
                         new
                         {
                             LocationId = 1,
-                            DateCreated = new DateTime(2020, 8, 6, 14, 24, 4, 527, DateTimeKind.Local).AddTicks(620),
+                            DateCreated = new DateTime(2020, 8, 10, 19, 27, 2, 43, DateTimeKind.Local).AddTicks(69),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsActual = true,
                             Latitude = 50.5,
@@ -256,11 +256,11 @@ namespace CarRental.DAL.Migrations
                         {
                             ReservationId = 1,
                             CarId = 1,
-                            DateCreated = new DateTime(2020, 8, 6, 14, 24, 4, 526, DateTimeKind.Local).AddTicks(8559),
+                            DateCreated = new DateTime(2020, 8, 10, 19, 27, 2, 42, DateTimeKind.Local).AddTicks(8377),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsFinished = false,
-                            RentalDate = new DateTime(2020, 8, 8, 14, 24, 4, 526, DateTimeKind.Local).AddTicks(6911),
-                            ReturnDate = new DateTime(2020, 8, 11, 14, 24, 4, 526, DateTimeKind.Local).AddTicks(7338),
+                            RentalDate = new DateTime(2020, 8, 12, 19, 27, 2, 42, DateTimeKind.Local).AddTicks(7023),
+                            ReturnDate = new DateTime(2020, 8, 15, 19, 27, 2, 42, DateTimeKind.Local).AddTicks(7387),
                             UserId = 1
                         });
                 });
@@ -290,6 +290,9 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("HashPassword")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
@@ -311,9 +314,6 @@ namespace CarRental.DAL.Migrations
                     b.Property<string>("StatusOfVerification")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
-
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
@@ -321,13 +321,31 @@ namespace CarRental.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = 1,
-                            DateCreated = new DateTime(2020, 8, 6, 14, 24, 4, 526, DateTimeKind.Local).AddTicks(5845),
+                            UserId = 2,
+                            CodeOfVerification = "37ys",
+                            DateCreated = new DateTime(2020, 8, 10, 19, 27, 2, 42, DateTimeKind.Local).AddTicks(4676),
                             DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FirstName = "John",
+                            Email = "sensacjea@gmail.com",
+                            FirstName = "Bohdan",
+                            IsDeleted = false,
                             LastName = "Doe",
-                            RoleOfUser = 0,
-                            isDeleted = false
+                            MobileNumber = "458963254",
+                            NumberIdentificate = "000000",
+                            RoleOfUser = 0
+                        },
+                        new
+                        {
+                            UserId = 1,
+                            CodeOfVerification = "xxX3",
+                            DateCreated = new DateTime(2020, 8, 10, 19, 27, 2, 42, DateTimeKind.Local).AddTicks(6287),
+                            DateModified = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "zanbor3@gmail.com",
+                            FirstName = "John",
+                            IsDeleted = false,
+                            LastName = "Doe",
+                            MobileNumber = "458963254",
+                            NumberIdentificate = "233Xs5",
+                            RoleOfUser = 1
                         });
                 });
 

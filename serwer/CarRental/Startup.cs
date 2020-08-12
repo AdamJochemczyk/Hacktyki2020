@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CarRental.API.StartupExtensions;
+using CarRental.DAL.Configurations;
+using CarRental.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -34,7 +36,8 @@ namespace CarRental
                 options.AddPolicy("AllowSpecificOrigin",
                     builder => builder.WithOrigins("http://localhost:44390"));
             });
-            services.AddMvc()
+            services
+                .AddMvc()
                 .AddFluentValidation();
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
@@ -69,6 +72,7 @@ namespace CarRental
             {
                 endpoints.MapControllers();
             });
+            ApplicationDbContextDataSeed.Initialize(app.ApplicationServices);
         }
     }
 }

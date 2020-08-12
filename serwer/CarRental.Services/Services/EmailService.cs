@@ -54,7 +54,6 @@ namespace CarRental.Services.Models.Email_Templates
                 message.Subject = "Car Renting";
                 message.Body = "Something";
                 smpt.Send(mailMessage);
-
             }
             return true;
         }

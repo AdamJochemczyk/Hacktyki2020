@@ -12,7 +12,7 @@ export default class AuthorizationApi{
   async signIn(params) {
     try {
       const response = await this.baseAxios.post(
-        "/authorization/signin",
+        "/authorization/signIn",
         params
       );
       sessionStorage.setItem("isLoggedIn", true)

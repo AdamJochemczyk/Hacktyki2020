@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Reservation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarRental.API.Controllers
@@ -19,6 +20,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllReservationsAsync()
         {
             var result = await service.GetAllReservationsAsync();
@@ -26,6 +28,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var result = await service.GetReservationByIdAsync(id);
@@ -33,6 +36,8 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet, Route("cars/{id}")]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetActualReservationsByCarIdAsync(int id)
         {
             var result = await service.GetActualReservationsByCarIdAsync(id);
@@ -40,6 +45,8 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet, Route("users/{id}")]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> GetAllReservationsByUserIdAsync(int id)
         {
             var result = await service.GetAllReservationsByUserIdAsync(id);
@@ -47,6 +54,8 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
             if (await service.ReservationCanBeCreatedAsync(reservationCreateDto))
@@ -58,6 +67,8 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Worker")]
         public async Task<IActionResult> UpdateReservationAsync(int id, ReservationUpdateDto reservationUpdateDto)
         {
             if (id != reservationUpdateDto.ReservationId)
@@ -70,7 +81,8 @@ namespace CarRental.API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{id}")] 
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteReservationAsync(int id)
         {
             var entity = await service.GetReservationByIdAsync(id);

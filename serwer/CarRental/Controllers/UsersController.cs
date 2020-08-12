@@ -21,6 +21,7 @@ namespace CarRental.API.Controllers
         {
             _usersService = usersService;
         }
+
         [HttpGet]
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetUsersAsync()

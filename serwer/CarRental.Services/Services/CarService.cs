@@ -15,8 +15,7 @@ namespace CarRental.Services.Services
     {
         private readonly ICarRepository repository;
         private readonly IMapper mapper;
-        public CarService(
-            ICarRepository repository,
+        public CarService(ICarRepository repository,
             IMapper mapper)
         {
             this.repository = repository;

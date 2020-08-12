@@ -65,7 +65,7 @@ namespace CarRental.Tests.Services
             int id = 1;
             mockRepository
                 .Setup(p => p.FindByIdAsync(id))
-                .ReturnsAsync((Reservation)null);
+                .ReturnsAsync(null as Reservation);
             var service = new ReservationService(mockRepository.Object, mapper);
             //Act
             var result = await service.GetReservationByIdAsync(id);

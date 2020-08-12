@@ -14,9 +14,7 @@ namespace CarRental.Services.Services
     {
         private readonly ILocationRepository repository;
         private readonly IMapper mapper;
-        public LocationService(
-            ILocationRepository repository,
-            IMapper mapper)
+        public LocationService(ILocationRepository repository, IMapper mapper)
         {
             this.repository = repository;
             this.mapper = mapper;

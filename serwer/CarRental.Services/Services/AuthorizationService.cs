@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
+using CarRental.Services.Cryptography;
 using CarRental.Services.Interfaces;
-using CarRental.Services.Models.HashPassword;
 using CarRental.Services.Models.Token;
 using CarRental.Services.Models.User;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -26,8 +26,11 @@ namespace CarRental.Services.Services
         private readonly IMapper _mapper;
         private readonly ITokenGeneratorService _token;
         private readonly IRefreshRepository _refreshRepository;
-        public AuthorizationService(IUserRepository userRepository, IEmailServices email, IMapper mapper
-            , ITokenGeneratorService token, IRefreshRepository refreshRepository)
+        public AuthorizationService(IUserRepository userRepository,
+            IEmailServices email,
+            IMapper mapper,
+            ITokenGeneratorService token,
+            IRefreshRepository refreshRepository)
         {
             _userRepository = userRepository;
             _email = email;
@@ -35,27 +38,30 @@ namespace CarRental.Services.Services
             _token = token;
             _refreshRepository = refreshRepository;
         }
-        //Generate Hash Password
-        public static HashSaltDto GenerateSaltedHash(int size, string password)
+
+        public static HashSalt GenerateSaltedHash(int size, string password)
         {
-            var saltBytes = new byte[size];
-            var provider = new RNGCryptoServiceProvider();
-            provider.GetNonZeroBytes(saltBytes);
-            var salt = Convert.ToBase64String(saltBytes);
+            var passwordHasher = new PasswordHasher();
+            return passwordHasher.GenerateSaltedHash(size, password);
+            //var saltBytes = new byte[size];
+            //var provider = new RNGCryptoServiceProvider();
+            //provider.GetNonZeroBytes(saltBytes);
+            //var salt = Convert.ToBase64String(saltBytes);
 
-            var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 10000);
-            var hashPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256));
+            //var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 10000);
+            //var hashPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256));
 
-            HashSaltDto hashSalt = new HashSaltDto { Hash = hashPassword, Salt = salt };
-            return hashSalt;
+            //HashSaltDto hashSalt = new HashSaltDto { Hash = hashPassword, Salt = salt };
+            //return hashSalt;
         }
-        //Verify Password
+
         public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
         {
             var saltBytes = Convert.FromBase64String(storedSalt);
             var rfc2898DeriveBytes = new Rfc2898DeriveBytes(enteredPassword, saltBytes, 10000);
             return Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256)) == storedHash;
         }
+
         public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
         {
             var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.NumberIdentificate,
@@ -65,7 +71,6 @@ namespace CarRental.Services.Services
             {
                 _userRepository.Create(new_user);
                 await _userRepository.SaveChangesAsync();
-                createUserDto.UserId = new_user.UserId;
                 createUserDto.CodeOfVerification = new_user.CodeOfVerification;
                 _email.EmailAfterRegistration(createUserDto);
             }
@@ -89,20 +94,20 @@ namespace CarRental.Services.Services
             var user = await _userRepository.FindByLogin(userLoginDto.Email);
             if (user == null)
             {
-                TokenDto token_error = new TokenDto();
-                token_error.Code = 401;
-                return token_error;
+                TokenDto tokenError = new TokenDto();
+                tokenError.Code = 401;
+                return tokenError;
             }
-            if (userLoginDto.Email != user.Email ||!VerifyPassword(userLoginDto.EncodePassword, user.HashPassword, user.Salt))
+            if (userLoginDto.Email != user.Email || !VerifyPassword(userLoginDto.EncodePassword, user.HashPassword, user.Salt))
             {
-                TokenDto token_error = new TokenDto();
-                token_error.Code = 401;
-                return token_error;
+                TokenDto tokenError = new TokenDto();
+                tokenError.Code = 401;
+                return tokenError;
             }
-            //Return two tokens Access , Refresh
+            //Return two tokens Access, Refresh
             TokenDto token = new TokenDto();
             token.Code = 200;
-            token.AccessToken =  await _token.GenerateToken(user.UserId);
+            token.AccessToken = _token.GenerateToken(user);
             token.RefreshToken = _token.RefreshGenerateToken();
             //Save To database Refresh token 
             RefreshToken refreshToken = new RefreshToken(token.RefreshToken, user.UserId, true);

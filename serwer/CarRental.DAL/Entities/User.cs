@@ -18,8 +18,9 @@ namespace CarRental.DAL.Entities
         public string StatusOfVerification { get; set; }
         public RoleOfWorker RoleOfUser { get; set; }
         public string CodeOfVerification { get; set; }
-        public bool isDeleted { get; set; }
+        public bool IsDeleted { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
+
         public User(string firstName, string lastName, string numberIdentificate, string email,
             string mobileNumber)
         {
@@ -31,12 +32,11 @@ namespace CarRental.DAL.Entities
             DateCreated = DateTime.Now;
             RoleOfUser = RoleOfWorker.Worker;
             StatusOfVerification = "Processing...";
-              CodeOfVerification = GetRandomString(32);
-            
+            CodeOfVerification = GetRandomString(32);
         }
+
         public User()
         {
-
         }
         public void Update(string firstName, string lastName, string numberIdentificate, string email,
             string mobileNumber)
@@ -50,35 +50,34 @@ namespace CarRental.DAL.Entities
         }
         public void Delete(bool isdelete)
         {
-            isDeleted = isdelete;
+            IsDeleted = isdelete;
         }
-        public void SetPassword(string encodePassword,string salt)
+        public void SetPassword(string encodePassword, string salt)
         {
             Salt = salt;
             HashPassword = encodePassword;
             CodeOfVerification = null;
             StatusOfVerification = "Account has been registered.";
-
         }
-        const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
+        const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         static string GetRandomString(int length)
         {
-            string s = "";
+            string code = "";
             using (RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider())
             {
-                while (s.Length != length)
+                while (code.Length != length)
                 {
                     byte[] oneByte = new byte[1];
                     provider.GetBytes(oneByte);
                     char character = (char)oneByte[0];
                     if (valid.Contains(character))
                     {
-                        s += character;
+                        code += character;
                     }
                 }
             }
-            return s;
+            return code;
         }
     }
 }
