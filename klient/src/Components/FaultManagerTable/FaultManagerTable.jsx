@@ -3,6 +3,7 @@ import { useTable, useFilters, useSortBy } from "react-table";
 import { Table as BootstrapTable, Input } from "reactstrap";
 
 export default function FaultManagerTable({ columns, data }) {
+  
   const [filter, setFilterBy] = useState({
     registrationNumber: "",
     description: "",

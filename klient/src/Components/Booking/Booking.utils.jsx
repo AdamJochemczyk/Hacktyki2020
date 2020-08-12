@@ -6,7 +6,8 @@ export default function useBooking() {
 
   const [checkavilable, setCheckAvilable] = useState(false);
   const [freeTerms, setFreeTerms] = useState([]);
-
+  const DEFAULT_IMAGE =
+  "https://pngimg.com/uploads/question_mark/question_mark_PNG136.png";
   const validationSchema = Yup.object().shape({
     rentaldate: Yup.date().required("Required"),
     returndate: Yup.date().min(
@@ -38,6 +39,7 @@ export default function useBooking() {
     validationSchema,
     checkavilable,
     freeTerms,
+    DEFAULT_IMAGE,
     onSubmit,
     checkAvilable,
   };

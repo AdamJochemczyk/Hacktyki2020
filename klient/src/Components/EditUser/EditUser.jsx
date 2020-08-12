@@ -11,7 +11,6 @@ export default function EditUser({ history }) {
     user,
     initialValues,
     validationSchema,
-    isSubmitting,
     createUser,
     updateUser,
     fetchUser,
@@ -124,12 +123,8 @@ export default function EditUser({ history }) {
             <div className="pt-3">
               <button
                 type="submit"
-                disabled={isSubmitting}
                 className="btn btn-primary"
               >
-                {isSubmitting && (
-                  <span className="spinner-border spinner-border-sm mr-1"></span>
-                )}
                 Save
               </button>
 

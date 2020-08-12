@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTable, useSortBy, useGlobalFilter } from "react-table";
 import { Table as BootstrapTable, Input } from "reactstrap";
+import {Col,Row} from "reactstrap"
 
 export default function TableAdminHistory({ columns, data }) {
   
@@ -24,6 +25,8 @@ export default function TableAdminHistory({ columns, data }) {
 
   return (
     <div>
+    <Row className="justify-content-end">
+    <Col lg={3}>
         <Input
         value={globalFilter || ""}
         onChange={e => {
@@ -32,7 +35,9 @@ export default function TableAdminHistory({ columns, data }) {
         }}
         placeholder={`Search All ...`}
       />
-    <BootstrapTable striped {...getTableProps()}>
+      </Col>
+      </Row>
+    <BootstrapTable striped {...getTableProps()} className="mt-2">
         {headerGroups.map((headerGroup) => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map((column) => (

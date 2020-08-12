@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Col } from "reactstrap";
 import { useHistory } from "react-router-dom";
+import CarImageParams from "../CarImageParams/CarImageParams"
 
 export default function Cardcar(props) {
   const DEFAULT_IMAGE =
@@ -9,22 +10,28 @@ export default function Cardcar(props) {
   let history = useHistory();
 
   return (
-    <Col sm="4">
+    <Col sm={3}>
       <div className="CardCar">
-        <div style={{ textAlign: "center", display: "block" }}>
+        <div className="justify-content-center" stye={{height: "200px", width: "300px"}}>
           <img
-            src={props.imagePath || DEFAULT_IMAGE}
+            src={props.src}
             alt="car"
-            style={{ width: 200, height: 200 }}
+            style={{height: "100%", width: "100%", objectfit: "contain"}}
+            onError={e=>e.target.src=DEFAULT_IMAGE}
           />
         </div>
-        <h5>Model: {props.model}</h5>
-        <p>Year of production: {props.yearOfProduction}</p>
+        <Col className="text-center">
         <p>Brand: {props.brand}</p>
+        <p>Model: {props.model}</p>
         <p>Registration number: {props.registrationNumber}</p>
-        <p>Sits: {props.sits}</p>
-        <p>Doors: {props.doors}</p>
-        <div style={{ textAlign: "center" }}>
+        <CarImageParams 
+                    key={1}
+                    doorsnumber={props.doors}
+                    sitsnumber={props.sits}
+                    yearOfProduction={props.yearOfProduction}
+                     />
+        </Col>
+        <div className="text-center pt-3">
           <Button
             color="success"
             onClick={() =>

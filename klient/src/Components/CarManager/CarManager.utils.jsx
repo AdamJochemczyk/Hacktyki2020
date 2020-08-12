@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { Button } from "reactstrap";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Api from "../API/CarApi";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
+import EditIcon from "@material-ui/icons/Edit";
+import { Tooltip, IconButton } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function useCarManager() {
 
@@ -40,28 +42,25 @@ export default function useCarManager() {
         Header: "Actions",
         Cell: ({ row }) => (
           <div>
-            <Button color="success">
-              <Link
-                to={{
+          <Tooltip title="Edit">
+              <IconButton aria-label="Edit" onClick={() =>
+                    history.push({
                   pathname: "/admin/car-manager/edit",
                   state: row.original.carId,
-                }}
-                style={{ textDecoration: "none", color: "white" }}
-              >
-                Edit
-              </Link>
-            </Button>
-            <Button
-              color="danger"
-              onClick={() => deleteCar(row.original.carId)}
-            >
-              Delete
-            </Button>
-          </div>
+                })}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+              <IconButton aria-label="Delete" onClick={() => deleteCar(row.original.carId)}>
+                <DeleteIcon/>
+              </IconButton>
+            </Tooltip>
+            </div>
         ),
       },
     ],
-    []
+    [history]
   );
 
   async function fetchCars() {
@@ -69,6 +68,7 @@ export default function useCarManager() {
     let api = new Api();
     setIsLoading(true);
     const res = await api.fetchCars();
+    console.log("fetchCars -> res", res)
     setData(res);
     setIsLoading(false)
       }catch(error){

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Col, Form, Input, Row, Button } from "reactstrap";
+import { Col, Form, Input, Row, Button, Label, Container } from "reactstrap";
 import Loader from "react-loader-spinner";
 import moment from "moment";
 import useReserveCar from "./ReserveCar.utils";
@@ -13,6 +13,7 @@ export default function ReserveCar() {
     handleChange,
     CreateCarCard,
     checkAvailability,
+    FilteredCarCard
   } = useReserveCar();
 
   useEffect(() => {
@@ -26,17 +27,18 @@ export default function ReserveCar() {
           <Loader type="Oval" color="#00BFFF" />
         </div>
       ) : (
-        <div>
+        <Container fluid>
           <Row>
-            <Col sm={2}>
-              <Form>
-                Search car by:
+            <Col sm={3}>
+              <Form className="text-center p-2 mb-5 shadow-lg rounded">
+                <Label size="md">Search car by:</Label>
                 <Input
                   type="text"
                   placeholder="Brand"
                   name="brand"
                   value={filters.brand}
                   onChange={handleChange}
+                  className="mb-1"
                 />
                 <Input
                   type="text"
@@ -44,13 +46,15 @@ export default function ReserveCar() {
                   name="model"
                   value={filters.model}
                   onChange={handleChange}
+                  className="mb-1"
                 />
                 <Input
                   type="text"
-                  placeholder="Registration Number"
+                  placeholder="Registration number"
                   name="registrationNumber"
                   value={filters.registrationNumber}
                   onChange={handleChange}
+                  className="mb-1"
                 />
                 <Input
                   type="text"
@@ -58,6 +62,7 @@ export default function ReserveCar() {
                   name="yearOfProduction"
                   value={filters.yearOfProduction}
                   onChange={handleChange}
+                  className="mb-1"
                 />
                 <Input
                   type="text"
@@ -65,6 +70,7 @@ export default function ReserveCar() {
                   name="numberOfDoor"
                   value={filters.numberOfDoor}
                   onChange={handleChange}
+                  className="mb-1"
                 />
                 <Input
                   type="text"
@@ -72,21 +78,25 @@ export default function ReserveCar() {
                   name="numberOfSits"
                   value={filters.numberOfSits}
                   onChange={handleChange}
+                  className="mb-1"
                 />
                 <Input
                   type="date"
                   min={moment().format("YYYY-MM-DD")}
                   onChange={handleChange}
                   name="startdate"
+                  className="mb-1"
                 />
                 <Input
                   type="date"
                   min={moment().format("YYYY-MM-DD")}
                   onChange={handleChange}
                   name="enddate"
+                  className="mb-1"
                 />
                 <Button
                   color="success"
+                  className="mb-1"
                   disabled={filters.startdate === '' || filters.enddate === ''}
                   onClick={() =>
                     checkAvailability(filters.startdate, filters.enddate)
@@ -96,30 +106,9 @@ export default function ReserveCar() {
                 </Button>
               </Form>
             </Col>
-            <Col sm={10}>
-              <Row>
-                {data && data.length!==0 ? data
-                  .filter((data) => {
-                    return (
-                      data.brand
-                        .toLowerCase()
-                        .includes(filters.brand.toLowerCase()) &&
-                      data.model
-                        .toLowerCase()
-                        .includes(filters.model.toLowerCase()) &&
-                      data.registrationNumber
-                        .toLowerCase()
-                        .includes(filters.registrationNumber.toLowerCase()) &&
-                      data.yearOfProduction >= filters.yearOfProduction &&
-                      data.numberOfDoor >= filters.numberOfDoor &&
-                      data.numberOfSits >= filters.numberOfSits
-                    );
-                  }) 
-                  .map(CreateCarCard) : "We don't have cars in this term"}
-              </Row>
-            </Col>
+                {data && data.length!==0 ? FilteredCarCard(data).map(CreateCarCard) : "We don't have cars in this term"}
           </Row>
-        </div>
+          </Container>
       )}
     </div>
   );

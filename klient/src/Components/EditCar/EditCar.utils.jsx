@@ -6,6 +6,7 @@ import Api from "../API/CarApi";
 
 export default function useEditCar() {
   let redirect = useHistory();
+  
   const [car, setCar] = useState();
   let initialValues = {
     brand: "",
@@ -40,20 +41,19 @@ export default function useEditCar() {
       .max(moment().format("YYYY")),
   });
 
-  function createCar(fields, setSubmitting) {
+  function createCar(fields) {
     try{
     let cartype = parseInt(fields.typeOfCar);
     fields.typeOfCar = cartype;
     let api = new Api();
     api.createCar(fields);
-    setSubmitting(false)
     }
     catch(error){
       console.log(error)
     }
   }
 
-  function updateCar(id, fields, setSubmitting) {
+  function updateCar(id, fields) {
     try{
     fields.carId = parseInt(id);
     let cartype = parseInt(fields.typeOfCar);
@@ -61,7 +61,6 @@ export default function useEditCar() {
     console.log(fields);
     let api = new Api();
     api.updateCar(id,fields);
-    setSubmitting(false);
     setTimeout(() => redirect.push("/admin/car-manager"), 2000);
     }
     catch(error){

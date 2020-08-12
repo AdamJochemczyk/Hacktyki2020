@@ -36,8 +36,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet, Route("cars/{id}")]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> GetActualReservationsByCarIdAsync(int id)
         {
             var result = await service.GetActualReservationsByCarIdAsync(id);
@@ -45,8 +44,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet, Route("users/{id}")]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> GetAllReservationsByUserIdAsync(int id)
         {
             var result = await service.GetAllReservationsByUserIdAsync(id);
@@ -54,8 +52,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
             if (await service.ReservationCanBeCreatedAsync(reservationCreateDto))
@@ -67,8 +64,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> UpdateReservationAsync(int id, ReservationUpdateDto reservationUpdateDto)
         {
             if (id != reservationUpdateDto.ReservationId)

@@ -5,10 +5,11 @@ import calendar from '../img/calendar.png'
 import target from '../img/target.png'
 import green from '../img/green.png'
 import Feature from '../Feature/Feature'
-import Footer from '../Footer/Footer'
+import AuthorDesc from "../AuthorDescription/AuthorDescription"
+
 
 const features =[
-    {id: 1, icon: calendar, text: "Simple check calendar and book avilable car"},
+    {id: 1, icon: calendar, text: "Simple check calendar and book available car"},
     {id: 2, icon: target, text: "Book car fits to your needs"},
     {id: 3, icon: green, text: "By sharing car you safe our planet"}
 ];
@@ -49,7 +50,7 @@ export default function Home(){
         {features.map(CreateFeatures)}
         </Row>
         </Container>
-        <Footer/>
+        <AuthorDesc/>
         </>
     )
 }

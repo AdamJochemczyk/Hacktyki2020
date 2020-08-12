@@ -11,18 +11,17 @@ export default function EditCar({ history }) {
     car,
     initialValues,
     validationSchema,
-    isSubmitting,
     createCar,
     updateCar,
     fetchCar,
   } = useEditCar();
 
-  function onSubmit(fields, {setSubmitting}) {
+  function onSubmit(fields) {
     if (isAddMode) {
-      createCar(fields, setSubmitting);
+      createCar(fields);
       document.getElementById("carUpsert").reset();
     } else {
-      updateCar(id, fields, setSubmitting);
+      updateCar(id, fields);
     }
   }
 
@@ -59,7 +58,7 @@ export default function EditCar({ history }) {
                   className="invalid-feedback"
                 />
 
-                <label>Registration Number</label>
+                <label>Registration number</label>
                 <Field
                   name="registrationNumber"
                   type="text"
@@ -91,7 +90,7 @@ export default function EditCar({ history }) {
                   className="invalid-feedback"
                 />
 
-                <label>Type Of Car</label>
+                <label>Type of car</label>
                 <Field
                   name="typeOfCar"
                   as="select"
@@ -152,9 +151,6 @@ export default function EditCar({ history }) {
             </Row>
             <div className="pt-3">
               <button type="submit" className="btn btn-primary">
-              {isSubmitting && (
-                  <span className="spinner-border spinner-border-sm mr-1"></span>
-                )}
                 Save
               </button>
 

@@ -21,8 +21,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> GetLocationByReservationIdAsync(int id)
         {
             var entity = await service.GetActualLocationByReservationIdAsync(id);
@@ -30,8 +29,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> CreateLocationAsync(LocationCreateDto location)
         {
             var entity = await service.CreateLocationAsync(location);

@@ -28,7 +28,6 @@ export default function useLogin() {
   async function signIn(params) {
     try {
       let api = new Api();
-      console.log(params);
       const response = await api.signIn(params);
       setIsSended(false)
       if (sessionStorage.getItem("isLoggedIn")) {

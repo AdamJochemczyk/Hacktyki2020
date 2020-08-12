@@ -4,7 +4,6 @@ import { Table as BootstrapTable, Input } from "reactstrap";
 
 export default function TableUserHistory({ columns, data }) {
   const [filter, setFilterBy] = useState({
-    reservationId: "",
     rentalDate: "",
     returnDate: "",
     registrationNumber: "",
@@ -48,14 +47,6 @@ export default function TableUserHistory({ columns, data }) {
           </tr>
         ))}
         <tr>
-          <td>
-            <Input
-              value={filter.reservationID}
-              onChange={filterBy}
-              placeholder={"Search by ID"}
-              name="reservationId"
-            />
-          </td>
           <td>
             <Input
               value={filter.rentalDate}

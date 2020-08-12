@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import Api from "../API/ReservationApi";
+import Location from "../API/LocationApi"
 import moment from "moment"
 import {Button} from "reactstrap"
 
@@ -25,6 +26,8 @@ export default function useAdminHistory() {
   async function finishReservationNow(reservationId){
     let api=new Api()
     await api.finishReservationNow(reservationId)
+    let location=new Location()
+    await location.deleteLocalization(reservationId)
     window.location.reload(false)
   }
 

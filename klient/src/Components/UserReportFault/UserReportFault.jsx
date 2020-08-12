@@ -1,44 +1,21 @@
 import React from "react"
 import { Formik, Field, Form, ErrorMessage } from "formik";
-import { useHistory, Link} from "react-router-dom"
-import * as Yup from "yup";
+import {Link} from "react-router-dom"
 import "../styles/componentsstyle.css"
-import Api from "../API/FaultApi"
-import Swal from "sweetalert2"
+import Loader from "react-loader-spinner"
+import useUserReportFault from "./UserReportFault.utils"
 
 export default function UserReportFault({history}){
   let data = history.location.state;
 
-  let redirect = useHistory()
-  const initialValues={
-    description: ''
-  }
-
-  const validationSchema = Yup.object().shape({
-    description: Yup.string()
-      .required("Required"),
-  });
-  async function onSubmit(fields) {
-    fields.carId=data.carId;
-    fields.userId=parseInt(sessionStorage.getItem("userID"));
-      try{
-        let api=new Api()
-        await api.createReport(fields)
-        Swal.fire("Thank you!", 'You succesfully reported problem!', 'success')
-        redirect.push('/')
-      }
-      catch(error){
-        console.log(error)
-        Swal.fire("Oops...", "Something went wrong...", "error").then(()=>redirect.goBack())
-      }
-  }
+  const {initialValues, isSended, validationSchema, onSubmit}=useUserReportFault()
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       enableReinitialize
-      onSubmit={onSubmit}
+      onSubmit={(values)=>onSubmit(values, data.carId)}
     >
       {({ errors, touched }) => {
         return (
@@ -65,7 +42,9 @@ export default function UserReportFault({history}){
               <button
                 type="submit"
                 className="btn btn-primary"
+                disabled={isSended}
               >
+              {isSended && <Loader type="Oval" color="#00BFFF" height="20px" width="20px"/>}
                 Save
               </button>
 

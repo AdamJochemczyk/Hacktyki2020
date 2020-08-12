@@ -20,8 +20,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> GetAllCarsAsync()
         {
             var entities = await service.GetAllCarsAsync();
@@ -29,8 +28,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetById")]
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> GetCarByIdAsync(int id)
         {
             var entity = await service.GetCarByIdAsync(id);

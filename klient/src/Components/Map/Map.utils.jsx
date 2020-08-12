@@ -34,7 +34,6 @@ export default function useMap() {
   async function fetchMarker(reservationid) {
     let api = new LocationApi();
     const response=await api.fetchLocalization(reservationid);
-    console.log("fetchMarker -> response", response)
     setCenter({
       lat: response.latitude,
       lng: response.longitude,

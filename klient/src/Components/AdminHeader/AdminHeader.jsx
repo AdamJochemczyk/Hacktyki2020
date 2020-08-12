@@ -7,7 +7,7 @@ import logo from '../img/euvic-logo.PNG';
 const AdminHeader = ()=>{
 
     return (
-<Navbar expand="lg">
+<Navbar expand="lg" className="shadow-lg p-3 mb-5 bg-white rounded">
   <Navbar.Brand href="/admin"><img src={logo} alt='euvic-logo'></img></Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav" className="ml-auto">

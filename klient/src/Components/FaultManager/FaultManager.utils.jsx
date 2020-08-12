@@ -32,6 +32,7 @@ export default function useFaultManager() {
       let api = new Api();
       setIsLoading(true);
       const response = await api.fetchFaults();
+      console.log("fetchFaults -> response", response)
       setData(response);
       setIsLoading(false);
     } catch (error) {
@@ -86,11 +87,11 @@ export default function useFaultManager() {
       },
       {
         Header: "Phone",
-        accessor: "phone",
+        accessor: "phoneNumber",
       },
       {
         Header: "Date of report",
-        accessor: "dateofreport",
+        accessor: "dateOfReport",
       },
       {
         Header: "Status",

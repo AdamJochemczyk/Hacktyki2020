@@ -1,19 +1,21 @@
 import React, { useRef } from "react";
-import { Col, Row, Button, Table } from "reactstrap";
+import { Col, Row, Button, Table, Container } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import moment from "moment";
 import useBooking from "./Booking.utils";
+import CarImageParams from "../CarImageParams/CarImageParams"
 
 export default function Booking({ history }) {
   const {
     validationSchema,
-    checkavilable,
+    checkavailable,
     freeTerms,
+    DEFAULT_IMAGE,
     onSubmit,
     checkAvilable,
   } = useBooking();
   let data = history.location.state;
-  sessionStorage.setItem("carID", data.car)
+  sessionStorage.setItem("carID", data.car);
   let initialValues = {
     rentaldate: data.startdate,
     returndate: data.enddate,
@@ -21,21 +23,17 @@ export default function Booking({ history }) {
   const ref = useRef(null);
 
   return (
-    <Col>
-      <Row style={{ justifyContent: "center" }}>
+    <Container fluid>
+      <Row className="justify-content-center">
         <h1>Reserve this car!</h1>
       </Row>
-      <Row>
-        <Col sm={6}>
-          <p>Brand: {data.brand}</p>
-          <p>Doors: {data.brand}</p>
-          <p>model: {data.model}</p>
-          <p>registrationNumber: {data.registrationNumber}</p>
-          <p>sits: {data.sits}</p>
-          <p>src: {data.src}</p>
-          <p>yearOfProduction: {data.yearOfProduction}</p>
+      <Row className="justify-content-center">
+        <Col sm={8}>
+          <img src={data.src} alt="booking car"  style={{height: "100%", width: "100%", objectfit: "contain"}}
+            onError={e=>e.target.src=DEFAULT_IMAGE}/>
         </Col>
-        <Col sm={6}>
+        <div className="upsertforms" style={{height: "500px", zIndex: 1, background: "white"}}>
+        <Col>
           <Formik
             innerRef={ref}
             initialValues={initialValues}
@@ -45,94 +43,106 @@ export default function Booking({ history }) {
           >
             {({ errors, touched }) => {
               return (
-                <Form id="userUpsert" className="upsertforms">
-                  <label>Start date</label>
-                  <Field
-                    name="rentaldate"
-                    type="date"
-                    min={moment().format("YYYY-MM-DD")}
-                    className={
-                      "form-control" +
-                      (errors.rentaldate && touched.rentaldate
-                        ? " is-invalid"
-                        : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="rentaldate"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-
-                  <label>End date</label>
-                  <Field
-                    name="returndate"
-                    type="date"
-                    id="enddate"
-                    min={moment().format("YYYY-MM-DD")}
-                    className={
-                      "form-control" +
-                      (errors.returndate && touched.returndate
-                        ? " is-invalid"
-                        : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="returndate"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-
-                  <div className="pt-3">
-                    <Button
-                      color="primary"
-                      onClick={() =>
-                        checkAvilable(
-                          data.car,
-                          ref.current.values.rentaldate,
-                          ref.current.values.returndate
-                        )
-                      }
-                    >
-                      Check date
-                    </Button>
-                    <Button color="success" type="submit">
-                      Confirm reservation
-                    </Button>
-                  </div>
-                </Form>
+                <Row className="justify-content-center">
+                  <h4>{data.brand +" "+ data.model}</h4>
+                  <h5>{" Registration number: "+data.registrationNumber}</h5>
+                    <CarImageParams 
+                    key={1}
+                    doorsnumber={data.doors}
+                    sitsnumber={data.sits}
+                    yearOfProduction={data.yearOfProduction}
+                     />
+                    <Form id="userUpsert" className="mt-2">
+                      <label>Start date</label>
+                      <Field
+                        name="rentaldate"
+                        type="date"
+                        min={moment().format("YYYY-MM-DD")}
+                        className={
+                          "form-control" +
+                          (errors.rentaldate && touched.rentaldate
+                            ? " is-invalid"
+                            : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="rentaldate"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                      <label>End date</label>
+                      <Field
+                        name="returndate"
+                        type="date"
+                        id="enddate"
+                        min={moment().format("YYYY-MM-DD")}
+                        className={
+                          "form-control" +
+                          (errors.returndate && touched.returndate
+                            ? " is-invalid"
+                            : "")
+                        }
+                      />
+                      <ErrorMessage
+                        name="returndate"
+                        component="div"
+                        className="invalid-feedback"
+                      />
+                      <div className="d-flex pt-3">
+                        <Button
+                          color="primary"
+                          className="mr-1"
+                          onClick={() =>
+                            checkAvilable(
+                              data.car,
+                              ref.current.values.rentaldate,
+                              ref.current.values.returndate
+                            )
+                          }
+                        >
+                          Check date
+                        </Button>
+                        <Button color="success" type="submit" className="ml-1">
+                          Confirm reservation
+                        </Button>
+                      </div>
+                    </Form>
+                </Row>
               );
             }}
           </Formik>
-          {checkavilable && (
+          <Row className="justify-content-center">
             <div
               style={{
-                maxHeight: "200px",
                 overflowY: "auto",
+                height: "150px",
+                width: "300px",
+                paddingTop: "20px"
               }}
             >
               <Table bordered>
                 <thead>
                   <tr>
-                    <td>Available terms</td>
+                    <td>Next available terms</td>
                   </tr>
                 </thead>
                 <tbody>
-                {freeTerms &&
-                  freeTerms.length !== 0 &&
-                  freeTerms.map((reservation, i) => {
-                    return (
-                      <tr key={i}>
-                        <td>{reservation}</td>
-                      </tr>
-                    );
-                  })}
-                  </tbody>
+                {(freeTerms &&
+                        freeTerms.length !== 0) ?
+                        freeTerms.map((reservation, i) => {
+                          return (
+                            <tr key={i}>
+                              <td>{reservation}</td>
+                            </tr>
+                          );
+                        }) : (checkavailable ? <tr><td>No available terms</td></tr> : <tr><td>Check available terms</td></tr> )}
+                </tbody>
               </Table>
             </div>
-          )}
-        </Col>
       </Row>
-    </Col>
+        </Col>
+        </div>
+      </Row>
+      </Container>
   );
 }

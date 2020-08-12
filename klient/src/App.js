@@ -19,6 +19,7 @@ import UserHistory from './Components/UserHistory/UserHistory'
 import UserReportFault from './Components/UserReportFault/UserReportFault'
 import UserHeader from './Components/UserHeader/UserHeader'
 import AdminHeader from './Components/AdminHeader/AdminHeader';
+import Footer from './Components/Footer/Footer'
 
 function App() {
   let userRole=sessionStorage.getItem('userRole');
@@ -41,6 +42,7 @@ function App() {
           <Route path="/history/report" component={UserReportFault} />
           <Route component={GenericNotFound} />
           </Switch>
+          <Footer/>
           </div>
         ) ||
          (
@@ -49,6 +51,7 @@ function App() {
            <Switch>
            <Route exact path='/' component={Login}/>
            <Route exact path='/admin' component={Home} />
+           <Route exact path='/home' component={Home} />
            <Route exact path='/history' component={UserHistory} />
            <Route path="/history/map" component={Map} />
           <Route path="/history/report" component={UserReportFault} />
@@ -70,6 +73,7 @@ function App() {
           <Route path="/history/report" component={UserReportFault} />
           <Route component={GenericNotFound} />
           </Switch>
+          <Footer/>
            </div>
            ): <Redirect to='/' />)
          : <div>
@@ -79,7 +83,6 @@ function App() {
          <Route component={GenericNotFound} />
          </Switch>
          </div>}
-       
     </Router>
   );
 }

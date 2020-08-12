@@ -6,7 +6,7 @@ import logo from '../img/euvic-logo.PNG';
 const UserHeader = ()=>{
 
     return (
-<Navbar expand="lg">
+<Navbar expand="lg" className="shadow-lg p-3 mb-5 bg-white rounded">
   <Navbar.Brand href="/home"><img src={logo} alt='euvic-logo'></img></Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav" className="mr-auto">

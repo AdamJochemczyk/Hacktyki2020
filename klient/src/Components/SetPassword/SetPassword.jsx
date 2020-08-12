@@ -1,14 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import { useParams, useHistory } from "react-router-dom";
 import Swal from "sweetalert2";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Api from "../API/AuthorizationApi"
+import Loader from "react-loader-spinner"
 
 export default function SetPassword() {
 
   const { code } = useParams();
   let history = useHistory()
+  const [isSended, setIsSended]=useState(false)
 
   let initialValues = {
     encodePassword: '',
@@ -30,6 +32,7 @@ export default function SetPassword() {
   function onSubmit(fields) {
     if (fields.encodePassword===fields.confirmEncodePassword) {
       sendPassword(fields);
+      setIsSended(true)
     }
     else{
       Swal.fire("Oops...", "Try again password weren't same", "error");
@@ -39,7 +42,12 @@ export default function SetPassword() {
   async function sendPassword(fields) {
     try {
       let api=new Api()
-      await api.sendPassword(fields)
+      const res=await api.sendPassword(fields)
+      setIsSended(res)
+      if(res===false)
+      {
+        throw new Error()
+      }
       history.push('/')
     } catch (error) {
       Swal.fire("Oops...", "Something went wrong", "error");
@@ -51,7 +59,12 @@ export default function SetPassword() {
       initialValues={initialValues}
       validationSchema={validationSchema}
       enableReinitialize
-      onSubmit={onSubmit}
+      onSubmit={(fields, {resetForm}) =>
+      {
+        onSubmit(fields)
+        resetForm({fields: ''})
+        }
+        }
     >
       {({ errors, touched, isSubmitting }) => {
         return (
@@ -93,7 +106,9 @@ export default function SetPassword() {
               <button
                 type="submit"
                 className="btn btn-primary"
+                disabled={isSended}
               >
+               {isSended && <Loader type="Oval" color="#00BFFF" height="20px" width="20px"/>}
                 Set password
               </button>
             </div>

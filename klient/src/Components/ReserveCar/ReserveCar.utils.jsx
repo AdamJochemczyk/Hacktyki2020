@@ -54,7 +54,7 @@ export default function useReserveCar() {
     });
   }
 
-  function CreateCarCard(data) {
+  const CreateCarCard=(data)=> {
     return (
       <CardCar
         key={data.carId}
@@ -72,13 +72,33 @@ export default function useReserveCar() {
     );
   }
 
+  const FilteredCarCard=(data)=>{
+    return data
+    .filter((data) => {
+      return (
+        CompareString(data.brand, filters.brand) &&
+        CompareString(data.model, filters.model) &&
+        CompareString(data.registrationNumber, filters.registrationNumber) &&
+        data.yearOfProduction >= filters.yearOfProduction &&
+        data.numberOfDoor >= filters.numberOfDoor &&
+        data.numberOfSits >= filters.numberOfSits
+      );
+  })
+}
+
+const CompareString=(a,b)=>{
+  return a.toLowerCase().includes(b.toLowerCase())
+}
+
   return {
     data,
     filters,
     isLoading,
     fetchCars,
     handleChange,
+    CompareString,
     CreateCarCard,
     checkAvailability,
+    FilteredCarCard,
   };
 }

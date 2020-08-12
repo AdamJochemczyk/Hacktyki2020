@@ -17,8 +17,9 @@ export default function CarManager() {
         <div className="loader">
           <Loader type="Oval" color="#00BFFF" />
         </div>
-      ) : (
+      ) : ( data ?
         <CarManagerTable columns={columns} data={data} />
+        : "You don't have cars in database"
       )}
     </div>
   );

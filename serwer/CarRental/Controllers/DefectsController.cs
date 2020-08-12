@@ -20,7 +20,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles ="Worker")]
+        [Authorize(Roles = "Admin, Worker")]
         public async Task<IActionResult> RegisterDefect(RegisterDefectDto registerDefectDto)
         {
             if (registerDefectDto == null) 
