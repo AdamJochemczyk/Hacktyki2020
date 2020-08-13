@@ -1,11 +1,9 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace CarRental.DAL.Entities
 {
-   public class TokenOptions
+    public class TokenOptions
     {
         public const string ISSUER = "MyAuthServer"; // издатель токена
         public const string AUDIENCE = "MyAuthClient"; // потребитель токена

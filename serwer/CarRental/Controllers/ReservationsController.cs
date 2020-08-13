@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CarRental.API.Attributes;
+using CarRental.DAL.Entities;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Reservation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
 {
@@ -13,78 +12,80 @@ namespace CarRental.API.Controllers
     [ApiController]
     public class ReservationsController : Controller
     {
-        private readonly IReservationService service;
-        public ReservationsController(IReservationService service)
+        private readonly IReservationService reservationService;
+        public ReservationsController(IReservationService reservationService)
         {
-            this.service = service;
+            this.reservationService = reservationService;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetAllReservationsAsync()
         {
-            var result = await service.GetAllReservationsAsync();
-            return Ok(result);
+            var reservations = await reservationService.GetAllReservationsAsync();
+            return Ok(reservations);
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            var result = await service.GetReservationByIdAsync(id);
-            return Ok(result);
+            var reservation = await reservationService.GetReservationByIdAsync(id);
+            return Ok(reservation);
         }
 
         [HttpGet, Route("cars/{id}")]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> GetActualReservationsByCarIdAsync(int id)
         {
-            var result = await service.GetActualReservationsByCarIdAsync(id);
-            return Ok(result);
+            var reservations = await reservationService.GetActualReservationsByCarIdAsync(id);
+            return Ok(reservations);
         }
 
         [HttpGet, Route("users/{id}")]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> GetAllReservationsByUserIdAsync(int id)
         {
-            var result = await service.GetAllReservationsByUserIdAsync(id);
-            return Ok(result);
+            var reservations = await reservationService.GetAllReservationsByUserIdAsync(id);
+            return Ok(reservations);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
-            if (await service.ReservationCanBeCreatedAsync(reservationCreateDto))
+            if (await reservationService.ReservationCanBeCreatedAsync(reservationCreateDto))
             {
-                var result = await service.CreateReservationAsync(reservationCreateDto);
-                return Ok(result);
+                var reservation = await reservationService.CreateReservationAsync(reservationCreateDto);
+                return Ok(reservation);
             }
             return BadRequest();
         }
 
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin, Worker")]
+        [HttpPatch("{id}")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> UpdateReservationAsync(int id, ReservationUpdateDto reservationUpdateDto)
         {
             if (id != reservationUpdateDto.ReservationId)
-                return BadRequest();
-            if (await service.ReservationCanBeUpdatedAsync(reservationUpdateDto))
             {
-                var entity = await service.UpdateReservationAsync(reservationUpdateDto);
-                return Ok(entity);
+                return BadRequest();
+            }
+            if (await reservationService.ReservationCanBeUpdatedAsync(reservationUpdateDto))
+            {
+                var reservation = await reservationService.UpdateReservationAsync(reservationUpdateDto);
+                return Ok(reservation);
             }
             return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> DeleteReservationAsync(int id)
         {
-            var entity = await service.GetReservationByIdAsync(id);
-            if (entity != null)
+            var reservation = await reservationService.GetReservationByIdAsync(id);
+            if (reservation != null)
             {
-                await service.DeleteReservationAsync(id);
+                await reservationService.DeleteReservationAsync(id);
                 return Ok();
             }
             return BadRequest();

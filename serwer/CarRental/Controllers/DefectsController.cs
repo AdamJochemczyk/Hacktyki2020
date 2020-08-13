@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CarRental.API.Attributes;
+using CarRental.DAL.Entities;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Defect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
 {
@@ -20,7 +19,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> RegisterDefect(RegisterDefectDto registerDefectDto)
         {
             if (registerDefectDto == null) 
@@ -32,7 +31,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetAllDefects()
         {
             var defects = await _defectsService.GetAllDefectsAsync();
@@ -42,7 +41,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetDefect(int id)
         {
             var defect = await _defectsService.GetDefectAsync(id);
@@ -50,8 +49,9 @@ namespace CarRental.API.Controllers
                 return NotFound("This is defect does not exist");
             return Ok(defect);
         }
-        [HttpPut]
-        [Authorize(Roles = "Admin")]
+
+        [HttpPatch]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> UpdateDefectAsync(UpdateDefectDto updateDefectDto)
         {
           var defect =  await _defectsService.UpdateDefectAsync(updateDefectDto);

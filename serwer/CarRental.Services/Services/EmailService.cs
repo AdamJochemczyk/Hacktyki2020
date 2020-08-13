@@ -1,14 +1,9 @@
-﻿using CarRental.DAL.Entities;
-using CarRental.Services.Interfaces;
+﻿using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
-using System.Security.Claims;
 using System.Text;
 
 namespace CarRental.Services.Models.Email_Templates

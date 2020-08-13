@@ -1,29 +1,23 @@
 ﻿using AutoMapper;
 using CarRental.DAL;
+using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.DAL.Repositories;
+using CarRental.Services;
 using CarRental.Services.Interfaces;
+using CarRental.Services.Mapper;
+using CarRental.Services.Models.Car;
 using CarRental.Services.Models.Email_Templates;
+using CarRental.Services.Models.Location;
 using CarRental.Services.Models.Reservation;
 using CarRental.Services.Models.User;
 using CarRental.Services.Services;
 using CarRental.Services.Validators;
-using CarRental.Services.Mapper;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CarRental.Services.Models.Car;
-using CarRental.DAL.Entities;
-using CarRental.Services.Models.Location;
-using CarRental.DAL.Configurations;
-using CarRental.Services;
 
 namespace CarRental.API.StartupExtensions
 {
@@ -107,7 +101,7 @@ namespace CarRental.API.StartupExtensions
                         ValidAudience = TokenOptions.AUDIENCE,
                         ValidateLifetime = true,
                         IssuerSigningKey = TokenOptions.GetSymmetricSecurityKey(),
-                        ValidateIssuerSigningKey = true,
+                        ValidateIssuerSigningKey = true
                     };
                 });
             return services;

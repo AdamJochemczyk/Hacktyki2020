@@ -1,22 +1,21 @@
 ﻿using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
+using CarRental.Services.Services;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using CarRental.Services.Services;
-using System.Linq;
 
 namespace CarRental.Tests.Services
 {
     public class TermServiceTest
     {
-        private readonly Mock<IReservationRepository> mockRepository;
+        private readonly Mock<IReservationRepository> mockReservationRepository;
         public TermServiceTest()
         {
-            mockRepository = new Mock<IReservationRepository>();
+            mockReservationRepository = new Mock<IReservationRepository>();
         }
 
         [Fact]
@@ -42,10 +41,10 @@ namespace CarRental.Tests.Services
                 DateTime.Now.AddDays(1).Date.ToString("dd.MM.yyyy"),
                 DateTime.Now.AddDays(7).Date.ToString("dd.MM.yyyy")              
             };
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FindAllByCarIdAsync(id))
                 .ReturnsAsync(reservations);
-            var service = new TermService(mockRepository.Object);
+            var service = new TermService(mockReservationRepository.Object);
             //Act
             var returnedDates = await service.GetFreeTermsByCarIdAsync(id, null, null);
             //Assert
@@ -76,10 +75,10 @@ namespace CarRental.Tests.Services
                 DateTime.Now.AddDays(7).Date.ToString("dd.MM.yyyy"),
                 DateTime.Now.AddDays(14).Date.ToString("dd.MM.yyyy")
             };
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FindAllByCarIdAsync(id))
                 .ReturnsAsync(reservations);
-            var service = new TermService(mockRepository.Object);
+            var service = new TermService(mockReservationRepository.Object);
             //Act
             var returnedDates = await service.GetFreeTermsByCarIdAsync(id, DateTime.Now.AddDays(6), DateTime.Now.AddDays(13));
             //Assert
@@ -93,7 +92,7 @@ namespace CarRental.Tests.Services
             var rentalDate = DateTime.Now.AddDays(8);
             var returnDate = DateTime.Now.AddDays(12);
             var freeDays = Enumerable.Range(rentalDate.DayOfYear - 7, returnDate.DayOfYear - rentalDate.DayOfYear + 8);
-            var service = new TermService(mockRepository.Object);
+            var service = new TermService(mockReservationRepository.Object);
             //Act
             var result = service.PrepareFreeDaysArray(rentalDate, returnDate);
             //Assert
@@ -105,7 +104,7 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             var freeDays = Enumerable.Range(DateTime.Now.DayOfYear, 14);
-            var service = new TermService(mockRepository.Object);
+            var service = new TermService(mockReservationRepository.Object);
             //Act
             var result = service.PrepareFreeDaysArray(null, null);
             //Assert

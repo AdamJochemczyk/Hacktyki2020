@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarRental.DAL.Entities
 {
-  public class RefreshToken
+    public class RefreshToken
     {
         public int Id { get; set; }
         public string Refresh { get; set; }

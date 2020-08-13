@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace CarRental.DAL.Entities
 {
@@ -10,7 +9,7 @@ namespace CarRental.DAL.Entities
         public int UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string NumberIdentificate { get; set; }
+        public string IdentificationNumber { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
         public string HashPassword { get; set; }
@@ -21,12 +20,12 @@ namespace CarRental.DAL.Entities
         public bool IsDeleted { get; set; }
         public List<RefreshToken> RefreshTokens { get; set; }
 
-        public User(string firstName, string lastName, string numberIdentificate, string email,
+        public User(string firstName, string lastName, string identificationNumber, string email,
             string mobileNumber)
         {
             FirstName = firstName;
             LastName = lastName;
-            NumberIdentificate = numberIdentificate;
+            IdentificationNumber = identificationNumber;
             Email = email;
             MobileNumber = mobileNumber;
             DateCreated = DateTime.Now;
@@ -38,12 +37,12 @@ namespace CarRental.DAL.Entities
         public User()
         {
         }
-        public void Update(string firstName, string lastName, string numberIdentificate, string email,
+        public void Update(string firstName, string lastName, string identificationNumber, string email,
             string mobileNumber)
         {
             FirstName = firstName;
             LastName = lastName;
-            NumberIdentificate = numberIdentificate;
+            IdentificationNumber = identificationNumber;
             Email = email;
             MobileNumber = mobileNumber;
             DateModified = DateTime.Now;

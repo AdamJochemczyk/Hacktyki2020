@@ -2,13 +2,9 @@
 using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.Services.Interfaces;
-using CarRental.Services.Models.Email_Templates;
 using CarRental.Services.Models.User;
 using CarRental.Services.Services;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -37,7 +33,7 @@ namespace CarRental.Tests.Services
             {
                 FirstName = "Bohdan",
                 LastName = "Kucher",
-                NumberIdentificate = "123123",
+                IdentificationNumber = "123123",
                 Email = "kucherbogdan200@gmail.com",
                 MobileNumber = "123123123"
             };
@@ -72,7 +68,7 @@ namespace CarRental.Tests.Services
             {
                 FirstName = "Bohdan",
                 LastName = "Kucher",
-                NumberIdentificate = "123123",
+                IdentificationNumber = "123123",
                 Email = "kucherbogdan200@gmail.com",
                 MobileNumber = "123123123"
             };
@@ -129,7 +125,7 @@ namespace CarRental.Tests.Services
             var signIn = new UserLoginDto()
             {
                 Email = "kucherbogdan@gmail.com",
-                EncodePassword = "Basket",
+                Password = "Basket",
                 RoleOfWorker = 1
             };
             _mockUserRepository
@@ -154,7 +150,7 @@ namespace CarRental.Tests.Services
             var signIn = new UserLoginDto()
             {
                 Email = "kucherbogdan@gmail.com",
-                EncodePassword = "Basket",
+                Password = "Basket",
                 RoleOfWorker = 1
             };
             _mockUserRepository
@@ -179,7 +175,7 @@ namespace CarRental.Tests.Services
             var signIn = new UserLoginDto()
             {
                 Email = "kucherbogdan@gmail.com",
-                EncodePassword = "12345678",
+                Password = "12345678",
                 RoleOfWorker = 1
             };
             _mockUserRepository

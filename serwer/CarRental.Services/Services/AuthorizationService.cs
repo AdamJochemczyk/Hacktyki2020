@@ -5,15 +5,8 @@ using CarRental.Services.Cryptography;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Token;
 using CarRental.Services.Models.User;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRental.Services.Services
@@ -64,7 +57,7 @@ namespace CarRental.Services.Services
 
         public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
         {
-            var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.NumberIdentificate,
+            var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.IdentificationNumber,
                 createUserDto.Email, createUserDto.MobileNumber);
             var check_user = await _userRepository.FindByLogin(createUserDto.Email);
             if (check_user == null)
@@ -98,7 +91,7 @@ namespace CarRental.Services.Services
                 tokenError.Code = 401;
                 return tokenError;
             }
-            if (userLoginDto.Email != user.Email || !VerifyPassword(userLoginDto.EncodePassword, user.HashPassword, user.Salt))
+            if (userLoginDto.Email != user.Email || !VerifyPassword(userLoginDto.Password, user.HashPassword, user.Salt))
             {
                 TokenDto tokenError = new TokenDto();
                 tokenError.Code = 401;

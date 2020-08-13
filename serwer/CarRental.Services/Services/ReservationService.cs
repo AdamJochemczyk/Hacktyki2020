@@ -6,25 +6,24 @@ using CarRental.Services.Models.Reservation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRental.Services.Services
 {
     public class ReservationService : IReservationService
     {
-        private readonly IReservationRepository repository;
+        private readonly IReservationRepository reservationRepository;
         private readonly IMapper mapper;
-        public ReservationService(IReservationRepository repository,
+        public ReservationService(IReservationRepository reservationRepository,
             IMapper mapper)
         {
-            this.repository = repository;
+            this.reservationRepository = reservationRepository;
             this.mapper = mapper;
         }
 
         public async Task<ReservationDto> CreateReservationAsync(ReservationCreateDto reservationCreateDto)
         {
-            var entity = new Reservation()
+            var reservation = new Reservation()
             {
                 UserId = reservationCreateDto.UserId,
                 CarId = reservationCreateDto.CarId,
@@ -33,40 +32,40 @@ namespace CarRental.Services.Services
                 IsFinished = false,
                 DateCreated = DateTime.Now
             };
-            repository.Create(entity);
-            await repository.SaveChangesAsync();
-            entity = await repository.FindByIdAsync(entity.ReservationId);
-            return mapper.Map<ReservationDto>(entity);
+            reservationRepository.Create(reservation);
+            await reservationRepository.SaveChangesAsync();
+            reservation = await reservationRepository.FindByIdAsync(reservation.ReservationId);
+            return mapper.Map<ReservationDto>(reservation);
         }
 
         public async Task DeleteReservationAsync(int id)
         {
-            await repository.Delete(id);
-            await repository.SaveChangesAsync();
+            await reservationRepository.Delete(id);
+            await reservationRepository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<ReservationDto>> GetAllReservationsAsync()
         {
-            var entities = await repository.FindAllAsync();
-            return mapper.Map<IEnumerable<ReservationDto>>(entities);
+            var reservations = await reservationRepository.FindAllAsync();
+            return mapper.Map<IEnumerable<ReservationDto>>(reservations);
         }
 
         public async Task<ReservationDto> GetReservationByIdAsync(int id)
         {
-            var entity = await repository.FindByIdAsync(id);
-            return mapper.Map<ReservationDto>(entity);
+            var reservation = await reservationRepository.FindByIdAsync(id);
+            return mapper.Map<ReservationDto>(reservation);
         }
 
         public async Task<ReservationDto> UpdateReservationAsync(ReservationUpdateDto reservationUpdateDto)
         {
-            var entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
-            entity.Update(reservationUpdateDto.RentalDate,
+            var reservation = await reservationRepository.FindByIdAsync(reservationUpdateDto.ReservationId);
+            reservation.Update(reservationUpdateDto.RentalDate,
                 reservationUpdateDto.ReturnDate,
                 reservationUpdateDto.IsFinished);
-            repository.Update(entity);
-            await repository.SaveChangesAsync();
-            entity = await repository.FindByIdAsync(reservationUpdateDto.ReservationId);
-            return mapper.Map<ReservationDto>(entity);
+            reservationRepository.Update(reservation);
+            await reservationRepository.SaveChangesAsync();
+            reservation = await reservationRepository.FindByIdAsync(reservationUpdateDto.ReservationId);
+            return mapper.Map<ReservationDto>(reservation);
         }
 
         public async Task<bool> ReservationCanBeCreatedAsync(ReservationCreateDto reservationDto)
@@ -77,8 +76,8 @@ namespace CarRental.Services.Services
                 ReturnDate = reservationDto.ReturnDate,
                 CarId = reservationDto.CarId
             };
-            List<Reservation> entities = await repository.FilterReservationsAsync(reservation);
-            return entities.Count == 0 ? true : false;
+            List<Reservation> reservations = await reservationRepository.FilterReservationsAsync(reservation);
+            return reservations.Count == 0 ? true : false;
         }
 
         public async Task<bool> ReservationCanBeUpdatedAsync(ReservationUpdateDto reservationDto)
@@ -90,22 +89,22 @@ namespace CarRental.Services.Services
                 ReturnDate = Convert.ToDateTime(reservationDto.ReturnDate),
                 CarId = reservationDto.CarId
             };
-            List<Reservation> entities = await repository.FilterReservationsAsync(reservation);
-            int count = entities.Count;
-            int id = count == 0 ? 0 : entities.FirstOrDefault().ReservationId;
+            List<Reservation> reservations = await reservationRepository.FilterReservationsAsync(reservation);
+            int count = reservations.Count;
+            int id = count == 0 ? 0 : reservations.FirstOrDefault().ReservationId;
             return (count == 0 || (count == 1 && id == reservation.ReservationId)) ? true : false;
         }
 
         public async Task<IEnumerable<ReservationDto>> GetAllReservationsByUserIdAsync(int id)
         {
-            var entities = await repository.FindAllByUserIdAsync(id);
-            return mapper.Map<IEnumerable<ReservationDto>>(entities);
+            var reservations = await reservationRepository.FindAllByUserIdAsync(id);
+            return mapper.Map<IEnumerable<ReservationDto>>(reservations);
         }
 
         public async Task<IEnumerable<ReservationDto>> GetActualReservationsByCarIdAsync(int id)
         {
-            var entities = await repository.FindAllByCarIdAsync(id);
-            return mapper.Map<IEnumerable<ReservationDto>>(entities);
+            var reservations = await reservationRepository.FindAllByCarIdAsync(id);
+            return mapper.Map<IEnumerable<ReservationDto>>(reservations);
         }    
     }
 }

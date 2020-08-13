@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
@@ -51,7 +50,7 @@ namespace CarRental.Services.Services
             if (usersDto.Email == user.Email)
             {
                 usersDto.isValid = true;
-                user.Update(usersDto.FirstName, usersDto.LastName, usersDto.NumberIdentificate, usersDto.Email, usersDto.MobileNumber);
+                user.Update(usersDto.FirstName, usersDto.LastName, usersDto.IdentificationNumber, usersDto.Email, usersDto.MobileNumber);
                 _userRepository.Update(user);
                 await _userRepository.SaveChangesAsync();
                 return usersDto;

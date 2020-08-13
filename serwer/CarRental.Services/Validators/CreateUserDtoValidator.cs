@@ -8,8 +8,8 @@ namespace CarRental.Services.Validators
         {
             RuleFor(u => u.Email).EmailAddress();
             RuleFor(u => u.MobileNumber).Length(9);
-            RuleFor(u => u.NumberIdentificate).Length(6);
-           
+            RuleFor(u => u.IdentificationNumber).Length(6);
+
         }
     }
 }

@@ -4,37 +4,35 @@ using CarRental.DAL.Interfaces;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Location;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRental.Services.Services
 {
     public class LocationService : ILocationService
     {
-        private readonly ILocationRepository repository;
+        private readonly ILocationRepository locationRepository;
         private readonly IMapper mapper;
-        public LocationService(ILocationRepository repository, IMapper mapper)
+        public LocationService(ILocationRepository locationRepository, IMapper mapper)
         {
-            this.repository = repository;
+            this.locationRepository = locationRepository;
             this.mapper = mapper;
         }
 
         public async Task<LocationDto> GetActualLocationByReservationIdAsync(int id)
         {
-            var location = await repository.GetActualLocationByReservationIdAsync(id);
+            var location = await locationRepository.GetActualLocationByReservationIdAsync(id);
             return mapper.Map<LocationDto>(location);
         }
 
         public async Task<LocationDto> GetLocationByIdAsync(int id)
         {
-            var location = await repository.FindByIdAsync(id);
+            var location = await locationRepository.FindByIdAsync(id);
             return mapper.Map<LocationDto>(location);
         }
 
         public async Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto)
         {
-            var oldLocation = await repository
+            var oldLocation = await locationRepository
                 .GetActualLocationByReservationIdAsync(locationCreateDto.ReservationId);
             if (oldLocation != null)
                 oldLocation.IsActual = false;
@@ -47,16 +45,16 @@ namespace CarRental.Services.Services
                 IsActual = true,
                 DateCreated = DateTime.Now
             };
-            repository.Create(location);
-            await repository.SaveChangesAsync();
+            locationRepository.Create(location);
+            await locationRepository.SaveChangesAsync();
             return mapper.Map<LocationDto>(location);
         }
 
         public async Task DeleteLocationAsync(int id)
         {
-            var location = await repository.FindByIdAsync(id);
+            var location = await locationRepository.FindByIdAsync(id);
             location.IsActual = false;
-            await repository.SaveChangesAsync();
+            await locationRepository.SaveChangesAsync();
         }
     }
 }

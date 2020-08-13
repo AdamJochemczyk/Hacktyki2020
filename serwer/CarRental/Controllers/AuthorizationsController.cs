@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
-using CarRental.Services.Interfaces;
+﻿using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
 {
@@ -13,17 +10,17 @@ namespace CarRental.API.Controllers
     [ApiController]
     public class AuthorizationsController : Controller
     {
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthorizationService authorizationService;
         public AuthorizationsController(IAuthorizationService authorizationService)
         {
-            _authorizationService = authorizationService;
+            this.authorizationService = authorizationService;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(CreateUserDto createUserDto)
         {
             if (createUserDto == null) return NotFound("User is null");
-            var user = await _authorizationService.RegistrationUserAsync(createUserDto);
+            var user = await authorizationService.RegistrationUserAsync(createUserDto);
             if (user.UserId == 0)
                 return BadRequest("This Email already exists");
             return Ok(user);
@@ -32,16 +29,16 @@ namespace CarRental.API.Controllers
         [HttpPost("signIn")]
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
-            var cos = await _authorizationService.SignIn(userLoginDto);
-            if (cos.Code == 401)
+            var signInResult = await authorizationService.SignIn(userLoginDto);
+            if (signInResult.Code == (int)HttpStatusCode.Unauthorized)
                 return Unauthorized("Email/Password not correct");
-            return Ok(cos);
+            return Ok(signInResult);
         }
 
         [HttpPut]
         public async Task<IActionResult> SetPassword(UpdateUserPasswordDto updateUserPassword)
         {
-            if (!await _authorizationService.SetPassword(updateUserPassword))
+            if (!await authorizationService.SetPassword(updateUserPassword))
                 return NotFound("Code of Verification is bad");
             return Ok();
         }

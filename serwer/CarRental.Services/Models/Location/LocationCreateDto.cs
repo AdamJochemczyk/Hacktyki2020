@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarRental.Services.Models.Location
+﻿namespace CarRental.Services.Models.Location
 {
     public class LocationCreateDto
     {

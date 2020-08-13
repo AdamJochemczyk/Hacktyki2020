@@ -4,22 +4,21 @@ using CarRental.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRental.Services.Services
 {
     public class TermService : ITermService
     {
-        private readonly IReservationRepository repository;
-        public TermService(IReservationRepository repository)
+        private readonly IReservationRepository reservationRepository;
+        public TermService(IReservationRepository reservationRepository)
         {
-            this.repository = repository;
+            this.reservationRepository = reservationRepository;
         }
 
         public async Task<IEnumerable<string>> GetFreeTermsByCarIdAsync(int id, DateTime? rentalDate, DateTime? returnDate)
         {
-            var reservations = await repository.FindAllByCarIdAsync(id);
+            var reservations = await reservationRepository.FindAllByCarIdAsync(id);
             List<int> freeDays = PrepareFreeDaysArray(rentalDate, returnDate);
             freeDays = RemoveUnavailableDates(reservations, freeDays);
             return GetConvertedDates(freeDays);
@@ -57,6 +56,16 @@ namespace CarRental.Services.Services
                 dates.Add(date);
             }
             return dates;
+        }
+
+        public bool DatesAreCorrect(DateTime rentalDate, DateTime returnDate)
+        {
+            return rentalDate < returnDate && rentalDate.Date >= DateTime.Now.Date;
+        }
+
+        public bool DatesHaveValue(DateTime? rentalDate, DateTime? returnDate)
+        {
+            return rentalDate.HasValue && returnDate.HasValue;
         }
     }
 }
