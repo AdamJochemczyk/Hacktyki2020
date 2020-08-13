@@ -1,11 +1,10 @@
-﻿using System;
-using System.Resources;
-using System.Threading.Tasks;
+﻿using CarRental.API.Attributes;
 using CarRental.API.Resources;
+using CarRental.DAL.Entities;
 using CarRental.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Resources;
 using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers

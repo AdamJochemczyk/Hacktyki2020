@@ -1,10 +1,9 @@
-﻿using CarRental.Services.Interfaces;
-﻿using System.Resources;
-using System.Threading.Tasks;
-using CarRental.API.Resources;
+﻿using CarRental.API.Resources;
+using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Resources;
 using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
@@ -47,7 +46,7 @@ namespace CarRental.API.Controllers
         [HttpPost("signIn")]
         public async Task<IActionResult> SignInAsync(UserLoginDto userLoginDto)
         {
-            var signInResult = await authorizationService.SignIn(userLoginDto);
+            var signInResult = await authorizationService.SignInAsync(userLoginDto);
             if (signInResult.Code == (int)HttpStatusCode.Unauthorized)
             {
                 return Unauthorized(resourcesManager.GetString("EmailPassword"));

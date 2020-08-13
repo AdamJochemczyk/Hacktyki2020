@@ -1,12 +1,10 @@
 ﻿using CarRental.API.Attributes;
-using CarRental.DAL.Entities;
-﻿using System.Resources;
-using System.Threading.Tasks;
 using CarRental.API.Resources;
+using CarRental.DAL.Entities;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Resources;
 using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
@@ -15,11 +13,11 @@ namespace CarRental.API.Controllers
     [ApiController]
     public class UsersController : Controller
     {
-        private readonly IUsersService _usersService;
+        private readonly IUsersService usersService;
         public ResourceManager resourcesManager;
         public UsersController(IUsersService usersService)
         {
-            _usersService = usersService;
+            this.usersService = usersService;
             resourcesManager = new ResourceManager("CarRental.API.Resources.ResourceFile", typeof(ResourceFile).Assembly);
         }
 
@@ -27,7 +25,7 @@ namespace CarRental.API.Controllers
         [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetUsersAsync()
         {
-            var result = await _usersService.GetAllUsersAsync();
+            var result = await usersService.GetAllUsersAsync();
             if (result == null)
             {
                 return NotFound(resourcesManager.GetString("DatabaseEmpty"));
@@ -40,12 +38,12 @@ namespace CarRental.API.Controllers
         public async Task<IActionResult> GetUserAsync(int id)
         {
 
-            var user = await _usersService.GetUserAsync(id);
+            var user = await usersService.GetUserAsync(id);
             if (user == null)
             {
                 return NotFound(resourcesManager.GetString("NotExist"));
             }
-            user = await _usersService.GetUserAsync(id);
+            user = await usersService.GetUserAsync(id);
             return Ok(user);
         }
 
@@ -54,7 +52,7 @@ namespace CarRental.API.Controllers
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
 
-            if (!await _usersService.DeleteUserAsync(id))
+            if (!await usersService.DeleteUserAsync(id))
             {
                 return NotFound(resourcesManager.GetString("NotExist"));
             }
@@ -70,7 +68,7 @@ namespace CarRental.API.Controllers
             {
                 return NotFound(resourcesManager.GetString("NotExist"));
             }
-            var result = await _usersService.UpdateUserAsync(usersDto);
+            var result = await usersService.UpdateUserAsync(usersDto);
             if (result.isValid == false)
             {
                 return NotFound(resourcesManager.GetString("NotFound"));
