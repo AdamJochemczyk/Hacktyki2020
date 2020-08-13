@@ -1,4 +1,7 @@
-﻿using CarRental.DAL.Entities;
+﻿using CarRental.DAL;
+using CarRental.DAL.Entities;
+using CarRental.Services.Cryptography;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +33,7 @@ namespace CarRental.Services
             List<User> users = new List<User>() { admin, worker };
             foreach (var user in users)
             {
-                if (!context.Users.Any(u => u.NumberIdentificate == user.NumberIdentificate))
+                if (!context.Users.Any(u => u.IdentificationNumber == user.IdentificationNumber))
                 {
                     context.Users.Add(user);
                 }
@@ -56,7 +59,7 @@ namespace CarRental.Services
             {
                 FirstName = "Bohdan",
                 LastName = "Doe",
-                NumberIdentificate = "000000",
+                IdentificationNumber = "000000",
                 Email = "admin@admin.com",
                 MobileNumber = "458963254",
                 RoleOfUser = RoleOfWorker.Admin,
@@ -75,7 +78,7 @@ namespace CarRental.Services
             {
                 FirstName = "John",
                 LastName = "Brandon",
-                NumberIdentificate = "000111",
+                IdentificationNumber = "000111",
                 Email = "worker1@worker.com",
                 MobileNumber = "44443254",
                 RoleOfUser = RoleOfWorker.Worker,

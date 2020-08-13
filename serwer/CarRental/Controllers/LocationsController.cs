@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using CarRental.API.Attributes;
+using CarRental.DAL.Entities;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Location;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
 {
@@ -10,36 +12,36 @@ namespace CarRental.API.Controllers
     [ApiController]
     public class LocationsController : Controller
     {
-        private readonly ILocationService service;
-        public LocationsController(ILocationService service)
+        private readonly ILocationService locationService;
+        public LocationsController(ILocationService locationService)
         {
-            this.service = service;
+            this.locationService = locationService;
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> GetLocationByReservationIdAsync(int id)
         {
-            var entity = await service.GetActualLocationByReservationIdAsync(id);
-            return Ok(entity);
+            var location = await locationService.GetActualLocationByReservationIdAsync(id);
+            return Ok(location);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin, Worker")]
-        public async Task<IActionResult> CreateLocationAsync(LocationCreateDto location)
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
+        public async Task<IActionResult> CreateLocationAsync(LocationCreateDto locationDto)
         {
-            var entity = await service.CreateLocationAsync(location);
-            return Ok(entity);
+            var location = await locationService.CreateLocationAsync(locationDto);
+            return Ok(location);
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> DeleteLocationAsync(int id)
         {
-            var entity = await service.GetActualLocationByReservationIdAsync(id);
-            if (entity != null)
+            var location = await locationService.GetActualLocationByReservationIdAsync(id);
+            if (location != null)
             {
-                await service.DeleteLocationAsync(id);
+                await locationService.DeleteLocationAsync(id);
             }
             return Ok();
         }

@@ -8,7 +8,7 @@ namespace CarRental.Services.Validators
         public UserLoginValidatorDto()
         {
             RuleFor(p => p).Must(p => p.Email != null).WithMessage("Email not correct");
-            RuleFor(p => p).Must(p => p.EncodePassword != null).WithMessage("Email not correct");
+            RuleFor(p => p).Must(p => p.Password != null).WithMessage("Email not correct");
         }
     }
 }

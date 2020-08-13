@@ -1,12 +1,9 @@
 ﻿using CarRental.Services.Models.Defect;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarRental.Services.Validators
 {
-   public class RegisterDefectDtoValidator: AbstractValidator<RegisterDefectDto>
+    public class RegisterDefectDtoValidator: AbstractValidator<RegisterDefectDto>
     {
       public RegisterDefectDtoValidator()
         {

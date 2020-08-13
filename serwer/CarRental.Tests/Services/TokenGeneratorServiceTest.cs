@@ -17,7 +17,7 @@ namespace CarRental.Tests.Services
                 HashPassword="12312eewsddf2323",
                 Email = "kucher@gmail.com",
                 MobileNumber = "123123123",
-                NumberIdentificate = "123123"
+                IdentificationNumber = "123123"
             };
             var services = new TokenGeneratorService();
             //Act
@@ -26,6 +26,7 @@ namespace CarRental.Tests.Services
             var assertResult = Assert.IsType<string>(result);
             Assert.Equal(result, assertResult);
         }
+
         [Fact]
         public void GenerateRefreshToken_ReturnRefreshToken()
         {

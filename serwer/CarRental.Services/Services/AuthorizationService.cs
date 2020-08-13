@@ -47,7 +47,7 @@ namespace CarRental.Services.Services
 
         public async Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto)
         {
-            var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.NumberIdentificate,
+            var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.IdentificationNumber,
                 createUserDto.Email, createUserDto.MobileNumber);
             var check_user = await userRepository.FindByLogin(createUserDto.Email);
             if (check_user == null)
@@ -81,7 +81,7 @@ namespace CarRental.Services.Services
                 tokenDto.Code = 401;
                 return tokenDto;
             }
-            if (userLoginDto.Email != user.Email || !VerifyPassword(userLoginDto.EncodePassword, user.HashPassword, user.Salt))
+            if (userLoginDto.Email != user.Email || !VerifyPassword(userLoginDto.Password, user.HashPassword, user.Salt))
             {
                 tokenDto.Code = 401;
                 return tokenDto;

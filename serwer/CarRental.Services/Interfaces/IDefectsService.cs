@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CarRental.Services.Interfaces
 {
-   public interface IDefectsService
+    public interface IDefectsService
     {
          Task<DefectDto> RegisterDefectAsync(RegisterDefectDto registerDefectDto);
          Task<IEnumerable<DefectDto>> GetAllDefectsAsync();

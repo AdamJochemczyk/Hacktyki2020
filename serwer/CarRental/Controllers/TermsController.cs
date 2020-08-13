@@ -5,6 +5,8 @@ using CarRental.API.Resources;
 using CarRental.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
 {
@@ -24,38 +26,28 @@ namespace CarRental.API.Controllers
 
         [HttpGet("{id}")]
         [HttpGet("{id}/{rentalDate:datetime}/{returnDate:datetime}")]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> GetFreeTermsByCarIdAsync(int id, DateTime? rentalDate, DateTime? returnDate)
         {
-            if (!DatesHaveValue(rentalDate, returnDate) || DatesAreCorrect(rentalDate.Value, returnDate.Value))
+            if (!termService.DatesHaveValue(rentalDate, returnDate) || termService.DatesAreCorrect(rentalDate.Value, returnDate.Value))
             {
-                var result = await termService.GetFreeTermsByCarIdAsync(id, rentalDate, returnDate);
-                return Ok(result);
+                var terms = await termService.GetFreeTermsByCarIdAsync(id, rentalDate, returnDate);
+                return Ok(terms);
             }
             return BadRequest(resourcesManager.GetString("BadDateOrder"));
         }
 
         //example: .../api/terms/2021-08-07/2021-09-07
         [HttpGet, Route("{rentalDate:datetime}/{returnDate:datetime}")]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
         {
-            if (DatesAreCorrect(rentalDate, returnDate))
+            if (termService.DatesAreCorrect(rentalDate, returnDate))
             {
-                var entities = await carService.GetAvailableCars(rentalDate, returnDate);
-                return Ok(entities);
+                var cars = await carService.GetAvailableCars(rentalDate, returnDate);
+                return Ok(cars);
             }
             return BadRequest(resourcesManager.GetString("BadDateOrder"));
-        }
-
-        private bool DatesAreCorrect(DateTime rentalDate, DateTime returnDate)
-        {
-            return rentalDate < returnDate && rentalDate.Date >= DateTime.Now.Date;
-        }
-
-        private bool DatesHaveValue(DateTime? rentalDate, DateTime? returnDate)
-        {
-            return rentalDate.HasValue && returnDate.HasValue;
         }
     }
 }

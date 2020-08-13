@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CarRental.DAL.Repositories
 {
-   public class DefectRepository:RepositoryBase<Defect>,IDefectRepository
+    public class DefectRepository:RepositoryBase<Defect>,IDefectRepository
     {
         public DefectRepository(ApplicationDbContext dbContext) : base(dbContext)
         {

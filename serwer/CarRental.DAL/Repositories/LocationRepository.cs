@@ -1,8 +1,8 @@
 ﻿using CarRental.DAL.Entities;
 using CarRental.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarRental.DAL.Repositories
 {

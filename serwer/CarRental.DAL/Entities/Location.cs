@@ -1,5 +1,4 @@
-﻿
-namespace CarRental.DAL.Entities
+﻿namespace CarRental.DAL.Entities
 {
     public class Location : BaseEntity
     {

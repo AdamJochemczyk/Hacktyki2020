@@ -1,3 +1,5 @@
+﻿using CarRental.API.Attributes;
+using CarRental.DAL.Entities;
 ﻿using System.Resources;
 using System.Threading.Tasks;
 using CarRental.API.Resources;
@@ -5,6 +7,7 @@ using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
 {
@@ -21,7 +24,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetUsersAsync()
         {
             var result = await _usersService.GetAllUsersAsync();
@@ -33,7 +36,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetUserAsync(int id)
         {
 
@@ -47,7 +50,7 @@ namespace CarRental.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
 
@@ -58,8 +61,9 @@ namespace CarRental.API.Controllers
             return Ok();
         }
 
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+
+        [HttpPatch("{id}")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> UpdateUserAsync(int id, UsersDto usersDto)
         {
             if (id != usersDto.UserId)

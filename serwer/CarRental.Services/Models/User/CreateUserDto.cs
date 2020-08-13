@@ -7,7 +7,7 @@ namespace CarRental.Services.Models.User
         public int UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string NumberIdentificate { get; set; }
+        public string IdentificationNumber { get; set; }
         public string Email { get; set; }
         public string MobileNumber { get; set; }
         public DateTime DateCreated { get; set; }

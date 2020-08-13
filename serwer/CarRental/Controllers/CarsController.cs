@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using CarRental.API.Attributes;
+using CarRental.DAL.Entities;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Car;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace CarRental.API.Controllers
 {
@@ -10,60 +13,63 @@ namespace CarRental.API.Controllers
     [ApiController]
     public class CarsController : Controller
     {
-        private readonly ICarService service;
-        public CarsController(ICarService service)
+        private readonly ICarService carService;
+        public CarsController(ICarService carService)
         {
-            this.service = service;
+            this.carService = carService;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> GetAllCarsAsync()
         {
-            var entities = await service.GetAllCarsAsync();
-            return Ok(entities);
+            var cars = await carService.GetAllCarsAsync();
+            return Ok(cars);
         }
 
         [HttpGet("{id}", Name = "GetById")]
-        [Authorize(Roles = "Admin, Worker")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin, RoleOfWorker.Worker)]
         public async Task<IActionResult> GetCarByIdAsync(int id)
         {
-            var entity = await service.GetCarByIdAsync(id);
-            return Ok(entity);
+            var car = await carService.GetCarByIdAsync(id);
+            return Ok(car);
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> CreateCarAsync(CarCreateDto carDto)
         {
-            var result = await service.CreateCarAsync(carDto);
-            if (result == null)
+            var car = await carService.CreateCarAsync(carDto);
+            if (car == null)
+            {
                 return BadRequest();
-
+            }
             return CreatedAtRoute(
                 routeName: "GetById",
-                routeValues: new { id = result.CarId },
-                value: result);
+                routeValues: new { id = car.CarId },
+                value: car);
         }
 
-        [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+        [HttpPatch("{id}")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> UpdateCarAsync(int id, CarDto carDto)
         {
             if (id != carDto.CarId)
+            {
                 return BadRequest();
-            var result = await service.UpdateCarAsync(carDto);
+            }
+            var result = await carService.UpdateCarAsync(carDto);
             return Ok(result);
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> DeleteCarAsync(int id)
         {
-            var entity = await service.GetCarByIdAsync(id);
-            if (entity != null && entity.IsDeleted != true)
+            var car = await carService.GetCarByIdAsync(id);
+            if (car != null && car.IsDeleted != true)
             {
-                await service.DeleteCar(id);
+                await carService.DeleteCarAsync(id);
                 return Ok();
             }
             return BadRequest();

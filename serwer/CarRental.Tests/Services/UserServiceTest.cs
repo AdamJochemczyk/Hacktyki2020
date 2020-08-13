@@ -38,6 +38,7 @@ namespace CarRental.Tests.Services
             var assertResult = Assert.IsType<List<UsersDto>>(result);
             Assert.Equal(users.Count, assertResult.Count);
         }
+
         [Fact]
         public async Task GetUserById_ExcitingId_ReturnCorrectObject()
         {
@@ -53,6 +54,7 @@ namespace CarRental.Tests.Services
             var assertResult = Assert.IsType<UsersDto>(result);
             Assert.Equal(id, assertResult.UserId);
         }
+
         [Fact]
         public async Task GetUserById_NotExcitingId_ReturnsNull()
         {
@@ -67,6 +69,7 @@ namespace CarRental.Tests.Services
             //Assert
             Assert.Null(result);
         }
+
         [Fact]
         public async Task UpdateUser_CorrectObject_ReturnObject()
         {
@@ -78,7 +81,7 @@ namespace CarRental.Tests.Services
                 Email = "kucher@gmail.com",
                 LastName = "Kucher",
                 MobileNumber = "123123123",
-                NumberIdentificate = "123123"
+                IdentificationNumber = "123123"
             };
             User user = new User()
             {
@@ -87,7 +90,7 @@ namespace CarRental.Tests.Services
                 Email = "kucher@gmail.com",
                 LastName = "Kuchera",
                 MobileNumber = "444444444",
-                NumberIdentificate = "123123"
+                IdentificationNumber = "123123"
             };
             this.mockUsersRepository
                .Setup(p => p.FindByIdDetails(1))
@@ -105,8 +108,9 @@ namespace CarRental.Tests.Services
             Assert.Equal(result.FirstName, usersDto.FirstName);
             Assert.Equal(result.LastName, usersDto.LastName);
             Assert.Equal(result.MobileNumber, usersDto.MobileNumber);
-            Assert.Equal(result.NumberIdentificate, usersDto.NumberIdentificate);
+            Assert.Equal(result.IdentificationNumber, usersDto.IdentificationNumber);
         }
+
         [Fact]
         public async Task UpdateUser_UserNotFound_ReturnObject()
         {
@@ -118,7 +122,7 @@ namespace CarRental.Tests.Services
                 Email = "kucher@gmail.com",
                 LastName = "Kucher",
                 MobileNumber = "123123123",
-                NumberIdentificate = "123123"
+                IdentificationNumber = "123123"
             };
             this.mockUsersRepository
                .Setup(p => p.FindByIdDetails(usersDto.UserId))
@@ -129,6 +133,7 @@ namespace CarRental.Tests.Services
             //Assert
             Assert.False(result.isValid);
         }
+
         [Fact]
         public async Task DeleteUser_IdExiciting_ReturnTrue()
         {
@@ -150,6 +155,7 @@ namespace CarRental.Tests.Services
             //Assert
             Assert.True(result);
         }
+
         [Fact]
         public async Task DeleteUser_IdNotFound_ReturnTrue()
         {

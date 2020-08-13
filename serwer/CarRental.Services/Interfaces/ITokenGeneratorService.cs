@@ -2,7 +2,7 @@
 
 namespace CarRental.Services.Interfaces
 {
-   public interface ITokenGeneratorService
+    public interface ITokenGeneratorService
     {
          string GenerateToken(User user);
          string RefreshGenerateToken();

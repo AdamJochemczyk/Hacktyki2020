@@ -1,5 +1,4 @@
-﻿
-using CarRental.Services.Models.Car;
+﻿using CarRental.Services.Models.Car;
 using CarRental.Services.Models.User;
 
 namespace CarRental.Services.Models.Reservation

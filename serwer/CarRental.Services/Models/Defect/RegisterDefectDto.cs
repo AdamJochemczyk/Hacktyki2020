@@ -1,5 +1,4 @@
-﻿
-namespace CarRental.Services.Models.Defect
+﻿namespace CarRental.Services.Models.Defect
 {
     public class RegisterDefectDto
     {

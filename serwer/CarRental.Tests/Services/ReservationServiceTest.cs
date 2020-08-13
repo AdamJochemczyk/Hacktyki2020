@@ -13,11 +13,11 @@ namespace CarRental.Tests.Services
 {
     public class ReservationServiceTest
     {
-        private readonly Mock<IReservationRepository> mockRepository;
+        private readonly Mock<IReservationRepository> mockReservationRepository;
         private readonly IMapper mapper;
         public ReservationServiceTest()
         {
-            mockRepository = new Mock<IReservationRepository>();
+            mockReservationRepository = new Mock<IReservationRepository>();
             var config = new MapperConfiguration(opts =>
             {
                 opts.CreateMap<Reservation, ReservationDto>();
@@ -30,10 +30,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             List<Reservation> reservations = new List<Reservation>() { new Reservation(), new Reservation() };
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FindAllAsync())
                 .ReturnsAsync(reservations);
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.GetAllReservationsAsync();
             //Assert
@@ -46,10 +46,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int id = 1;
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FindByIdAsync(id))
                 .ReturnsAsync(new Reservation() { ReservationId = id });
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.GetReservationByIdAsync(id);
             //Assert
@@ -62,10 +62,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int id = 1;
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FindByIdAsync(id))
                 .ReturnsAsync(null as Reservation);
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.GetReservationByIdAsync(id);
             //Assert
@@ -77,10 +77,10 @@ namespace CarRental.Tests.Services
         {
             Reservation reservation = new Reservation() { ReservationId = 1 };
             ReservationCreateDto reservationDto = new ReservationCreateDto();
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FindByIdAsync(0))
                 .ReturnsAsync(reservation);
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.CreateReservationAsync(reservationDto);
             //Assert
@@ -107,10 +107,10 @@ namespace CarRental.Tests.Services
                 IsFinished = false
             };
 
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FindByIdAsync(reservationDto.ReservationId))
                 .ReturnsAsync(reservation);
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.UpdateReservationAsync(reservationDto);
             //Assert
@@ -126,10 +126,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             var reservationDto = new ReservationCreateDto() { };
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
                 .ReturnsAsync(new List<Reservation>() { });
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.ReservationCanBeCreatedAsync(reservationDto);
             //Assert
@@ -143,10 +143,10 @@ namespace CarRental.Tests.Services
             //Arrange
             var reservationDto = new ReservationCreateDto() { };
             var reservations = new List<Reservation>() { new Reservation() };
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
                 .ReturnsAsync(reservations);
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.ReservationCanBeCreatedAsync(reservationDto);
             //Assert
@@ -159,10 +159,10 @@ namespace CarRental.Tests.Services
             //Arrange
             var reservationDto = new ReservationUpdateDto() { };
             var reservations = new List<Reservation>() { };
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
                 .ReturnsAsync(reservations);
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.ReservationCanBeUpdatedAsync(reservationDto);
             //Assert
@@ -175,10 +175,10 @@ namespace CarRental.Tests.Services
             //Arrange
             var reservationDto = new ReservationUpdateDto() { ReservationId = 1 };
             var reservations = new List<Reservation>() { new Reservation() { ReservationId = 1 } };
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
                 .ReturnsAsync(reservations);
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.ReservationCanBeUpdatedAsync(reservationDto);
             //Assert
@@ -191,10 +191,10 @@ namespace CarRental.Tests.Services
             //Arrange
             var reservationDto = new ReservationUpdateDto() { };
             var reservations = new List<Reservation>() { new Reservation(), new Reservation() };
-            mockRepository
+            mockReservationRepository
                 .Setup(p => p.FilterReservationsAsync(It.IsAny<Reservation>()))
                 .ReturnsAsync(reservations);
-            var service = new ReservationService(mockRepository.Object, mapper);
+            var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.ReservationCanBeUpdatedAsync(reservationDto);
             //Assert

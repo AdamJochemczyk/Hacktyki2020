@@ -1,9 +1,6 @@
-﻿using CarRental.Services.Formatters;
-using CarRental.Services.Models.Reservation;
+﻿using CarRental.Services.Models.Reservation;
 using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarRental.Services.Validators
 {

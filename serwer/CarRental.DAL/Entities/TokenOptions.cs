@@ -3,7 +3,7 @@ using System.Text;
 
 namespace CarRental.DAL.Entities
 {
-   public class TokenOptions
+    public class TokenOptions
     {
         public const string ISSUER = "MyAuthServer";
         public const string AUDIENCE = "MyAuthClient";

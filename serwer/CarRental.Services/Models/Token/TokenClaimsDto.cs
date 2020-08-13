@@ -1,6 +1,4 @@
-﻿
-
-namespace CarRental.Services.Models.Token
+﻿namespace CarRental.Services.Models.Token
 {
     public class TokenClaimsDto
     {

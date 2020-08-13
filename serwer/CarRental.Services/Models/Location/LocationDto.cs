@@ -1,5 +1,4 @@
-﻿
-namespace CarRental.Services.Models.Location
+﻿namespace CarRental.Services.Models.Location
 {
     public class LocationDto
     {

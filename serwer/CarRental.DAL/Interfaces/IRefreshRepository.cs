@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CarRental.DAL.Interfaces
 {
-   public interface IRefreshRepository:IRepositoryBase<RefreshToken>
+    public interface IRefreshRepository:IRepositoryBase<RefreshToken>
     {
         public  Task<RefreshToken> FindByRefreshToken(string refresh);
     }

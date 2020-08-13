@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace CarRental.Services.Interfaces
 {
-   public interface IAuthorizationService
+    public interface IAuthorizationService
     {
         Task<CreateUserDto> RegistrationUserAsync(CreateUserDto createUserDto);
         Task<bool> SetPasswordAsync(UpdateUserPasswordDto updateUserPassword);

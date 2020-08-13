@@ -12,11 +12,11 @@ namespace CarRental.Tests.Services
 {
     public class CarServiceTest
     {
-        private readonly Mock<ICarRepository> mockRepository;
+        private readonly Mock<ICarRepository> mockCarRepository;
         private readonly IMapper mapper;
         public CarServiceTest()
         {
-            mockRepository = new Mock<ICarRepository>();
+            mockCarRepository = new Mock<ICarRepository>();
             var config = new MapperConfiguration(opts =>
             {
                 opts.CreateMap<Car, CarDto>();
@@ -29,10 +29,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             List<Car> cars = new List<Car>() { new Car(), new Car() };
-            mockRepository
+            mockCarRepository
                 .Setup(p => p.FindAllAsync())
                 .ReturnsAsync(cars);
-            var service = new CarService(mockRepository.Object, mapper);
+            var service = new CarService(mockCarRepository.Object, mapper);
             //Act
             var result = await service.GetAllCarsAsync();
             //Assert
@@ -45,10 +45,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int id = 1;
-            mockRepository
+            mockCarRepository
                 .Setup(p => p.FindByIdAsync(id))
                 .ReturnsAsync(new Car() { CarId = id });
-            var service = new CarService(mockRepository.Object, mapper);
+            var service = new CarService(mockCarRepository.Object, mapper);
             //Act
             var result = await service.GetCarByIdAsync(id);
             //Assert
@@ -61,10 +61,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int id = 1;
-            mockRepository
+            mockCarRepository
                 .Setup(p => p.FindByIdAsync(id))
                 .ReturnsAsync(null as Car);
-            var service = new CarService(mockRepository.Object, mapper);
+            var service = new CarService(mockCarRepository.Object, mapper);
             //Act
             var result = await service.GetCarByIdAsync(id);
             //Assert
@@ -77,10 +77,10 @@ namespace CarRental.Tests.Services
             //Arrange
             Car car = new Car() { CarId = 1 };
             CarCreateDto carDto = new CarCreateDto();
-            mockRepository
+            mockCarRepository
                 .Setup(p => p.FindByIdAsync(0))
                 .ReturnsAsync(car);
-            var service = new CarService(mockRepository.Object, mapper);
+            var service = new CarService(mockCarRepository.Object, mapper);
             //Act
             var result = await service.CreateCarAsync(carDto);
             //Assert
@@ -94,10 +94,10 @@ namespace CarRental.Tests.Services
             CarDto carDto = new CarDto() { CarId = 1, Brand = "KIA", Model = "Seed" };
             Car car = new Car() { CarId = 1, Brand = "KIHA", Model = "Sweet" };
 
-            mockRepository
+            mockCarRepository
                 .Setup(p => p.FindByIdAsync(carDto.CarId))
                 .ReturnsAsync(car);
-            var service = new CarService(mockRepository.Object, mapper);
+            var service = new CarService(mockCarRepository.Object, mapper);
             //Act
             var result = await service.UpdateCarAsync(carDto);
             //Assert

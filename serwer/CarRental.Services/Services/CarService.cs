@@ -12,12 +12,13 @@ namespace CarRental.Services.Services
 {
     public class CarService : ICarService
     {
-        private readonly ICarRepository repository;
+        private readonly ICarRepository carRepository;
         private readonly IMapper mapper;
-        public CarService(ICarRepository repository,
+        public CarService(
+            ICarRepository carRepository,
             IMapper mapper)
         {
-            this.repository = repository;
+            this.carRepository = carRepository;
             this.mapper = mapper;
         }
 
@@ -35,46 +36,46 @@ namespace CarRental.Services.Services
                 ImagePath = carDto.ImagePath,
                 DateCreated = DateTime.Now
             };
-            repository.Create(car);
-            await repository.SaveChangesAsync();
-            var entity = await repository.FindByIdAsync(car.CarId);
-            return mapper.Map<CarDto>(entity);
+            carRepository.Create(car);
+            await carRepository.SaveChangesAsync();
+            car = await carRepository.FindByIdAsync(car.CarId);
+            return mapper.Map<CarDto>(car);
         }
 
-        public async Task DeleteCar(int id)
+        public async Task DeleteCarAsync(int id)
         {
-            var entity = await repository.FindByIdAsync(id);
-            entity.IsDeleted = true;
-            await repository.SaveChangesAsync();
+            var car = await carRepository.FindByIdAsync(id);
+            car.IsDeleted = true;
+            await carRepository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<CarDto>> GetAllCarsAsync()
         {
-            var entities = await repository.FindAllAsync();
-            return mapper.Map<IEnumerable<CarDto>>(entities);
+            var cars = await carRepository.FindAllAsync();
+            return mapper.Map<IEnumerable<CarDto>>(cars);
         }
 
         public async Task<CarDto> GetCarByIdAsync(int id)
         {
-            var entity = await repository.FindByIdAsync(id);
-            return mapper.Map<CarDto>(entity);
+            var car = await carRepository.FindByIdAsync(id);
+            return mapper.Map<CarDto>(car);
         }
 
         public async Task<CarDto> UpdateCarAsync(CarDto carDto)
         {
-            var car = await repository.FindByIdAsync(carDto.CarId);
+            var car = await carRepository.FindByIdAsync(carDto.CarId);
             car.Update(carDto.Brand, carDto.Model, carDto.RegistrationNumber, carDto.TypeOfCar, carDto.NumberOfDoor,
             carDto.NumberOfSits, carDto.YearOfProduction, carDto.ImagePath);
-            repository.Update(car);
-            await repository.SaveChangesAsync();
-            var entity = await repository.FindByIdAsync(carDto.CarId);
-            return mapper.Map<CarDto>(entity);
+            carRepository.Update(car);
+            await carRepository.SaveChangesAsync();
+            car = await carRepository.FindByIdAsync(carDto.CarId);
+            return mapper.Map<CarDto>(car);
         }
 
         public async Task<IEnumerable<CarDto>> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
         {
-            var reservedCars = await repository.GetReservedCarsByDates(rentalDate, returnDate);
-            var allCars = await repository.FindAllAsync();
+            var reservedCars = await carRepository.GetReservedCarsByDates(rentalDate, returnDate);
+            var allCars = await carRepository.FindAllAsync();
             List<Car> availableCars = allCars.Except(reservedCars).ToList();
             return mapper.Map<IEnumerable<CarDto>>(availableCars);
         }

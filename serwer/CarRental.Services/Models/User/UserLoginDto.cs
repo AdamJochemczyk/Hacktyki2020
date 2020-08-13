@@ -1,10 +1,9 @@
-﻿
-namespace CarRental.Services.Models.User
+﻿namespace CarRental.Services.Models.User
 {
-   public class UserLoginDto
+    public class UserLoginDto
     {
         public string Email { get; set; }
-        public string EncodePassword { get; set; }
+        public string Password { get; set; }
         public int RoleOfWorker { get; set; }
     }
 }
