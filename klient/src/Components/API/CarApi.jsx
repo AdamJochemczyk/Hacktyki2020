@@ -32,7 +32,7 @@ export default class CarApi extends Api{
 
       async updateCar(id, params) {
         try {
-            await this.baseAxios.put('/cars/'+id,params)
+            await this.baseAxios.patch('/cars/'+id,params)
           Swal.fire("Good job!", "You successfully edited a car!", "success");
         } catch (error) {
           Swal.fire("Oops...", "Something went wrong", "error");

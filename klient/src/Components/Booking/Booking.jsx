@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Col, Row, Button, Table, Container } from "reactstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import moment from "moment";
@@ -9,18 +9,14 @@ export default function Booking({ history }) {
   const {
     validationSchema,
     checkavailable,
+    data,
+    ref,
+    initialValues,
     freeTerms,
     DEFAULT_IMAGE,
     onSubmit,
     checkAvilable,
-  } = useBooking();
-  let data = history.location.state;
-  sessionStorage.setItem("carID", data.car);
-  let initialValues = {
-    rentaldate: data.startdate,
-    returndate: data.enddate,
-  };
-  const ref = useRef(null);
+  } = useBooking(history.location.state);
 
   return (
     <Container fluid>

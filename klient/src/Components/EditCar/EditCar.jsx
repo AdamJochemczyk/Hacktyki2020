@@ -5,25 +5,16 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import useEditCar from "./EditCar.utils";
 
 export default function EditCar({ history }) {
-  const id = history.location.state;
-  const isAddMode = !id;
+
   const {
     car,
+    id,
     initialValues,
     validationSchema,
-    createCar,
-    updateCar,
+    isAddMode,
     fetchCar,
-  } = useEditCar();
-
-  function onSubmit(fields) {
-    if (isAddMode) {
-      createCar(fields);
-      document.getElementById("carUpsert").reset();
-    } else {
-      updateCar(id, fields);
-    }
-  }
+    onSubmit,
+  } = useEditCar(history.location.state);
 
   useEffect(() => {
     if (!isAddMode) {
@@ -40,7 +31,7 @@ export default function EditCar({ history }) {
     >
       {({ errors, touched }) => {
         return (
-          <Form id="carUpsert" className="upsertforms">
+          <Form className="upsertforms">
             <h1>{isAddMode ? "Add Car" : "Edit Car"}</h1>
             <Row>
               <Col>

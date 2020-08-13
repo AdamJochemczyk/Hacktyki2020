@@ -19,6 +19,7 @@ export default class AuthorizationApi{
       return response.data;
     } catch (error) {
       if (error.response) {
+        console.log(error.response)
         Swal.fire("Oops...", error.response.data, "error");
       }
     }

@@ -12,27 +12,11 @@ export default function App({history}) {
     center,
     options,
     onMapLoad,
+    onMapClick,
     marker,
     fetchMarker,
     setMarker
-  } = useMap();
-
-  const onMapClick = useCallback((e) => {
-
-    let props={
-      latitude: e.latLng.lat(),
-      longitude: e.latLng.lng(),
-      reservationid: history.location.state
-    }
-
-    let api=new LocationApi()
-    api.setLocalization(props)
-
-    setMarker({
-      latitude: e.latLng.lat(),
-      longitude: e.latLng.lng(),
-    });
-  }, []);
+  } = useMap(history.location.state);
 
   useEffect(()=>{
     fetchMarker(history.location.state)

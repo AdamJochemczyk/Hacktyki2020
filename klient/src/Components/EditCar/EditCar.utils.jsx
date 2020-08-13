@@ -4,8 +4,11 @@ import * as Yup from "yup";
 import moment from "moment";
 import Api from "../API/CarApi";
 
-export default function useEditCar() {
+export default function useEditCar(props) {
   let redirect = useHistory();
+
+  const id = props;
+  const isAddMode = !id;
   
   const [car, setCar] = useState();
   let initialValues = {
@@ -40,6 +43,14 @@ export default function useEditCar() {
       .min(1950)
       .max(moment().format("YYYY")),
   });
+
+  function onSubmit(fields) {
+    if (isAddMode) {
+      createCar(fields);
+    } else {
+      updateCar(id, fields);
+    }
+  }
 
   function createCar(fields) {
     try{
@@ -78,8 +89,9 @@ export default function useEditCar() {
     initialValues,
     validationSchema,
     car,
-    createCar,
-    updateCar,
+    id,
+    isAddMode,
     fetchCar,
+    onSubmit
   };
 }

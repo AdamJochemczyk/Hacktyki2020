@@ -59,7 +59,7 @@ export default class ReservationsApi extends Api{
   {
     try{
       await this.baseAxios.delete('/reservations/'+reservationid)
-      Swal.fire("Success", "You successfully finieshed reservation", "success");
+      Swal.fire("Success", "You successfully finished reservation", "success");
     }catch (error){
       console.log(error)
     }

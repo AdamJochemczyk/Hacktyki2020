@@ -4,8 +4,9 @@ import { useHistory} from "react-router-dom"
 import Api from "../API/FaultApi"
 import Swal from "sweetalert2"
 
-const useUserReportFault = ()=>{
+const useUserReportFault = (props)=>{
 
+  const data=props;
     let redirect = useHistory()
   const initialValues={
     description: ''
@@ -17,6 +18,7 @@ const useUserReportFault = ()=>{
     description: Yup.string()
       .required("Required"),
   });
+  
   async function onSubmit(fields, carId) {
     setIsSended(true)
     fields.carId=carId;
@@ -25,7 +27,7 @@ const useUserReportFault = ()=>{
         let api=new Api()
         await api.createReport(fields)
         setIsSended(false)
-        Swal.fire("Thank you!", 'You succesfully reported problem!', 'success')
+        Swal.fire("Thank you!", 'You successfully reported problem!', 'success')
         redirect.push('/')
       }
       catch(error){
@@ -35,7 +37,7 @@ const useUserReportFault = ()=>{
       }
   }
 
-    return {initialValues, isSended, validationSchema, onSubmit}
+    return {initialValues, isSended, data, validationSchema, onSubmit}
 }
 
 export default useUserReportFault

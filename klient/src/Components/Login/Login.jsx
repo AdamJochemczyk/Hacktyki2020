@@ -44,17 +44,17 @@ export default function Login() {
 
                 <label>Password</label>
                 <Field
-                  name="encodePassword"
+                  name="password"
                   type="password"
                   className={
                     "form-control" +
-                    (errors.encodePassword && touched.encodePassword
+                    (errors.password && touched.password
                       ? " is-invalid"
                       : "")
                   }
                 />
                 <ErrorMessage
-                  name="encodePassword"
+                  name="password"
                   component="div"
                   className="invalid-feedback"
                 />

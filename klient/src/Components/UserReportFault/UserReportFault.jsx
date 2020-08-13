@@ -6,9 +6,8 @@ import Loader from "react-loader-spinner"
 import useUserReportFault from "./UserReportFault.utils"
 
 export default function UserReportFault({history}){
-  let data = history.location.state;
 
-  const {initialValues, isSended, validationSchema, onSubmit}=useUserReportFault()
+  const {initialValues, isSended, data, validationSchema, onSubmit}=useUserReportFault(history.location.state)
 
   return (
     <Formik

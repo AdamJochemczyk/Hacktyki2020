@@ -4,6 +4,7 @@ import Api from './API'
 export default class FaultApi extends Api{
 
   async createReport(fields){
+      console.log("FaultApi -> createReport -> fields", fields)
       try{
         await this.baseAxios.post('/defects',fields)
       }catch(error){
@@ -19,16 +20,16 @@ export default class FaultApi extends Api{
         console.log(error)
     }
   }
-  async updateStatus(fields) {
+  async updateStatus(fields, id) {
     try {
-      await this.baseAxios.put('/defects', fields);
+      await this.baseAxios.patch('/defects/'+id, fields);
     } catch (error) {
       console.log(error);
     }
   }
-  async deleteFault(fields) {
+  async deleteFault(fields, id) {
     try {
-      await this.baseAxios.put('/defects', fields);
+      await this.baseAxios.patch('/defects/'+id, fields);
     } catch (error) {
       console.log(error);
     }
