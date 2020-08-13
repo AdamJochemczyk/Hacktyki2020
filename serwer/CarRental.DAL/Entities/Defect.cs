@@ -16,13 +16,14 @@ namespace CarRental.DAL.Entities
         public Status Status { get; set; }
         public Car Car { get; set; }
         public User User { get; set; }
-        public Defect(int userId ,int carId ,string name,string surname , string registrationNumber,
+        public Defect(int userId ,int carId ,string name,string surname , string mobilenumber, string registrationNumber,
                                 string description,Status status)
         {
             UserId = userId;
             CarId = carId;
             Name = name;
             Surname = surname;
+            PhoneNumber = mobilenumber;
             RegistrationNumber =registrationNumber ;
             Description = description;
             DateOfReport = DateTime.Now;
