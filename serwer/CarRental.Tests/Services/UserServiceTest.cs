@@ -12,28 +12,28 @@ namespace CarRental.Tests.Services
 {
     public class UserServiceTest
     {
-        private readonly Mock<IUserRepository> _mockRepository;
-        private readonly IMapper _mapper;
+        private readonly Mock<IUserRepository> mockUsersRepository;
+        private readonly IMapper mapper;
         public UserServiceTest()
         {
-            _mockRepository = new Mock<IUserRepository>();
+            this.mockUsersRepository = new Mock<IUserRepository>();
             var config = new MapperConfiguration(opts =>
             {
                 opts.CreateMap<User, UsersDto>();
             });
-            _mapper = config.CreateMapper();
+            mapper = config.CreateMapper();
         }
         [Fact]
         public async Task GetAllUsers_ReturnAllUser()
         {
             //Arrange
             List<User> users = new List<User> { new User(), new User() };
-            _mockRepository
+            this.mockUsersRepository
                 .Setup(p => p.FindAllUsers())
                 .ReturnsAsync(users);
-            var services = new UsersService(_mockRepository.Object, _mapper);
+            var services = new UsersService(this.mockUsersRepository.Object, mapper);
             //Act
-            var result = await services.GetAllUsers();
+            var result = await services.GetAllUsersAsync();
             //Assert
             var assertResult = Assert.IsType<List<UsersDto>>(result);
             Assert.Equal(users.Count, assertResult.Count);
@@ -44,12 +44,12 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int id = 1;
-            _mockRepository
+            this.mockUsersRepository
                 .Setup(p => p.FindByIdDetails(id))
                 .ReturnsAsync(new User { UserId = 1 });
-            var services = new UsersService(_mockRepository.Object, _mapper);
+            var services = new UsersService(this.mockUsersRepository.Object, mapper);
             //Act
-            var result = await services.GetUser(id);
+            var result = await services.GetUserAsync(id);
             //Assert
             var assertResult = Assert.IsType<UsersDto>(result);
             Assert.Equal(id, assertResult.UserId);
@@ -60,12 +60,12 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int id = 1;
-            _mockRepository
-                .Setup(p => p.FindByIdDetails(id))
+            this.mockUsersRepository
+               .Setup(p => p.FindByIdDetails(id))
                 .ReturnsAsync((User)null);
-            var services = new UsersService(_mockRepository.Object, _mapper);
+            var services = new UsersService(this.mockUsersRepository.Object, mapper);
             //Act
-            var result = await services.GetUser(id);
+            var result = await services.GetUserAsync(id);
             //Assert
             Assert.Null(result);
         }
@@ -92,18 +92,18 @@ namespace CarRental.Tests.Services
                 MobileNumber = "444444444",
                 IdentificationNumber = "123123"
             };
-            _mockRepository
-                .Setup(p => p.FindByIdDetails(1))
+            this.mockUsersRepository
+               .Setup(p => p.FindByIdDetails(1))
                 .ReturnsAsync(user);
-            _mockRepository
-                .Setup(u => u.Update(user))
+            this.mockUsersRepository
+               .Setup(u => u.Update(user))
                 .Verifiable();
-            _mockRepository
-                .Setup(u => u.SaveChangesAsync())
+            this.mockUsersRepository
+               .Setup(u => u.SaveChangesAsync())
                 .Verifiable();
-            var services = new UsersService(_mockRepository.Object, _mapper);
+            var services = new UsersService(this.mockUsersRepository.Object, mapper);
             //Act
-            var result = await services.UpdateUser(usersDto);
+            var result = await services.UpdateUserAsync(usersDto);
             Assert.Equal(result.UserId, usersDto.UserId);
             Assert.Equal(result.FirstName, usersDto.FirstName);
             Assert.Equal(result.LastName, usersDto.LastName);
@@ -124,12 +124,12 @@ namespace CarRental.Tests.Services
                 MobileNumber = "123123123",
                 IdentificationNumber = "123123"
             };
-            _mockRepository
-                .Setup(p => p.FindByIdDetails(usersDto.UserId))
+            this.mockUsersRepository
+               .Setup(p => p.FindByIdDetails(usersDto.UserId))
                 .ReturnsAsync(null as User);
-            var services = new UsersService(_mockRepository.Object, _mapper);
+            var services = new UsersService(this.mockUsersRepository.Object, mapper);
             //Act
-            var result = await services.UpdateUser(usersDto);
+            var result = await services.UpdateUserAsync(usersDto);
             //Assert
             Assert.False(result.isValid);
         }
@@ -139,19 +139,19 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int id = 2;
-            _mockRepository
-                .Setup(p => p.FindByIdAsync(id))
+            this.mockUsersRepository
+               .Setup(p => p.FindByIdAsync(id))
                 .ReturnsAsync(new User()
                 {
                     UserId = 2,
                     FirstName = "Bohdan"
                 });
-            _mockRepository
-              .Setup(s => s.SaveChangesAsync())
+            this.mockUsersRepository
+             .Setup(s => s.SaveChangesAsync())
               .Verifiable();
-            var services = new UsersService(_mockRepository.Object, _mapper);
+            var services = new UsersService(this.mockUsersRepository.Object, mapper);
             //Act
-            var result = await services.DeleteUser(id);
+            var result = await services.DeleteUserAsync(id);
             //Assert
             Assert.True(result);
         }
@@ -161,12 +161,12 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int id = 2;
-            _mockRepository
-                .Setup(p => p.FindByIdAsync(id))
+            this.mockUsersRepository
+               .Setup(p => p.FindByIdAsync(id))
                 .ReturnsAsync(null as User);
-            var services = new UsersService(_mockRepository.Object, _mapper);
+            var services = new UsersService(this.mockUsersRepository.Object, mapper);
             //Act
-            var result = await services.DeleteUser(id);
+            var result = await services.DeleteUserAsync(id);
             //Assert
             Assert.False(result);
         }

@@ -14,38 +14,28 @@ namespace CarRental.Services.Services
 
     public class AuthorizationService : IAuthorizationService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IEmailServices _email;
-        private readonly IMapper _mapper;
-        private readonly ITokenGeneratorService _token;
-        private readonly IRefreshRepository _refreshRepository;
+        private readonly IUserRepository userRepository;
+        private readonly IEmailServices email;
+        private readonly IMapper mapper;
+        private readonly ITokenGeneratorService token;
+        private readonly IRefreshRepository refreshRepository;
         public AuthorizationService(IUserRepository userRepository,
             IEmailServices email,
             IMapper mapper,
             ITokenGeneratorService token,
             IRefreshRepository refreshRepository)
         {
-            _userRepository = userRepository;
-            _email = email;
-            _mapper = mapper;
-            _token = token;
-            _refreshRepository = refreshRepository;
+            this.userRepository = userRepository;
+            this.email = email;
+            this.mapper = mapper;
+            this.token = token;
+            this.refreshRepository = refreshRepository;
         }
 
         public static HashSalt GenerateSaltedHash(int size, string password)
         {
             var passwordHasher = new PasswordHasher();
-            return passwordHasher.GenerateSaltedHash(size, password);
-            //var saltBytes = new byte[size];
-            //var provider = new RNGCryptoServiceProvider();
-            //provider.GetNonZeroBytes(saltBytes);
-            //var salt = Convert.ToBase64String(saltBytes);
-
-            //var rfc2898DeriveBytes = new Rfc2898DeriveBytes(password, saltBytes, 10000);
-            //var hashPassword = Convert.ToBase64String(rfc2898DeriveBytes.GetBytes(256));
-
-            //HashSaltDto hashSalt = new HashSaltDto { Hash = hashPassword, Salt = salt };
-            //return hashSalt;
+            return passwordHasher.GenerateSaltedHash(size, password);         
         }
 
         public static bool VerifyPassword(string enteredPassword, string storedHash, string storedSalt)
@@ -59,54 +49,52 @@ namespace CarRental.Services.Services
         {
             var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.IdentificationNumber,
                 createUserDto.Email, createUserDto.MobileNumber);
-            var check_user = await _userRepository.FindByLogin(createUserDto.Email);
+            var check_user = await userRepository.FindByLogin(createUserDto.Email);
             if (check_user == null)
             {
-                _userRepository.Create(new_user);
-                await _userRepository.SaveChangesAsync();
+                userRepository.Create(new_user);
+                await userRepository.SaveChangesAsync();
                 createUserDto.CodeOfVerification = new_user.CodeOfVerification;
-                _email.EmailAfterRegistration(createUserDto);
+                email.EmailAfterRegistration(createUserDto);
             }
             else
                 return createUserDto;
-            return _mapper.Map<CreateUserDto>(new_user);
+            return mapper.Map<CreateUserDto>(new_user);
         }
 
-        public async Task<bool> SetPassword(UpdateUserPasswordDto updateUserPassword)
+        public async Task<bool> SetPasswordAsync(UpdateUserPasswordDto updateUserPassword)
         {
-            var user = await _userRepository.FindByCodeOfVerification(updateUserPassword.CodeOfVerification);
+            var user = await userRepository.FindByCodeOfVerification(updateUserPassword.CodeOfVerification);
             var saltHashPassword = GenerateSaltedHash(16, updateUserPassword.EncodePassword);
             user.SetPassword(saltHashPassword.Hash, saltHashPassword.Salt);
-            _userRepository.Update(user);
-            await _userRepository.SaveChangesAsync();
+            userRepository.Update(user);
+            await userRepository.SaveChangesAsync();
             return true;
         }
 
-        public async Task<TokenDto> SignIn(UserLoginDto userLoginDto)
+        public async Task<TokenDto> SignInAsync(UserLoginDto userLoginDto)
         {
-            var user = await _userRepository.FindByLogin(userLoginDto.Email);
+            var user = await userRepository.FindByLogin(userLoginDto.Email);
+            TokenDto tokenDto = new TokenDto();
             if (user == null)
             {
-                TokenDto tokenError = new TokenDto();
-                tokenError.Code = 401;
-                return tokenError;
+                tokenDto.Code = 401;
+                return tokenDto;
             }
             if (userLoginDto.Email != user.Email || !VerifyPassword(userLoginDto.Password, user.HashPassword, user.Salt))
             {
-                TokenDto tokenError = new TokenDto();
-                tokenError.Code = 401;
-                return tokenError;
+                tokenDto.Code = 401;
+                return tokenDto;
             }
             //Return two tokens Access, Refresh
-            TokenDto token = new TokenDto();
-            token.Code = 200;
-            token.AccessToken = _token.GenerateToken(user);
-            token.RefreshToken = _token.RefreshGenerateToken();
+            tokenDto.Code = 200;
+            tokenDto.AccessToken = token.GenerateToken(user);
+            tokenDto.RefreshToken = token.RefreshGenerateToken();
             //Save To database Refresh token 
-            RefreshToken refreshToken = new RefreshToken(token.RefreshToken, user.UserId, true);
-            _refreshRepository.Create(refreshToken);
-            await _refreshRepository.SaveChangesAsync();
-            return token;
+            RefreshToken refreshToken = new RefreshToken(tokenDto.RefreshToken, user.UserId, true);
+            refreshRepository.Create(refreshToken);
+            await refreshRepository.SaveChangesAsync();
+            return tokenDto;
         }
     }
 }

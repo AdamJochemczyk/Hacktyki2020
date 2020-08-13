@@ -11,27 +11,25 @@ namespace CarRental.Tests.Services
 {
     public class TokenServiceTest
     {
-        private readonly Mock<IRefreshRepository> _refreshRepository;
-        private readonly Mock<IUserRepository> _userRepository;
-
+        private readonly Mock<IRefreshRepository> mockRefreshRepository;
+        private readonly Mock<IUserRepository> mockUsersRepository;
         public TokenServiceTest()
         {
-            _refreshRepository = new Mock<IRefreshRepository>();
-            _userRepository = new Mock<IUserRepository>();
+            mockRefreshRepository = new Mock<IRefreshRepository>();
+            mockUsersRepository = new Mock<IUserRepository>();
         }
-
         [Fact]
         public async Task CheckAccessRefreshToken_RefreshTokenBad_ReturnFalse()
         {
             //Arrange
             string refresh = "PeaIvTHLbjgGRd2lQAXhLK85TkGI4En9GJ7mHThT8DmyzWA/C4y8aOKqqYXUqxL3qxdPih2WhB2YQ2tqZZJG7hDavGdLgHoW8ZGAVc84MqdDTaDOr0gHZVJgvPyp5Wl7FPZP7q3fh7MYRfTaTzMZSqooADcErb4CdgyEFrlAb8o=";
-            _refreshRepository
+            mockRefreshRepository
                 .Setup(p => p.FindByRefreshToken(refresh))
                 .ReturnsAsync(null as RefreshToken);
             var tokenGeneratorService = new Mock<TokenGeneratorService>();
-            var services = new TokenService(_refreshRepository.Object, _userRepository.Object, tokenGeneratorService.Object);
+            var services = new TokenService(mockRefreshRepository.Object, mockUsersRepository.Object, tokenGeneratorService.Object);
             //Act
-            var result = await services.CheckAccessRefreshToken(refresh);
+            var result = await services.CheckAccessRefreshTokenAsync(refresh);
             //Assert
             Assert.False(result.CheckRefreshToken);
         }
@@ -41,13 +39,13 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             string refresh = "PeaIvTHLbjgGRd2lQAXhLK85TkGI4En9GJ7mHThT8DmyzWA/C4y8aOKqqYXUqxL3qxdPih2WhB2YQ2tqZZJG7hDavGdLgHoW8ZGAVc84MqdDTaDOr0gHZVJgvPyp5Wl7FPZP7q3fh7MYRfTaTzMZSqooADcErb4CdgyEFrlAb8o=";
-            _refreshRepository
+            mockRefreshRepository
                 .Setup(p => p.FindByRefreshToken(refresh))
                 .ReturnsAsync(new RefreshToken());
             var tokenGeneratorService = new Mock<TokenGeneratorService>();
-            var services = new TokenService(_refreshRepository.Object, _userRepository.Object, tokenGeneratorService.Object);
+            var services = new TokenService(mockRefreshRepository.Object, mockUsersRepository.Object, tokenGeneratorService.Object);
             //Act
-            var result = await services.CheckAccessRefreshToken(refresh);
+            var result = await services.CheckAccessRefreshTokenAsync(refresh);
             //Assert
             Assert.False(result.CheckRefreshToken);
         }
@@ -57,20 +55,20 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             string refresh = "PeaIvTHLbjgGRd2lQAXhLK85TkGI4En9GJ7mHThT8DmyzWA/C4y8aOKqqYXUqxL3qxdPih2WhB2YQ2tqZZJG7hDavGdLgHoW8ZGAVc84MqdDTaDOr0gHZVJgvPyp5Wl7FPZP7q3fh7MYRfTaTzMZSqooADcErb4CdgyEFrlAb8o=";
-            _refreshRepository
+            mockRefreshRepository
                 .Setup(p => p.FindByRefreshToken(refresh))
                   .ReturnsAsync(new RefreshToken()
                   {
                       DateOfStart = DateTime.Now,
                       DateOfEnd = DateTime.Now.AddDays(20)
                   });
-            _refreshRepository
+            mockRefreshRepository
                 .Setup(p => p.SaveChangesAsync())
                 .Verifiable();
             var tokenGeneratorService = new Mock<TokenGeneratorService>();
-            var services = new TokenService(_refreshRepository.Object, _userRepository.Object, tokenGeneratorService.Object);
+            var services = new TokenService(mockRefreshRepository.Object, mockUsersRepository.Object, tokenGeneratorService.Object);
             //Act
-            var result = await services.CheckAccessRefreshToken(refresh);
+            var result = await services.CheckAccessRefreshTokenAsync(refresh);
             //Assert
             Assert.True(result.CheckRefreshToken);
         }
@@ -81,7 +79,7 @@ namespace CarRental.Tests.Services
             {
                 UserId = 2
             };
-            _userRepository
+            mockUsersRepository
                 .Setup(p => p.FindByIdDetails(token.UserId))
                 .ReturnsAsync(new User()
                 {
@@ -91,9 +89,9 @@ namespace CarRental.Tests.Services
                     RoleOfUser = RoleOfWorker.Worker
                 });
             var tokenGeneratorService = new Mock<TokenGeneratorService>();
-            var services = new TokenService(_refreshRepository.Object, _userRepository.Object, tokenGeneratorService.Object);
+            var services = new TokenService(mockRefreshRepository.Object, mockUsersRepository.Object, tokenGeneratorService.Object);
             //Act
-            var result = await services.GenerateRefreshToken(token);
+            var result = await services.GenerateRefreshTokenAsync(token);
             //Assert
             Assert.Equal(200, result.Code);
         }
@@ -109,16 +107,16 @@ namespace CarRental.Tests.Services
                 DateOfStart = DateTime.Now,
                 DateOfEnd = DateTime.Now.AddDays(100)
             };
-            _refreshRepository
+            mockRefreshRepository
                 .Setup(p=>p.Create(refresh))
                 .Verifiable();
-            _refreshRepository
+            mockRefreshRepository
                 .Setup(p => p.SaveChangesAsync())
                 .Verifiable();
             var tokenGeneratorService = new Mock<TokenGeneratorService>();
-            var services = new TokenService(_refreshRepository.Object, _userRepository.Object, tokenGeneratorService.Object);
+            var services = new TokenService(mockRefreshRepository.Object, mockUsersRepository.Object, tokenGeneratorService.Object);
             //Act
-            var result  = await services.SaveRefreshToken(refresh.UserId, refresh.Refresh, refresh.IsValid);
+            var result  = await services.SaveRefreshTokenAsync(refresh.UserId, refresh.Refresh, refresh.IsValid);
             //Assert
             Assert.NotNull(result);
         }

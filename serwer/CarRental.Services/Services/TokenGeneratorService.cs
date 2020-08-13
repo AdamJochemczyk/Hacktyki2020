@@ -24,8 +24,7 @@ namespace CarRental.Services.Services
                   issuer: TokenOptions.ISSUER,
                   audience: TokenOptions.AUDIENCE,
                   claims: claims,
-               //   expires: DateTime.Now.AddMinutes(TokenOptions.LIFETIME),
-                  expires: DateTime.Now.AddMinutes(1),
+                  expires: DateTime.UtcNow.AddMinutes(TokenOptions.LIFETIME),
                   signingCredentials: new SigningCredentials(TokenOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return encodedJwt;

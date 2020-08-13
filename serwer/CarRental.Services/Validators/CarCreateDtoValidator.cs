@@ -1,7 +1,6 @@
 ﻿using CarRental.Services.Models.Car;
 using FluentValidation;
 using System;
-
 namespace CarRental.Services.Validators
 {
     public class CarCreateDtoValidator : AbstractValidator<CarCreateDto>

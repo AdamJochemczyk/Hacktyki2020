@@ -7,7 +7,7 @@ namespace CarRental.Services.Validators
     {
         public UpdateUserPasswordValidator()
         {
-            RuleFor(p => p.EncodePassword).NotNull().MinimumLength(8);
+            RuleFor(p => p).Must(p => p.EncodePassword.Length <= 8).WithMessage("Password so weakly");
             RuleFor(p => p).Must(p => p.ConfirmEncodePassword == p.EncodePassword).WithMessage("Paaword is not the same");
         }
     }

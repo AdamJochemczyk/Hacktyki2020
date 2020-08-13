@@ -10,40 +10,40 @@ namespace CarRental.Services.Services
 {
     public class DefectService : IDefectsService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly ICarRepository _carRepository;
-        private readonly IDefectRepository _defectRepository;
-        private readonly IMapper _mapper;
+        private readonly IUserRepository userRepository;
+        private readonly ICarRepository carRepository;
+        private readonly IDefectRepository defectRepository;
+        private readonly IMapper mapper;
 
         public DefectService(IUserRepository userRepository,
             ICarRepository carRepository,
             IMapper mapper,
             IDefectRepository defectRepository) 
         {
-            _userRepository = userRepository;
-            _carRepository = carRepository;
-            _defectRepository = defectRepository;
-            _mapper = mapper;
+            this.userRepository = userRepository;
+            this.carRepository = carRepository;
+            this.defectRepository = defectRepository;
+            this.mapper = mapper;
         }
 
         public async Task<IEnumerable<DefectDto>> GetAllDefectsAsync()
         {
-            var defects = await _defectRepository.FindAllDefects();
-            return _mapper.Map<IEnumerable<DefectDto>>(defects);
+            var defects = await defectRepository.FindAllDefects();
+            return mapper.Map<IEnumerable<DefectDto>>(defects);
         }
 
         public async Task<DefectDto> GetDefectAsync(int Id)
         {
-            var defect = await _defectRepository.FindDefectById(Id);
+            var defect = await defectRepository.FindDefectById(Id);
             if (defect == null)
                 return null;
-            return _mapper.Map<DefectDto>(defect);
+            return mapper.Map<DefectDto>(defect);
         }
 
         public async Task<DefectDto> RegisterDefectAsync(RegisterDefectDto registerDefectDto)
         {
-            var user = await _userRepository.FindByIdDetails(registerDefectDto.UserId);
-            var car = await _carRepository.FindByIdAsync(registerDefectDto.CarId);
+            var user = await userRepository.FindByIdDetails(registerDefectDto.UserId);
+            var car = await carRepository.FindByIdAsync(registerDefectDto.CarId);
             if (user == null || car == null) { return null; }
             Defect defect = new Defect(user.UserId,
                 car.CarId,
@@ -53,13 +53,13 @@ namespace CarRental.Services.Services
                 registerDefectDto.Description,
                 Status.Reported);
 
-            _defectRepository.Create(defect);
-            await _defectRepository.SaveChangesAsync();
-            return _mapper.Map<DefectDto>(defect);
+            defectRepository.Create(defect);
+            await defectRepository.SaveChangesAsync();
+            return mapper.Map<DefectDto>(defect);
         }
         public async Task<DefectDto> UpdateDefectAsync(UpdateDefectDto updateDefectDto)
         {
-            var defect = await _defectRepository.FindDefectById(updateDefectDto.Id);
+            var defect = await defectRepository.FindDefectById(updateDefectDto.Id);
             if (defect == null)
                 return new DefectDto()
                 {
@@ -68,8 +68,8 @@ namespace CarRental.Services.Services
                     DefectId = updateDefectDto.Id
                 };
             defect.Update(updateDefectDto.Description, updateDefectDto.Status);
-            await _defectRepository.SaveChangesAsync();
-            return _mapper.Map<DefectDto>(defect);
+            await defectRepository.SaveChangesAsync();
+            return mapper.Map<DefectDto>(defect);
         }
 
     }

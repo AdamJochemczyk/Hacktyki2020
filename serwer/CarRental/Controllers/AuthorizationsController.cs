@@ -1,4 +1,7 @@
 ﻿using CarRental.Services.Interfaces;
+﻿using System.Resources;
+using System.Threading.Tasks;
+using CarRental.API.Resources;
 using CarRental.Services.Models.User;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -11,35 +14,54 @@ namespace CarRental.API.Controllers
     public class AuthorizationsController : Controller
     {
         private readonly IAuthorizationService authorizationService;
+        public  ResourceManager resourcesManager;
         public AuthorizationsController(IAuthorizationService authorizationService)
         {
             this.authorizationService = authorizationService;
+            resourcesManager = new ResourceManager("CarRental.API.Resources.ResourceFile", typeof(ResourceFile).Assembly);
         }
 
+        /// <summary>
+        /// Register user 
+        /// Check if input email exciting in database
+        /// If yes then return BadRequest
+        /// else return Ok(User)
+        /// </summary>
+        /// <param name="createUserDto"></param>
+        /// <returns></returns>
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser(CreateUserDto createUserDto)
+        public async Task<IActionResult> RegisterUserAsync(CreateUserDto createUserDto)
         {
-            if (createUserDto == null) return NotFound("User is null");
+            if (createUserDto == null)
+            {
+                return NotFound(resourcesManager.GetString("UserNull"));
+            }
             var user = await authorizationService.RegistrationUserAsync(createUserDto);
-            if (user.UserId == 0)
-                return BadRequest("This Email already exists");
+            if (user == null)
+            {
+                return BadRequest(resourcesManager.GetString("EmailExiciting"));
+            }
             return Ok(user);
         }
 
         [HttpPost("signIn")]
-        public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
+        public async Task<IActionResult> SignInAsync(UserLoginDto userLoginDto)
         {
             var signInResult = await authorizationService.SignIn(userLoginDto);
             if (signInResult.Code == (int)HttpStatusCode.Unauthorized)
-                return Unauthorized("Email/Password not correct");
+            {
+                return Unauthorized(resourcesManager.GetString("EmailPassword"));
+            }
             return Ok(signInResult);
         }
 
         [HttpPut]
-        public async Task<IActionResult> SetPassword(UpdateUserPasswordDto updateUserPassword)
+        public async Task<IActionResult> SetPasswordAsync(UpdateUserPasswordDto updateUserPassword)
         {
-            if (!await authorizationService.SetPassword(updateUserPassword))
-                return NotFound("Code of Verification is bad");
+            if (!await authorizationService.SetPasswordAsync(updateUserPassword))
+            {
+                return NotFound(resourcesManager.GetString("CodeVerification"));
+            }
             return Ok();
         }
     }

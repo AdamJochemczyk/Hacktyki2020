@@ -5,6 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using CarRental.Services.Cryptography;
+using CarRental.DAL;
 
 namespace CarRental.Services
 {

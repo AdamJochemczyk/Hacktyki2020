@@ -9,46 +9,46 @@ namespace CarRental.Services.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly IRefreshRepository _refreshRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly ITokenGeneratorService _tokenGeneratorService;
+        private readonly IRefreshRepository refreshRepository;
+        private readonly IUserRepository userRepository;
+        private readonly ITokenGeneratorService tokenGeneratorService;
         public TokenService(IRefreshRepository refreshRepository,IUserRepository userRepository,
                                                    ITokenGeneratorService tokenGeneratorService)
         {
-            _refreshRepository = refreshRepository;
-            _userRepository = userRepository;
-            _tokenGeneratorService = tokenGeneratorService;
+            this.refreshRepository = refreshRepository;
+            this.userRepository = userRepository;
+            this.tokenGeneratorService = tokenGeneratorService;
         }
-        public async Task<TokenClaimsDto> CheckAccessRefreshToken(string refresh)
+        public async Task<TokenClaimsDto> CheckAccessRefreshTokenAsync(string refresh)
         {
             TokenClaimsDto token = new TokenClaimsDto();
-            var check = await _refreshRepository.FindByRefreshToken(refresh);
+            var check = await refreshRepository.FindByRefreshToken(refresh);
             if (check == null || check.DateOfEnd < DateTime.Now)
             {
                 token.CheckRefreshToken = false;
                 return token;
             }
             check.Delete(false);
-            await _refreshRepository.SaveChangesAsync();
+            await refreshRepository.SaveChangesAsync();
             token.UserId = check.UserId;
             token.CheckRefreshToken = true;
             return token;
 
         }
-        public async Task<TokenDto> GenerateRefreshToken(TokenClaimsDto token)
+        public async Task<TokenDto> GenerateRefreshTokenAsync(TokenClaimsDto token)
         {
             TokenDto tokenDto = new TokenDto();
-            var user = await _userRepository.FindByIdDetails(token.UserId);
-            tokenDto.AccessToken = _tokenGeneratorService.GenerateToken(user);
-            tokenDto.RefreshToken = _tokenGeneratorService.RefreshGenerateToken();
+            var user = await userRepository.FindByIdDetails(token.UserId);
+            tokenDto.AccessToken = tokenGeneratorService.GenerateToken(user);
+            tokenDto.RefreshToken = tokenGeneratorService.RefreshGenerateToken();
             tokenDto.Code = 200;
             return tokenDto;
         }
-        public async Task<TokenDto> SaveRefreshToken(int id, string refreshtoken, bool isvalid)
+        public async Task<TokenDto> SaveRefreshTokenAsync(int id, string refreshtoken, bool isvalid)
         {
             RefreshToken refresh = new RefreshToken(refreshtoken, id, isvalid);
-            _refreshRepository.Create(refresh);
-           await _refreshRepository.SaveChangesAsync();
+            refreshRepository.Create(refresh);
+           await refreshRepository.SaveChangesAsync();
             return new TokenDto() { RefreshToken = refresh.Refresh };
         }
     }

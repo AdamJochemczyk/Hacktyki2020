@@ -15,7 +15,9 @@ namespace CarRental.DAL.Repositories
 
         public  async Task<RefreshToken> FindByRefreshToken(string refresh)
         {
-            return await context.Set<RefreshToken>().Where(e=>e.IsValid==true).FirstOrDefaultAsync(e => e.Refresh == refresh);
+            return await context.Set<RefreshToken>()
+                .Where(e=>e.IsValid==true)
+                .FirstOrDefaultAsync(e => e.Refresh == refresh);
         }
     }
 }

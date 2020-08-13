@@ -1,5 +1,8 @@
 ﻿using CarRental.API.Attributes;
 using CarRental.DAL.Entities;
+﻿using System.Resources;
+using System.Threading.Tasks;
+using CarRental.API.Resources;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.User;
 using Microsoft.AspNetCore.Authorization;
@@ -13,17 +16,22 @@ namespace CarRental.API.Controllers
     public class UsersController : Controller
     {
         private readonly IUsersService _usersService;
+        public ResourceManager resourcesManager;
         public UsersController(IUsersService usersService)
         {
             _usersService = usersService;
+            resourcesManager = new ResourceManager("CarRental.API.Resources.ResourceFile", typeof(ResourceFile).Assembly);
         }
 
         [HttpGet]
-        [Authorize(Roles ="Admin")]
+        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetUsersAsync()
         {
-            var result = await _usersService.GetAllUsers();
-            if (result == null) return NotFound("Database users is empty");
+            var result = await _usersService.GetAllUsersAsync();
+            if (result == null)
+            {
+                return NotFound(resourcesManager.GetString("DatabaseEmpty"));
+            }
             return Ok(result);
         }
 
@@ -31,11 +39,13 @@ namespace CarRental.API.Controllers
         [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetUserAsync(int id)
         {
- 
-            var user = await _usersService.GetUser(id);
-            if (user == null) return NotFound("This ID does not exist");
-            if (id == 0) return BadRequest("This ID does not exist");
-             user = await _usersService.GetUser(id);
+
+            var user = await _usersService.GetUserAsync(id);
+            if (user == null)
+            {
+                return NotFound(resourcesManager.GetString("NotExist"));
+            }
+            user = await _usersService.GetUserAsync(id);
             return Ok(user);
         }
 
@@ -44,18 +54,27 @@ namespace CarRental.API.Controllers
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
 
-            if (!await _usersService.DeleteUser(id))
-                return NotFound("This ID does not exist");
+            if (!await _usersService.DeleteUserAsync(id))
+            {
+                return NotFound(resourcesManager.GetString("NotExist"));
+            }
             return Ok();
         }
 
+
         [HttpPatch("{id}")]
         [AuthorizeEnumRoles(RoleOfWorker.Admin)]
-        public async Task<IActionResult> UpdateUserAsync(UsersDto usersDto)
-        { 
-            var result = await _usersService.UpdateUser(usersDto);
+        public async Task<IActionResult> UpdateUserAsync(int id, UsersDto usersDto)
+        {
+            if (id != usersDto.UserId)
+            {
+                return NotFound(resourcesManager.GetString("NotExist"));
+            }
+            var result = await _usersService.UpdateUserAsync(usersDto);
             if (result.isValid == false)
-                return NotFound("User Not Found");
+            {
+                return NotFound(resourcesManager.GetString("NotFound"));
+            }
             return Ok(result);
         }
     }

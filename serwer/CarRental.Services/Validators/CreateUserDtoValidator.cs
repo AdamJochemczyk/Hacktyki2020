@@ -6,10 +6,11 @@ namespace CarRental.Services.Validators
     {
         public CreateUserDtoValidator()
         {
-            RuleFor(u => u.Email).EmailAddress();
-            RuleFor(u => u.MobileNumber).Length(9);
-            RuleFor(u => u.IdentificationNumber).Length(6);
-
+            RuleFor(p => p).Must(p => p.Email != null).WithMessage("Email not correct");
+            RuleFor(p => p).Must(p => p.MobileNumber.Length<9).WithMessage("Mobile not correct");
+            RuleFor(p => p).Must(p => p.MobileNumber.Length > 9).WithMessage("Mobile not correct");
+            RuleFor(p => p).Must(p => p.NumberIdentificate.Length > 6).WithMessage("Number of indentification not correct");
+            RuleFor(p => p).Must(p => p.NumberIdentificate.Length < 6).WithMessage("Number of indentification not correct");
         }
     }
 }

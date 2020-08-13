@@ -5,9 +5,9 @@ namespace CarRental.Services.Interfaces
 {
     public interface ITokenService
     {
-        Task<TokenClaimsDto> CheckAccessRefreshToken(string refresh);
-        Task<TokenDto> GenerateRefreshToken(TokenClaimsDto token);
-        Task<TokenDto> SaveRefreshToken(int id, string refreshtoken, bool isvalid);
+        Task<TokenClaimsDto> CheckAccessRefreshTokenAsync(string refresh);
+        Task<TokenDto> GenerateRefreshTokenAsync(TokenClaimsDto token);
+        Task<TokenDto> SaveRefreshTokenAsync(int id, string refreshtoken, bool isvalid);
 
     }
 }
