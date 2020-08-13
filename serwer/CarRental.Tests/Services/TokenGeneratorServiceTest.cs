@@ -1,12 +1,5 @@
-﻿using AutoMapper;
-using CarRental.DAL.Entities;
-using CarRental.DAL.Interfaces;
+﻿using CarRental.DAL.Entities;
 using CarRental.Services.Services;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CarRental.Tests.Services

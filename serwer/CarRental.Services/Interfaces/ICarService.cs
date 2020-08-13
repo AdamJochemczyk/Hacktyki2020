@@ -1,8 +1,6 @@
-﻿using CarRental.DAL.Entities;
-using CarRental.Services.Models.Car;
+﻿using CarRental.Services.Models.Car;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRental.Services.Interfaces

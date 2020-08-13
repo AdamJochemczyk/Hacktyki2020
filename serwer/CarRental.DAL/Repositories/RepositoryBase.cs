@@ -1,8 +1,6 @@
 ﻿using CarRental.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CarRental.DAL.Repositories
@@ -10,7 +8,7 @@ namespace CarRental.DAL.Repositories
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         public ApplicationDbContext context;
-        private DbSet<T> entities;
+        private readonly DbSet<T> entities;
         public RepositoryBase(ApplicationDbContext context)
         {
             this.context = context;

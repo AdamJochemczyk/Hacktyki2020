@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Resources;
 using System.Threading.Tasks;
+using CarRental.API.Resources;
 using CarRental.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +14,12 @@ namespace CarRental.API.Controllers
     {
         private readonly ITermService termService;
         private readonly ICarService carService;
+        public ResourceManager resourcesManager;
         public TermsController(ITermService termService, ICarService carService)
         {
             this.termService = termService;
             this.carService = carService;
+            resourcesManager = new ResourceManager("CarRental.API.Resources.ResourceFile", typeof(ResourceFile).Assembly);
         }
 
         [HttpGet("{id}")]
@@ -30,7 +32,7 @@ namespace CarRental.API.Controllers
                 var result = await termService.GetFreeTermsByCarIdAsync(id, rentalDate, returnDate);
                 return Ok(result);
             }
-            return BadRequest("Bad dates orded");
+            return BadRequest(resourcesManager.GetString("BadDateOrder"));
         }
 
         //example: .../api/terms/2021-08-07/2021-09-07
@@ -43,7 +45,7 @@ namespace CarRental.API.Controllers
                 var entities = await carService.GetAvailableCars(rentalDate, returnDate);
                 return Ok(entities);
             }
-            return BadRequest("Bad dates orded");
+            return BadRequest(resourcesManager.GetString("BadDateOrder"));
         }
 
         private bool DatesAreCorrect(DateTime rentalDate, DateTime returnDate)

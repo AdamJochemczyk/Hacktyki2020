@@ -1,9 +1,6 @@
 ﻿
 using CarRental.Services.Models.Car;
 using CarRental.Services.Models.User;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarRental.Services.Models.Reservation
 {

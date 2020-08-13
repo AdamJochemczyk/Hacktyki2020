@@ -1,8 +1,5 @@
 ﻿using CarRental.Services.Models.Defect;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarRental.Services.Validators
 {
@@ -10,7 +7,8 @@ namespace CarRental.Services.Validators
     {
         public UpdateDefectDtoValidator()
         {
-            RuleFor(p => p.Description).NotEmpty().MaximumLength(250);
+            RuleFor(p => p).Must(p => p.Description.Length > 250).WithMessage("So long message");
+            RuleFor(p => p).Must(p => p.Description.Length < 5).WithMessage("So short message");
         }
     }
 }

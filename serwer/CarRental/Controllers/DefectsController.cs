@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Resources;
 using System.Threading.Tasks;
+using CarRental.API.Resources;
 using CarRental.Services.Interfaces;
 using CarRental.Services.Models.Defect;
 using Microsoft.AspNetCore.Authorization;
@@ -13,50 +12,66 @@ namespace CarRental.API.Controllers
     [ApiController]
     public class DefectsController : Controller
     {
-        private readonly IDefectsService _defectsService;
+        private readonly IDefectsService defectsService;
+        public ResourceManager resourcesManager;
         public DefectsController(IDefectsService defectsService)
         {
-            _defectsService = defectsService;
+            this.defectsService = defectsService;
+            resourcesManager = new ResourceManager("CarRental.API.Resources.ResourceFile", typeof(ResourceFile).Assembly);
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin, Worker")]
-        public async Task<IActionResult> RegisterDefect(RegisterDefectDto registerDefectDto)
+        public async Task<IActionResult> RegisterDefectAsync(RegisterDefectDto registerDefectDto)
         {
-            if (registerDefectDto == null) 
-                return BadRequest("Model is empty"); 
-            var register_defect = await _defectsService.RegisterDefectAsync(registerDefectDto);
+            if (registerDefectDto == null)
+            {
+                return BadRequest(resourcesManager.GetString("Model"));
+            }
+            var register_defect = await defectsService.RegisterDefectAsync(registerDefectDto);
             if (register_defect == null)
-                return BadRequest("Object car or user is empty;"); 
+            {
+                return BadRequest("ObjectCarUser");
+            }
             return Ok(register_defect);
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllDefects()
+        public async Task<IActionResult> GetAllDefectsAsync()
         {
-            var defects = await _defectsService.GetAllDefectsAsync();
+            var defects = await defectsService.GetAllDefectsAsync();
             if (defects == null)
-                return BadRequest("Database is empty");
+            {
+                return BadRequest(resourcesManager.GetString("DatabaseEmpty"));
+            }
             return Ok(defects);
         }
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetDefect(int id)
+        public async Task<IActionResult> GetDefectAsync(int id)
         {
-            var defect = await _defectsService.GetDefectAsync(id);
+            var defect = await defectsService.GetDefectAsync(id);
             if (defect == null)
-                return NotFound("This is defect does not exist");
+            {
+                return NotFound(resourcesManager.GetString("NotExist"));
+            }
             return Ok(defect);
         }
-        [HttpPut]
+        [HttpPut("id")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateDefectAsync(UpdateDefectDto updateDefectDto)
+        public async Task<IActionResult> UpdateDefectAsync(int id, UpdateDefectDto updateDefectDto)
         {
-          var defect =  await _defectsService.UpdateDefectAsync(updateDefectDto);
+            if (id != updateDefectDto.Id)
+            {
+                return NotFound(resourcesManager.GetString("NotExist"));
+            }
+            var defect = await defectsService.UpdateDefectAsync(updateDefectDto);
             if (defect == null)
-                return NotFound("Not found this object");
+            {
+                return NotFound(resourcesManager.GetString("NotFound"));
+            }
             return Ok(defect);
         }
     }

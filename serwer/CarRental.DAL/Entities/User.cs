@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
-
 namespace CarRental.DAL.Entities
 {
     public class User : BaseEntity

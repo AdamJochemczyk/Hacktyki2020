@@ -1,9 +1,5 @@
-﻿using CarRental.DAL.Entities;
-using CarRental.Services.Models.User;
+﻿using CarRental.Services.Models.User;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarRental.Services.Validators
 {

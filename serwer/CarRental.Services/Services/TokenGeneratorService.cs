@@ -1,5 +1,4 @@
 ﻿using CarRental.DAL.Entities;
-using CarRental.DAL.Interfaces;
 using CarRental.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -7,8 +6,6 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarRental.Services.Services
 {
@@ -27,7 +24,7 @@ namespace CarRental.Services.Services
                   issuer: TokenOptions.ISSUER,
                   audience: TokenOptions.AUDIENCE,
                   claims: claims,
-                  expires: DateTime.Now.AddMinutes(TokenOptions.LIFETIME),
+                  expires: DateTime.UtcNow.AddMinutes(TokenOptions.LIFETIME),
                   signingCredentials: new SigningCredentials(TokenOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return encodedJwt;

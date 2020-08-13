@@ -10,7 +10,8 @@ namespace CarRental.Services.Validators
     {
       public RegisterDefectDtoValidator()
         {
-            RuleFor(p => p.Description).NotEmpty().MaximumLength(250);
+            RuleFor(p => p).Must(p => p.Description.Length > 250).WithMessage("So long message");
+            RuleFor(p => p).Must(p => p.Description.Length < 5).WithMessage("So short message");
         }
     }
 }

@@ -4,9 +4,7 @@ using CarRental.DAL.Interfaces;
 using CarRental.Services.Models.Defect;
 using CarRental.Services.Services;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,20 +12,20 @@ namespace CarRental.Tests.Services
 {
     public class DefectServiceTest
     {
-        private readonly Mock<IUserRepository> _userRepository;
-        private readonly Mock<ICarRepository> _carRepository;
-        private readonly Mock<IDefectRepository> _defectRepository;
-        private readonly IMapper _mapper;
+        private readonly Mock<IUserRepository> mockUsersRepository;
+        private readonly Mock<ICarRepository> mockCarsRepository;
+        private readonly Mock<IDefectRepository> mockDefectsRepository;
+        private readonly IMapper mapper;
         public DefectServiceTest()
         {
-            _userRepository = new Mock<IUserRepository>();
-            _carRepository = new Mock<ICarRepository>();
-            _defectRepository = new Mock<IDefectRepository>();
+            mockUsersRepository = new Mock<IUserRepository>();
+            mockCarsRepository = new Mock<ICarRepository>();
+            mockDefectsRepository = new Mock<IDefectRepository>();
             var config = new MapperConfiguration(opts =>
             {
                 opts.CreateMap<Defect, DefectDto>();
             });
-            _mapper = config.CreateMapper();
+            mapper = config.CreateMapper();
         }
 
         [Fact]
@@ -35,10 +33,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             List<Defect> defects = new List<Defect> { new Defect() };
-            _defectRepository
+            mockDefectsRepository
                 .Setup(p => p.FindAllDefects())
                 .ReturnsAsync(defects);
-            var services = new DefectService(_userRepository.Object, _carRepository.Object, _mapper, _defectRepository.Object);
+            var services = new DefectService(mockUsersRepository.Object, mockCarsRepository.Object, mapper, mockDefectsRepository.Object);
             //Act
             var result = await services.GetAllDefectsAsync();
             //Assert
@@ -51,10 +49,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int DefectId = 1;
-            _defectRepository
+            mockDefectsRepository
                 .Setup(p => p.FindDefectById(DefectId))
                 .ReturnsAsync(new Defect { DefectId = 1 });
-            var services = new DefectService(_userRepository.Object, _carRepository.Object, _mapper, _defectRepository.Object);
+            var services = new DefectService(mockUsersRepository.Object, mockCarsRepository.Object, mapper, mockDefectsRepository.Object);
             //Act
             var result = await services.GetDefectAsync(DefectId);
             //Assert
@@ -67,10 +65,10 @@ namespace CarRental.Tests.Services
         {
             //Arrange
             int DefectId = 1;
-            _defectRepository
+            mockDefectsRepository
                 .Setup(p => p.FindDefectById(DefectId))
                 .ReturnsAsync(null as Defect);
-            var services = new DefectService(_userRepository.Object, _carRepository.Object, _mapper, _defectRepository.Object);
+            var services = new DefectService(mockUsersRepository.Object, mockCarsRepository.Object, mapper, mockDefectsRepository.Object);
             //Act
             var result = await services.GetDefectAsync(DefectId);
             //Assert
@@ -86,19 +84,19 @@ namespace CarRental.Tests.Services
                 CarId = 1,
                 Description = "Stop Working Window"
             };
-            _userRepository
+            mockUsersRepository
                 .Setup(p => p.FindByIdDetails(registerDefectDto.UserId))
                 .ReturnsAsync(new User() { UserId = 1 });
-            _carRepository
+            mockCarsRepository
                 .Setup(c => c.FindByIdAsync(registerDefectDto.CarId))
                 .ReturnsAsync(new Car() { CarId = 1 });
-            _defectRepository
+            mockDefectsRepository
                 .Setup(d => d.Create(It.IsAny<Defect>()))
                 .Verifiable();
-            _defectRepository
+            mockDefectsRepository
                 .Setup(s => s.SaveChangesAsync())
                 .Verifiable();
-            var services = new DefectService(_userRepository.Object, _carRepository.Object, _mapper, _defectRepository.Object);
+            var services = new DefectService(mockUsersRepository.Object, mockCarsRepository.Object, mapper, mockDefectsRepository.Object);
             //Act
             var result = await services.RegisterDefectAsync(registerDefectDto);
             //Assert
@@ -117,13 +115,13 @@ namespace CarRental.Tests.Services
                 CarId = 1,
                 Description = "Stop Working Window"
             };
-            _userRepository
+            mockUsersRepository
               .Setup(p => p.FindByIdDetails(registerDefectDto.UserId))
               .ReturnsAsync(null as User);
-            _carRepository
+            mockCarsRepository
                 .Setup(c => c.FindByIdAsync(registerDefectDto.CarId))
                 .ReturnsAsync(null as Car);
-            var services = new DefectService(_userRepository.Object, _carRepository.Object, _mapper, _defectRepository.Object);
+            var services = new DefectService(mockUsersRepository.Object, mockCarsRepository.Object, mapper, mockDefectsRepository.Object);
             //Act
             var result = await services.RegisterDefectAsync(registerDefectDto);
             //Assert
@@ -145,7 +143,7 @@ namespace CarRental.Tests.Services
                 Description = "Door Finished",
                 Status = Status.Finished
             };
-            _defectRepository
+            mockDefectsRepository
                 .Setup(p => p.FindDefectById(updateDefectDto.Id))
                 .ReturnsAsync(new Defect()
                 {
@@ -153,10 +151,10 @@ namespace CarRental.Tests.Services
                     Description = "Door Finished",
                     Status = Status.Finished
                 });
-            _defectRepository
+            mockDefectsRepository
                 .Setup(s => s.SaveChangesAsync())
                 .Verifiable();
-            var services = new DefectService(_userRepository.Object, _carRepository.Object, _mapper, _defectRepository.Object);
+            var services = new DefectService(mockUsersRepository.Object, mockCarsRepository.Object, mapper, mockDefectsRepository.Object);
             //Act
             var result = await services.UpdateDefectAsync(updateDefectDto);
             //Assert
@@ -173,12 +171,12 @@ namespace CarRental.Tests.Services
                 Id = 1,
                 Description = "Broken door",
                 Status = Status.InRepair
-            };       
-            _defectRepository
+            };
+            mockDefectsRepository
                 .Setup(p => p.FindDefectById(updateDefectDto.Id))
                 .ReturnsAsync(null as Defect);
             
-            var services = new DefectService(_userRepository.Object, _carRepository.Object, _mapper, _defectRepository.Object);
+            var services = new DefectService(mockUsersRepository.Object, mockCarsRepository.Object, mapper, mockDefectsRepository.Object);
             //Act
             var result = await services.UpdateDefectAsync(updateDefectDto);
             //Assert
