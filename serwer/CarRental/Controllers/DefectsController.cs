@@ -61,7 +61,7 @@ namespace CarRental.API.Controllers
             return Ok(defect);
         }
 
-        [HttpPatch]
+        [HttpPatch("{id}")]
         [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> UpdateDefectAsync(int id, UpdateDefectDto updateDefectDto)
         {

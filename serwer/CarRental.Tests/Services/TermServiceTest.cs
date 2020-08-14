@@ -37,9 +37,9 @@ namespace CarRental.Tests.Services
             };
             var dates = new List<string>()
             {
-                DateTime.Now.Date.ToString("dd.MM.yyyy"),
-                DateTime.Now.AddDays(1).Date.ToString("dd.MM.yyyy"),
-                DateTime.Now.AddDays(7).Date.ToString("dd.MM.yyyy")              
+                DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                DateTime.Now.AddDays(1).Date.ToString("dd/MM/yyyy"),
+                DateTime.Now.AddDays(7).Date.ToString("dd/MM/yyyy")              
             };
             mockReservationRepository
                 .Setup(p => p.FindAllByCarIdAsync(id))
@@ -70,10 +70,10 @@ namespace CarRental.Tests.Services
             };
             var dates = new List<string>()
             {
-                DateTime.Now.Date.ToString("dd.MM.yyyy"),
-                DateTime.Now.AddDays(1).Date.ToString("dd.MM.yyyy"),
-                DateTime.Now.AddDays(7).Date.ToString("dd.MM.yyyy"),
-                DateTime.Now.AddDays(14).Date.ToString("dd.MM.yyyy")
+                DateTime.Now.Date.ToString("dd/MM/yyyy"),
+                DateTime.Now.AddDays(1).Date.ToString("dd/MM/yyyy"),
+                DateTime.Now.AddDays(7).Date.ToString("dd/MM/yyyy"),
+                DateTime.Now.AddDays(14).Date.ToString("dd/MM/yyyy")
             };
             mockReservationRepository
                 .Setup(p => p.FindAllByCarIdAsync(id))

@@ -54,7 +54,7 @@ namespace CarRental.API.Controllers
             return Ok(signInResult);
         }
 
-        [HttpPut]
+        [HttpPatch]
         public async Task<IActionResult> SetPasswordAsync(UpdateUserPasswordDto updateUserPassword)
         {
             if (!await authorizationService.SetPasswordAsync(updateUserPassword))

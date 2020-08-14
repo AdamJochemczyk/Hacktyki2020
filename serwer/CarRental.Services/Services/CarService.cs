@@ -22,6 +22,11 @@ namespace CarRental.Services.Services
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Insert new car into database. 
+        /// </summary>
+        /// <param name="carDto"></param>
+        /// <returns>Returns mapped car object - carDto.</returns>
         public async Task<CarDto> CreateCarAsync(CarCreateDto carDto)
         {
             Car car = new Car()
@@ -42,6 +47,10 @@ namespace CarRental.Services.Services
             return mapper.Map<CarDto>(car);
         }
 
+        /// <summary>
+        /// Change flag IsDeleted in the database from false to true.  
+        /// </summary>
+        /// <param name="id"></param>
         public async Task DeleteCarAsync(int id)
         {
             var car = await carRepository.FindByIdAsync(id);
@@ -49,18 +58,32 @@ namespace CarRental.Services.Services
             await carRepository.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Get all cars from database.
+        /// </summary>
+        /// <returns>Returns list with cars mapped to carDto. </returns>
         public async Task<IEnumerable<CarDto>> GetAllCarsAsync()
         {
             var cars = await carRepository.FindAllAsync();
             return mapper.Map<IEnumerable<CarDto>>(cars);
         }
 
+        /// <summary>
+        /// Get car by given id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Returns car mapped to carDto.</returns>
         public async Task<CarDto> GetCarByIdAsync(int id)
         {
             var car = await carRepository.FindByIdAsync(id);
             return mapper.Map<CarDto>(car);
         }
 
+        /// <summary>
+        /// Change one or many properties of car in the database.
+        /// </summary>
+        /// <param name="carDto"></param>
+        /// <returns>Returns car mapped to carDto.</returns>
         public async Task<CarDto> UpdateCarAsync(CarDto carDto)
         {
             var car = await carRepository.FindByIdAsync(carDto.CarId);
@@ -72,6 +95,12 @@ namespace CarRental.Services.Services
             return mapper.Map<CarDto>(car);
         }
 
+        /// <summary>
+        /// Get all available cars in given term.
+        /// </summary>
+        /// <param name="rentalDate"></param>
+        /// <param name="returnDate"></param>
+        /// <returns>Returns list of cars which are available.</returns>
         public async Task<IEnumerable<CarDto>> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
         {
             var reservedCars = await carRepository.GetReservedCarsByDates(rentalDate, returnDate);

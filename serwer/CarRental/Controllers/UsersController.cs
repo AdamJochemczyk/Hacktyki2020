@@ -11,6 +11,7 @@ namespace CarRental.API.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [AuthorizeEnumRoles(RoleOfWorker.Admin)]
     public class UsersController : Controller
     {
         private readonly IUsersService usersService;
@@ -22,7 +23,6 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet]
-        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetUsersAsync()
         {
             var result = await usersService.GetAllUsersAsync();
@@ -34,7 +34,6 @@ namespace CarRental.API.Controllers
         }
 
         [HttpGet("{id}")]
-        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> GetUserAsync(int id)
         {
 
@@ -48,7 +47,6 @@ namespace CarRental.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> DeleteUserAsync(int id)
         {
 
@@ -61,7 +59,6 @@ namespace CarRental.API.Controllers
 
 
         [HttpPatch("{id}")]
-        [AuthorizeEnumRoles(RoleOfWorker.Admin)]
         public async Task<IActionResult> UpdateUserAsync(int id, UsersDto usersDto)
         {
             if (id != usersDto.UserId)

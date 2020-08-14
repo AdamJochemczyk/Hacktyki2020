@@ -18,22 +18,36 @@ namespace CarRental.Services.Services
             this.mapper = mapper;
         }
 
+        /// <summary>
+        /// Get actual location for given reservations id. Actual location is marked with flag IsActual.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Returns last saved location mapped to locationDto.</returns>
         public async Task<LocationDto> GetActualLocationByReservationIdAsync(int id)
         {
             var location = await locationRepository.GetActualLocationByReservationIdAsync(id);
             return mapper.Map<LocationDto>(location);
         }
 
+        /// <summary>
+        /// Get location by locations id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Returns location mapped to locationDto</returns>
         public async Task<LocationDto> GetLocationByIdAsync(int id)
         {
             var location = await locationRepository.FindByIdAsync(id);
             return mapper.Map<LocationDto>(location);
         }
 
+        /// <summary>
+        /// Create new location. The flag IsActual of last saved location is changed to false (if exists).
+        /// </summary>
+        /// <param name="locationCreateDto"></param>
+        /// <returns>Returns new location mapped to locationDto</returns>
         public async Task<LocationDto> CreateLocationAsync(LocationCreateDto locationCreateDto)
         {
-            var oldLocation = await locationRepository
-                .GetActualLocationByReservationIdAsync(locationCreateDto.ReservationId);
+            var oldLocation = await locationRepository.GetActualLocationByReservationIdAsync(locationCreateDto.ReservationId);
             if (oldLocation != null)
                 oldLocation.IsActual = false;
 
@@ -50,6 +64,10 @@ namespace CarRental.Services.Services
             return mapper.Map<LocationDto>(location);
         }
 
+        /// <summary>
+        /// Change flag IsActual of a location with a given id. 
+        /// </summary>
+        /// <param name="id"></param>
         public async Task DeleteLocationAsync(int id)
         {
             var location = await locationRepository.FindByIdAsync(id);
