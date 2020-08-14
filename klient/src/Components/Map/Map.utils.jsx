@@ -2,7 +2,8 @@ import { useState, useCallback, useRef } from "react";
 import { useLoadScript } from "@react-google-maps/api";
 import LocationApi from "../API/LocationApi";
 
-export default function useMap() {
+export default function useMap(resId) {
+  let id=resId;
   const libraries = ["places"];
   const mapContainerStyle = {
     height: "90vh",
@@ -41,6 +42,23 @@ export default function useMap() {
     setMarker(response)
   }
 
+  const onMapClick = useCallback((e) => {
+
+    let props={
+      latitude: e.latLng.lat(),
+      longitude: e.latLng.lng(),
+      reservationid: id
+    }
+
+    let api=new LocationApi()
+    api.setLocalization(props)
+
+    setMarker({
+      latitude: e.latLng.lat(),
+      longitude: e.latLng.lng(),
+    });
+  }, []);
+
   return {
     isLoaded,
     loadError,
@@ -48,6 +66,7 @@ export default function useMap() {
     center,
     options,
     onMapLoad,
+    onMapClick,
     marker,
     fetchMarker,
     setMarker

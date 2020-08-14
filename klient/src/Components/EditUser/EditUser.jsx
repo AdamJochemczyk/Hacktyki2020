@@ -4,26 +4,16 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import useEditUser from "./EditUser.utils";
 
 export default function EditUser({ history }) {
-  const id = history.location.state;
-  const isAddMode = !id;
 
   const {
     user,
     initialValues,
     validationSchema,
-    createUser,
-    updateUser,
+    id,
+    isAddMode,
+    onSubmit,
     fetchUser,
-  } = useEditUser();
-
-  function onSubmit(fields, { setSubmitting }) {
-    if (isAddMode) {
-      createUser(fields, setSubmitting);
-      document.getElementById("userUpsert").reset();
-    } else {
-      updateUser(id, fields, setSubmitting);
-    }
-  }
+  } = useEditUser(history.location.state);
 
   useEffect(() => {
     if (!isAddMode) {
@@ -40,7 +30,7 @@ export default function EditUser({ history }) {
     >
       {({ errors, touched }) => {
         return (
-          <Form id="userUpsert" className="upsertforms">
+          <Form className="upsertforms">
             <h1>{isAddMode ? "Add User" : "Edit User"}</h1>
 
             <label>First Name</label>
@@ -88,24 +78,24 @@ export default function EditUser({ history }) {
               className="invalid-feedback"
             />
 
-            <label>Number Identificate</label>
+            <label>Identification number</label>
             <Field
-              name="numberIdentificate"
+              name="identificationNumber"
               type="text"
               className={
                 "form-control" +
-                (errors.numberIdentificate && touched.numberIdentificate
+                (errors.identificationNumber && touched.identificationNumber
                   ? " is-invalid"
                   : "")
               }
             />
             <ErrorMessage
-              name="numberIdentificate"
+              name="identificationNumber"
               component="div"
               className="invalid-feedback"
             />
 
-            <label>Mobile Number</label>
+            <label>Mobile number</label>
             <Field
               name="mobileNumber"
               className={

@@ -24,6 +24,10 @@ const AdminHeader = ()=>{
         <NavDropdown.Item href="/admin/admin-history">History</NavDropdown.Item>
         <NavDropdown.Item href="/admin/defects-manager">Defects</NavDropdown.Item>
       </NavDropdown>
+      <Nav.Link onClick={()=>{
+        sessionStorage.clear()
+        window.location.assign('/')
+        }}>Log out</Nav.Link>
     </Nav>
   </Navbar.Collapse>
 </Navbar>)

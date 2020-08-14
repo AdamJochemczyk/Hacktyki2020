@@ -11,9 +11,9 @@ export default function ReserveCar() {
     isLoading,
     fetchCars,
     handleChange,
-    CreateCarCard,
+    createCarCard,
     checkAvailability,
-    FilteredCarCard
+    filteredCarCard
   } = useReserveCar();
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export default function ReserveCar() {
                 </Button>
               </Form>
             </Col>
-                {data && data.length!==0 ? FilteredCarCard(data).map(CreateCarCard) : "We don't have cars in this term"}
+                {data && data.length!==0 ? filteredCarCard(data).map(createCarCard) : "We don't have cars in this term"}
           </Row>
           </Container>
       )}

@@ -9,19 +9,19 @@ export default function useFaultManager() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  async function deleteFault(fields) {
+  async function deleteFault(fields, id) {
     try {
       let api = new Api();
-      await api.deleteFault(fields);
+      await api.deleteFault(fields, id);
     } catch (error) {
       console.log(error);
     }
   }
 
-  async function updateStatus(fields) {
+  async function updateStatus(fields, id) {
     try {
       let api = new Api();
-      await api.updateStatus(fields);
+      await api.updateStatus(fields, id);
     } catch (error) {
       console.log(error);
     }
@@ -32,7 +32,6 @@ export default function useFaultManager() {
       let api = new Api();
       setIsLoading(true);
       const response = await api.fetchFaults();
-      console.log("fetchFaults -> response", response)
       setData(response);
       setIsLoading(false);
     } catch (error) {
@@ -49,11 +48,11 @@ export default function useFaultManager() {
     switch (status) {
       case "1":
         fields.status=1;
-        updateStatus(fields);
+        updateStatus(fields, id);
         break;
       case "2":
         fields.status=2;
-        deleteFault(fields);
+        deleteFault(fields, id);
         break;
       case "0":
         Swal.fire(
@@ -92,6 +91,9 @@ export default function useFaultManager() {
       {
         Header: "Date of report",
         accessor: "dateOfReport",
+        Cell: ({ row }) => (
+          row.original.dateOfReport.split('T')[0]
+        ),
       },
       {
         Header: "Status",

@@ -10,12 +10,12 @@ export default function useLogin() {
   let history=useHistory()
   let initialValues = {
     email: "",
-    encodePassword: "",
+    password: "",
   };
   const [isSended,setIsSended]=useState(false)
 
   const validationSchema = Yup.object().shape({
-    encodePassword: Yup.string().required("Required"),
+    password: Yup.string().required("Required"),
     email: Yup.string().email("This isn't email").required("Required"),
   });
 

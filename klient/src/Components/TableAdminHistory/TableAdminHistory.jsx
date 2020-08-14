@@ -33,7 +33,7 @@ export default function TableAdminHistory({ columns, data }) {
           setGlobalFilters(e.target.value || undefined)
           setGlobalFilter(e.target.value || undefined)
         }}
-        placeholder={`Search All ...`}
+        placeholder={`Search all...`}
       />
       </Col>
       </Row>

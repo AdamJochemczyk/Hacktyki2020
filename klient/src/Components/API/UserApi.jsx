@@ -34,7 +34,7 @@ export default class UserApi extends Api{
 
       async updateUser(id, fields) {
         try {
-          await this.baseAxios.put('/users/'+id, fields)
+          await this.baseAxios.patch('/users/'+id, fields)
           Swal.fire("Good job!", "You successfully edited a user!", "success");
         } catch (error) {
           console.log(error);

@@ -11,16 +11,16 @@ export default function Cardcar(props) {
 
   return (
     <Col sm={3}>
-      <div className="CardCar">
-        <div className="justify-content-center" stye={{height: "200px", width: "300px"}}>
+      <div className="CardCar" style={{height: "450px"}}>
+        <div className="justify-content-center" style={{maxHeight: "200px", maxWidth: "300px"}}>
           <img
             src={props.src}
             alt="car"
-            style={{height: "100%", width: "100%", objectfit: "contain"}}
+            style={{height: "100%", width: "100%"}}
             onError={e=>e.target.src=DEFAULT_IMAGE}
           />
         </div>
-        <Col className="text-center">
+        <Col className="text-center pb-3">
         <p>Brand: {props.brand}</p>
         <p>Model: {props.model}</p>
         <p>Registration number: {props.registrationNumber}</p>
@@ -31,7 +31,7 @@ export default function Cardcar(props) {
                     yearOfProduction={props.yearOfProduction}
                      />
         </Col>
-        <div className="text-center pt-3">
+        <div className="text-center">
           <Button
             color="success"
             onClick={() =>

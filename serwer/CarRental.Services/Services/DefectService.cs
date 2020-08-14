@@ -49,6 +49,7 @@ namespace CarRental.Services.Services
                 car.CarId,
                 user.FirstName,
                 user.LastName,
+                user.MobileNumber,
                 car.RegistrationNumber,
                 registerDefectDto.Description,
                 Status.Reported);

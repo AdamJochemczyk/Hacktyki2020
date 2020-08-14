@@ -69,6 +69,7 @@ export default function useUserHistory() {
                 />
               </IconButton>
             </Tooltip> }
+            {row.original.isFinished===true && "Reservation finished"}
           </div>
         ),
       },

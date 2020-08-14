@@ -5,7 +5,6 @@ import calendar from '../img/calendar.png'
 import target from '../img/target.png'
 import green from '../img/green.png'
 import Feature from '../Feature/Feature'
-import AuthorDesc from "../AuthorDescription/AuthorDescription"
 
 
 const features =[
@@ -37,7 +36,7 @@ export default function Home(){
                 <Button color="primary"><a href='/reserve-car' className={styles.link} style={{textDecoration: 'none', color: 'white'}}> Book a car</a></Button>
             </div>
             </Col>
-            <Col sm={6}>
+            <Col sm={6} className="justify-content-center">
                 <img src="https://pngimg.com/uploads/mazda/mazda_PNG133.png" alt="car" className={styles.image}/>
             </Col>
         </Row>
@@ -50,7 +49,6 @@ export default function Home(){
         {features.map(CreateFeatures)}
         </Row>
         </Container>
-        <AuthorDesc/>
         </>
     )
 }

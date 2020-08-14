@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace CarRental.Services.Validators
 {
-    public class UpdateDefectDtoValidator:AbstractValidator<UpdateDefectDto>
+    public class UpdateDefectDtoValidator : AbstractValidator<UpdateDefectDto>
     {
         public UpdateDefectDtoValidator()
         {
@@ -11,3 +11,4 @@ namespace CarRental.Services.Validators
         }
     }
 }
+

@@ -4,6 +4,8 @@ import Api from "../API/CarApi";
 import moment from "moment";
 import Swal from "sweetalert2";
 
+import compareString from '../Compare/CompareString'
+
 export default function useReserveCar() {
   const [data, setData] = useState([]);
   const [filters, setFilter] = useState({
@@ -54,7 +56,7 @@ export default function useReserveCar() {
     });
   }
 
-  const CreateCarCard=(data)=> {
+  function createCarCard(data) {
     return (
       <CardCar
         key={data.carId}
@@ -72,22 +74,18 @@ export default function useReserveCar() {
     );
   }
 
-  const FilteredCarCard=(data)=>{
+  function filteredCarCard(data){
     return data
     .filter((data) => {
       return (
-        CompareString(data.brand, filters.brand) &&
-        CompareString(data.model, filters.model) &&
-        CompareString(data.registrationNumber, filters.registrationNumber) &&
+        compareString(data.brand, filters.brand) &&
+        compareString(data.model, filters.model) &&
+        compareString(data.registrationNumber, filters.registrationNumber) &&
         data.yearOfProduction >= filters.yearOfProduction &&
         data.numberOfDoor >= filters.numberOfDoor &&
         data.numberOfSits >= filters.numberOfSits
       );
   })
-}
-
-const CompareString=(a,b)=>{
-  return a.toLowerCase().includes(b.toLowerCase())
 }
 
   return {
@@ -96,9 +94,8 @@ const CompareString=(a,b)=>{
     isLoading,
     fetchCars,
     handleChange,
-    CompareString,
-    CreateCarCard,
+    createCarCard,
     checkAvailability,
-    FilteredCarCard,
+    filteredCarCard,
   };
 }

@@ -3,14 +3,16 @@ import { useHistory } from "react-router-dom";
 import * as Yup from "yup";
 import Api from "../API/UserApi";
 
-export default function useEditUser() {
+export default function useEditUser(props) {
   let redirect = useHistory();
+  const id = props;
+  const isAddMode = !id;
   const [user, setUser] = useState();
   let initialValues = {
     firstName: "",
     lastName: "",
     email: "",
-    numberIdentificate: "",
+    identificationNumber: "",
     mobileNumber: "",
   };
 
@@ -23,16 +25,24 @@ export default function useEditUser() {
       .min(3, "Too short!")
       .max(20, "Too long!")
       .required("Required"),
-    numberIdentificate: Yup.string()
+      identificationNumber: Yup.string()
       .min(6)
       .max(6, "Too long!")
       .required("Required"),
     email: Yup.string().email("Invalid email").required("Required"),
     mobileNumber: Yup.string()
-      .min(9, "Must contains at least 9 numers")
-      .max(15, "Too long number")
+      .min(9, "Must contains at least 9 numbers")
+      .max(9, "Too long number")
       .required("Required"),
   });
+
+  function onSubmit(fields, { setSubmitting }) {
+    if (isAddMode) {
+      createUser(fields, setSubmitting);
+    } else {
+      updateUser(id, fields, setSubmitting);
+    }
+  }
 
   async function createUser(fields, setSubmitting) {
     try {
@@ -68,8 +78,9 @@ export default function useEditUser() {
     user,
     initialValues,
     validationSchema,
-    createUser,
-    updateUser,
+    id,
+    isAddMode,
+    onSubmit,
     fetchUser,
   };
 }

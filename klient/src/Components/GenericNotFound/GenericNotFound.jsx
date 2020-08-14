@@ -1,5 +1,7 @@
 import React from "react"
+import {Row} from "react-bootstrap"
 
 export default function GenericNotFound(){
-    return (<h1>404 Not Found</h1>)
+    return (
+    <Row className="justify-content-center"><h1>404 Not Found</h1></Row>)
 }
