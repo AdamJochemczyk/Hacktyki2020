@@ -30,7 +30,7 @@ namespace CarRental.Services.Services
         {
             TokenClaimsDto token = new TokenClaimsDto();
             var check = await refreshRepository.FindByRefreshToken(refresh);
-            if (check == null || check.DateOfEnd < DateTime.Now)
+            if (check == null || check.DateOfEnd < DateTime.UtcNow)
             {
                 token.CheckRefreshToken = false;
                 return token;
