@@ -18,6 +18,13 @@ namespace CarRental.API.Controllers
             this.tokenService = tokenService;
             resourcesManager = new ResourceManager("CarRental.API.Resources.ResourceFile", typeof(ResourceFile).Assembly);
         }
+        /// <summary>
+        /// Refresh token with correct refresh token 
+        /// </summary>
+        /// <param name="refreshToken"></param>
+        /// <returns>return new Access token and Refresh set old
+        /// refresh token on false
+        /// else return 401(UnAuthorized)</returns>
         [HttpPost]
         public async Task<IActionResult> RefreshTokenAsync(TokenDto refreshToken)
         {
