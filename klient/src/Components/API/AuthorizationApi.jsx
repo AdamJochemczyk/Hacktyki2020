@@ -27,7 +27,7 @@ export default class AuthorizationApi{
 
   async sendPassword(fields) {
     try {
-      await this.baseAxios.put("/authorization", fields);
+      await this.baseAxios.patch("/authorization", fields);
       Swal.fire("Good job!", "You successfully set your password!", "success");
       return true
     } catch (error) {
