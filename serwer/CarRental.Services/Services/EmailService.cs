@@ -10,6 +10,11 @@ namespace CarRental.Services.Models.Email_Templates
 {
     public class EmailService : IEmailServices
     {
+        /// <summary>
+        /// Send email with link to set password
+        /// </summary>
+        /// <param name="createUserDto"></param>
+        /// <returns>return true if email send correct</returns>
         [Obsolete]
         public bool EmailAfterRegistration(CreateUserDto createUserDto)
         {
@@ -31,9 +36,6 @@ namespace CarRental.Services.Models.Email_Templates
                                          </html>";
             string messageBody = string.Format(htmlBody, data);
             AlternateView alternateViewHtml = AlternateView.CreateAlternateViewFromString(htmlBody, Encoding.UTF8, MediaTypeNames.Text.Html);
-            /* LinkedResource windowsLogo = new LinkedResource(@"C:\Users\kuche\zespol3-laczone-samochody\serwer\CarRental\assets\Image\rsz_logo.png", MediaTypeNames.Image.Jpeg);
-             windowsLogo.ContentId = "WinLogo";
-             alternateViewHtml.LinkedResources.Add(windowsLogo);*/
             MailMessage mailMessage = new MailMessage("kucherbogdan2000@gmail.com", createUserDto.Email, subject, messageBody);
             mailMessage.AlternateViews.Add(alternateViewHtml);
             using (SmtpClient smpt = new SmtpClient("smtp.gmail.com", 587))

@@ -25,13 +25,20 @@ namespace CarRental.Services.Services
             this.defectRepository = defectRepository;
             this.mapper = mapper;
         }
-
+        /// <summary>
+        /// Get all defects
+        /// </summary>
+        /// <returns>return list with defects mapped to DefectDto </returns>
         public async Task<IEnumerable<DefectDto>> GetAllDefectsAsync()
         {
             var defects = await defectRepository.FindAllDefects();
             return mapper.Map<IEnumerable<DefectDto>>(defects);
         }
-
+        /// <summary>
+        /// Get defect by Id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns>return defect mapped ro DefectDto</returns>
         public async Task<DefectDto> GetDefectAsync(int Id)
         {
             var defect = await defectRepository.FindDefectById(Id);
@@ -39,7 +46,11 @@ namespace CarRental.Services.Services
                 return null;
             return mapper.Map<DefectDto>(defect);
         }
-
+        /// <summary>
+        /// Register defect with exiciting id user and car 
+        /// </summary>
+        /// <param name="registerDefectDto"></param>
+        /// <returns>return register defect mapped to DefectDto</returns>
         public async Task<DefectDto> RegisterDefectAsync(RegisterDefectDto registerDefectDto)
         {
             var user = await userRepository.FindByIdDetails(registerDefectDto.UserId);
@@ -58,6 +69,11 @@ namespace CarRental.Services.Services
             await defectRepository.SaveChangesAsync();
             return mapper.Map<DefectDto>(defect);
         }
+        /// <summary>
+        /// Change one or many properties of car in the database.
+        /// </summary>
+        /// <param name="updateDefectDto"></param>
+        /// <returns>return updated defect mapped to DefectDto</returns>
         public async Task<DefectDto> UpdateDefectAsync(UpdateDefectDto updateDefectDto)
         {
             var defect = await defectRepository.FindDefectById(updateDefectDto.Id);

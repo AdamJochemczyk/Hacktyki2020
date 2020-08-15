@@ -18,6 +18,11 @@ namespace CarRental.Services.Services
             this.userRepository = userRepository;
             this.mapper = mapper;
         }
+        /// <summary>
+        /// Change flag IsDeleted in the database from false to true.  
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>return true or false</returns>
         public async Task<bool> DeleteUserAsync(int id)
         {
             var user = await userRepository.FindByIdAsync(id);
@@ -26,19 +31,30 @@ namespace CarRental.Services.Services
             await userRepository.SaveChangesAsync();
             return true;
         }
-
+        /// <summary>
+        /// Get all users from database.
+        /// </summary>
+        /// <returns>Returns list with users mapped to UserDto. </returns>
         public async Task<IEnumerable<UsersDto>> GetAllUsersAsync()
         {
             var all_users = await userRepository.FindAllUsers();
             return mapper.Map<IEnumerable<UsersDto>>(all_users);
         }
-
+        /// <summary>
+        /// Get user by given id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Returns user mapped to UserDto.</returns>
         public async Task<UsersDto> GetUserAsync(int id)
         {
             var user = await userRepository.FindByIdDetails(id);
             return mapper.Map<UsersDto>(user);
         }
-
+        /// <summary>
+        /// Change one or many properties of user in the database.
+        /// </summary>
+        /// <param name="usersDto"></param>
+        /// <returns>Returns user mapped to UserDto.</returns>
         public async Task<UsersDto> UpdateUserAsync(UsersDto usersDto)
         {
             var user = await userRepository.FindByIdDetails(usersDto.UserId);

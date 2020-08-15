@@ -11,6 +11,9 @@ namespace CarRental.Services.Services
 {
     public class TokenGeneratorService : ITokenGeneratorService
     {
+        /// <summary>
+        /// It's function to generate Access token and return string
+        /// </summary>
         public TokenGeneratorService() { }
         public string GenerateToken(User _user)
         {
@@ -29,7 +32,10 @@ namespace CarRental.Services.Services
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             return encodedJwt;
         }
-
+        /// <summary>
+        /// It's function to generate refresh token
+        /// </summary>
+        /// <returns></returns>
         public string RefreshGenerateToken()
         {
             using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
