@@ -67,9 +67,7 @@ export default function useEditCar(props) {
   function updateCar(id, fields) {
     try{
     fields.carId = parseInt(id);
-    let cartype = parseInt(fields.typeOfCar);
-    fields.typeOfCar = cartype;
-    console.log(fields);
+    fields.typeOfCar = parseInt(fields.typeOfCar);
     let api = new Api();
     api.updateCar(id,fields);
     setTimeout(() => redirect.push("/admin/car-manager"), 2000);

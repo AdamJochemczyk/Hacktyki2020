@@ -68,7 +68,6 @@ export default function useCarManager() {
     let api = new Api();
     setIsLoading(true);
     const res = await api.fetchCars();
-    console.log("fetchCars -> res", res)
     setData(res);
     setIsLoading(false)
       }catch(error){

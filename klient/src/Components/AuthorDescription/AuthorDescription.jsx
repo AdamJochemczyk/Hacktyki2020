@@ -12,7 +12,7 @@ export default function AuthorDesc(props)
 
 function CreateAuthor(authors){
     return (
-        <Col sm="4">
+        <Col sm="4" key={authors.id}>
         <img className={styles.avatar} src={authors.src} alt="author profile"/>
             <br/>
             {authors.name} - {authors.role}
