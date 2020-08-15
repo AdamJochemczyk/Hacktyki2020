@@ -77,7 +77,7 @@ namespace CarRental.Services.Services
                 email.EmailAfterRegistration(createUserDto);
             }
             else
-                return createUserDto;
+                return null;
             return mapper.Map<CreateUserDto>(new_user);
         }
         /// <summary>
