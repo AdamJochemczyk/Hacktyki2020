@@ -80,6 +80,9 @@ namespace CarRental.Tests.Services
             mockReservationRepository
                 .Setup(p => p.FindByIdAsync(0))
                 .ReturnsAsync(reservation);
+            mockReservationRepository
+               .Setup(s => s.SaveChangesAsync())
+               .Verifiable();
             var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.CreateReservationAsync(reservationDto);
@@ -110,6 +113,9 @@ namespace CarRental.Tests.Services
             mockReservationRepository
                 .Setup(p => p.FindByIdAsync(reservationDto.ReservationId))
                 .ReturnsAsync(reservation);
+            mockReservationRepository
+                .Setup(s => s.SaveChangesAsync())
+                .Verifiable();
             var service = new ReservationService(mockReservationRepository.Object, mapper);
             //Act
             var result = await service.UpdateReservationAsync(reservationDto);
