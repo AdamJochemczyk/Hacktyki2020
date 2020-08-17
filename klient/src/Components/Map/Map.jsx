@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import useMap from "./Map.utils";
-import LocationApi from "../API/LocationApi";
 
 export default function App({history}) {
   
@@ -15,7 +14,6 @@ export default function App({history}) {
     onMapClick,
     marker,
     fetchMarker,
-    setMarker
   } = useMap(history.location.state);
 
   useEffect(()=>{

@@ -19,7 +19,7 @@ const AdminHeader = ()=>{
         <NavDropdown.Item href="/admin/add-user">User</NavDropdown.Item>
       </NavDropdown>
       <NavDropdown title="Manager tables" id="basic-nav-dropdown">
-        <NavDropdown.Item href="/admin/user-manager">User</NavDropdown.Item>
+        <NavDropdown.Item href="/admin/user-manager">Users</NavDropdown.Item>
         <NavDropdown.Item href="/admin/car-manager">Cars</NavDropdown.Item>
         <NavDropdown.Item href="/admin/admin-history">History</NavDropdown.Item>
         <NavDropdown.Item href="/admin/defects-manager">Defects</NavDropdown.Item>

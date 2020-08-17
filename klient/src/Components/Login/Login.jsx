@@ -31,6 +31,7 @@ export default function Login() {
                 <Field
                   name="email"
                   type="email"
+                  placeholder="email"
                   className={
                     "form-control" +
                     (errors.email && touched.email ? " is-invalid" : "")
@@ -46,6 +47,7 @@ export default function Login() {
                 <Field
                   name="password"
                   type="password"
+                  placeholder="password"
                   className={
                     "form-control" +
                     (errors.password && touched.password

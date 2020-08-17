@@ -74,6 +74,7 @@ export default function SetPassword() {
             <Field
               name="encodePassword"
               type="password"
+              placeholder="password"
               className={
                 "form-control" +
                 (errors.encodePassword && touched.encodePassword ? " is-invalid" : "")
@@ -89,6 +90,7 @@ export default function SetPassword() {
             <Field
               name="confirmEncodePassword"
               type="password"
+              placeholder="confirm password"
               className={
                 "form-control" +
                 (errors.confirmEncodePassword && touched.confirmEncodePassword
