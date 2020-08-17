@@ -21,7 +21,7 @@ namespace CarRental.DAL.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<Car>> GetReservedCarsByDates(DateTime rentalDate, DateTime returnDate)
+        public async Task<IEnumerable<Car>> GetReservedCarsByDatesAsync(DateTime rentalDate, DateTime returnDate)
         {
             var entities = await context.Reservations
                  .Where(p => p.IsFinished == false)

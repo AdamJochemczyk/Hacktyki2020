@@ -49,7 +49,7 @@ namespace CarRental.Services.Services
         /// <param name="id"></param>
         public async Task DeleteReservationAsync(int id)
         {
-            await reservationRepository.Delete(id);
+            await reservationRepository.DeleteAsync(id);
             await reservationRepository.SaveChangesAsync();
         }
 

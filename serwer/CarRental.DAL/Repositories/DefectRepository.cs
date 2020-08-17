@@ -12,12 +12,12 @@ namespace CarRental.DAL.Repositories
         {
         }
 
-        public async Task<Defect> FindDefectById(int id)
+        public async Task<Defect> FindDefectByIdAsync(int id)
         {
             return await context.Set<Defect>()
                 .FirstOrDefaultAsync(e => e.DefectId == id);
         }
-        public async Task<IEnumerable<Defect>> FindAllDefects()
+        public async Task<IEnumerable<Defect>> FindAllDefectsAsync()
         {
             return await context.Set<Defect>()
                 .ToListAsync();

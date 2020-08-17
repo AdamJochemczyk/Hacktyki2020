@@ -50,7 +50,7 @@ namespace CarRental.DAL.Repositories
                 .SingleOrDefaultAsync();
             return result;
         }
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var entity = await FindByIdAsync(id);
             entity.IsFinished = true; 

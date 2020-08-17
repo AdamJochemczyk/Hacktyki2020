@@ -103,7 +103,7 @@ namespace CarRental.Services.Services
         /// <returns>Returns list of cars which are available.</returns>
         public async Task<IEnumerable<CarDto>> GetAvailableCars(DateTime rentalDate, DateTime returnDate)
         {
-            var reservedCars = await carRepository.GetReservedCarsByDates(rentalDate, returnDate);
+            var reservedCars = await carRepository.GetReservedCarsByDatesAsync(rentalDate, returnDate);
             var allCars = await carRepository.FindAllAsync();
             List<Car> availableCars = allCars.Except(reservedCars).ToList();
             return mapper.Map<IEnumerable<CarDto>>(availableCars);

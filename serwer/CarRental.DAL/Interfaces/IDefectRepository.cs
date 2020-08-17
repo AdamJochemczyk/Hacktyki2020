@@ -6,7 +6,7 @@ namespace CarRental.DAL.Interfaces
 {
     public interface IDefectRepository: IRepositoryBase<Defect>
     {
-        Task<IEnumerable<Defect>> FindAllDefects();
-        Task<Defect> FindDefectById(int id);
+        Task<IEnumerable<Defect>> FindAllDefectsAsync();
+        Task<Defect> FindDefectByIdAsync(int id);
     }
 }

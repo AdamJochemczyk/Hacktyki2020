@@ -13,28 +13,28 @@ namespace CarRental.DAL.Repositories
         {
         }
 
-        public async Task<User> FindByIdDetails(int id)
+        public async Task<User> FindByIdDetailsAsync(int id)
         {
             return await context.Set<User>()
                 .Where(e => e.IsDeleted == false)
                 .FirstOrDefaultAsync(e => e.UserId == id);
         }
 
-        public async Task<IEnumerable<User>> FindAllUsers()
+        public async Task<IEnumerable<User>> FindAllUsersAsync()
         {
             return await context.Set<User>()
                 .Where(e => e.IsDeleted == false)
                 .ToListAsync();
         }
 
-        public async Task<User> FindByCodeOfVerification(string code)
+        public async Task<User> FindByCodeOfVerificationAsync(string code)
         {
             return await context.Set<User>()
                 .Where(e => e.IsDeleted == false)
                 .FirstOrDefaultAsync(e => e.CodeOfVerification == code);
         }
 
-        public async Task<User> FindByLogin(string email)
+        public async Task<User> FindByLoginAsync(string email)
         {
             return await context.Set<User>()
                 .Where(e => e.IsDeleted == false)

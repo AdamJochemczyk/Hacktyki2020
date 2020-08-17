@@ -5,6 +5,6 @@ namespace CarRental.DAL.Interfaces
 {
     public interface IRefreshRepository:IRepositoryBase<RefreshToken>
     {
-        public  Task<RefreshToken> FindByRefreshToken(string refresh);
+        public  Task<RefreshToken> FindByRefreshTokenAsync(string refresh);
     }
 }

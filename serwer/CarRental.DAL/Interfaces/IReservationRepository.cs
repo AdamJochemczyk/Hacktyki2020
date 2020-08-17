@@ -8,7 +8,7 @@ namespace CarRental.DAL.Interfaces
     {
         Task<IEnumerable<Reservation>> FindAllByUserIdAsync(int id);
         Task<IEnumerable<Reservation>> FindAllByCarIdAsync(int id);
-        Task Delete(int id);
+        Task DeleteAsync(int id);
         Task<List<Reservation>> FilterReservationsAsync(Reservation reservation);
     }
 }
