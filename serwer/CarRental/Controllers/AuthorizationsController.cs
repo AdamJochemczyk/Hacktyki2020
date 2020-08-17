@@ -27,7 +27,8 @@ namespace CarRental.API.Controllers
         /// else return Ok(User)
         /// </summary>
         /// <param name="createUserDto"></param>
-        /// <returns></returns>
+        /// <returns>404(Not found) or
+        /// 200(created) with new User </returns>
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUserAsync(CreateUserDto createUserDto)
         {
@@ -42,7 +43,12 @@ namespace CarRental.API.Controllers
             }
             return Ok(user);
         }
-
+        /// <summary>
+        /// Sign In user or admin , method avaible for anyone 
+        /// </summary>
+        /// <param name="userLoginDto"></param>
+        /// <returns>return 200 and access token and refresh
+        /// or return 401(UnAuthorized) Email/Password not correct</returns>
         [HttpPost("signIn")]
         public async Task<IActionResult> SignInAsync(UserLoginDto userLoginDto)
         {
@@ -53,7 +59,14 @@ namespace CarRental.API.Controllers
             }
             return Ok(signInResult);
         }
-
+        /// <summary>
+        /// Set up password , method will be work if you have 
+        /// correct code of verification 
+        /// </summary>
+        /// <param name="updateUserPassword"></param>
+        /// <returns>then return 200 and 
+        /// save your password in database
+        /// else return 404(NotFound) bad cod of verification</returns>
         [HttpPatch]
         public async Task<IActionResult> SetPasswordAsync(UpdateUserPasswordDto updateUserPassword)
         {

@@ -30,6 +30,7 @@ namespace CarRental.DAL.Repositories
         public async Task<User> FindByCodeOfVerification(string code)
         {
             return await context.Set<User>()
+                .Where(e => e.IsDeleted == false)
                 .FirstOrDefaultAsync(e => e.CodeOfVerification == code);
         }
 

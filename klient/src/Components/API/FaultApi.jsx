@@ -4,7 +4,6 @@ import Api from './API'
 export default class FaultApi extends Api{
 
   async createReport(fields){
-      console.log("FaultApi -> createReport -> fields", fields)
       try{
         await this.baseAxios.post('/defects',fields)
       }catch(error){

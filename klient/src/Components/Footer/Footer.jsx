@@ -1,14 +1,14 @@
-import React, { useState, useEffect} from "react"
+import React,  {useEffect} from "react"
 import styles from './Footerstyle.module.css'; 
+import useFooter from "./useFooter.utils"
 
 export default function Footer(){
 
-    const [year,setYear]=useState(0);
+    const {year, getYear}=useFooter()
 
     useEffect(()=>{
-            const date = new Date().getFullYear();
-            setYear(date); 
-    },[year])
+         getYear() 
+    },[])
 
     return ( 
         <div className={styles.global}>

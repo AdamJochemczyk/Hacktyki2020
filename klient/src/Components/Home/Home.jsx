@@ -26,7 +26,6 @@ function CreateFeatures(features){
 export default function Home(){
 
     return (
-        <>
         <Container>
         <Row>
             <Col sm={6}>
@@ -41,7 +40,7 @@ export default function Home(){
             </Col>
         </Row>
         <Row className={styles.center}>
-        <Col sm={12}>
+        <Col>
         <h1>Features</h1>
         </Col>
         </Row>
@@ -49,6 +48,5 @@ export default function Home(){
         {features.map(CreateFeatures)}
         </Row>
         </Container>
-        </>
     )
 }
