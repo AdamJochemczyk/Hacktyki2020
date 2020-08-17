@@ -33,6 +33,9 @@ namespace CarRental.Tests.Services
                 .Setup(p => p
                 .GetActualLocationByReservationIdAsync(oldLocation.ReservationId))
                 .ReturnsAsync(oldLocation);
+            mockLocationRepository
+               .Setup(s => s.SaveChangesAsync())
+               .Verifiable();
             var service = new LocationService(mockLocationRepository.Object, mapper);
             //Act
             var newLocation = await service.CreateLocationAsync(locationDto);
