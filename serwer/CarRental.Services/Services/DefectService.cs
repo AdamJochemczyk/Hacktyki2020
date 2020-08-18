@@ -31,7 +31,7 @@ namespace CarRental.Services.Services
         /// <returns>return list with defects mapped to DefectDto </returns>
         public async Task<IEnumerable<DefectDto>> GetAllDefectsAsync()
         {
-            var defects = await defectRepository.FindAllDefects();
+            var defects = await defectRepository.FindAllDefectsAsync();
             return mapper.Map<IEnumerable<DefectDto>>(defects);
         }
         /// <summary>
@@ -41,7 +41,7 @@ namespace CarRental.Services.Services
         /// <returns>return defect mapped ro DefectDto</returns>
         public async Task<DefectDto> GetDefectAsync(int Id)
         {
-            var defect = await defectRepository.FindDefectById(Id);
+            var defect = await defectRepository.FindDefectByIdAsync(Id);
             if (defect == null)
                 return null;
             return mapper.Map<DefectDto>(defect);
@@ -53,7 +53,7 @@ namespace CarRental.Services.Services
         /// <returns>return register defect mapped to DefectDto</returns>
         public async Task<DefectDto> RegisterDefectAsync(RegisterDefectDto registerDefectDto)
         {
-            var user = await userRepository.FindByIdDetails(registerDefectDto.UserId);
+            var user = await userRepository.FindByIdDetailsAsync(registerDefectDto.UserId);
             var car = await carRepository.FindByIdAsync(registerDefectDto.CarId);
             if (user == null || car == null) { return null; }
             Defect defect = new Defect(user.UserId,
@@ -76,7 +76,7 @@ namespace CarRental.Services.Services
         /// <returns>return updated defect mapped to DefectDto</returns>
         public async Task<DefectDto> UpdateDefectAsync(UpdateDefectDto updateDefectDto)
         {
-            var defect = await defectRepository.FindDefectById(updateDefectDto.Id);
+            var defect = await defectRepository.FindDefectByIdAsync(updateDefectDto.Id);
             if (defect == null)
                 return new DefectDto()
                 {

@@ -29,7 +29,7 @@ namespace CarRental.Services.Services
         public async Task<TokenClaimsDto> CheckAccessRefreshTokenAsync(string refresh)
         {
             TokenClaimsDto token = new TokenClaimsDto();
-            var check = await refreshRepository.FindByRefreshToken(refresh);
+            var check = await refreshRepository.FindByRefreshTokenAsync(refresh);
             if (check == null || check.DateOfEnd < DateTime.UtcNow)
             {
                 token.CheckRefreshToken = false;
@@ -49,7 +49,7 @@ namespace CarRental.Services.Services
         public async Task<TokenDto> GenerateRefreshTokenAsync(TokenClaimsDto token)
         {
             TokenDto tokenDto = new TokenDto();
-            var user = await userRepository.FindByIdDetails(token.UserId);
+            var user = await userRepository.FindByIdDetailsAsync(token.UserId);
             tokenDto.AccessToken = tokenGeneratorService.GenerateToken(user);
             tokenDto.RefreshToken = tokenGeneratorService.RefreshGenerateToken();
             tokenDto.Code = 200;

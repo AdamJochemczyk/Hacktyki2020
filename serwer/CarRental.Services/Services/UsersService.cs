@@ -37,7 +37,7 @@ namespace CarRental.Services.Services
         /// <returns>Returns list with users mapped to UserDto. </returns>
         public async Task<IEnumerable<UsersDto>> GetAllUsersAsync()
         {
-            var all_users = await userRepository.FindAllUsers();
+            var all_users = await userRepository.FindAllUsersAsync();
             return mapper.Map<IEnumerable<UsersDto>>(all_users);
         }
         /// <summary>
@@ -47,7 +47,7 @@ namespace CarRental.Services.Services
         /// <returns>Returns user mapped to UserDto.</returns>
         public async Task<UsersDto> GetUserAsync(int id)
         {
-            var user = await userRepository.FindByIdDetails(id);
+            var user = await userRepository.FindByIdDetailsAsync(id);
             return mapper.Map<UsersDto>(user);
         }
         /// <summary>
@@ -57,7 +57,7 @@ namespace CarRental.Services.Services
         /// <returns>Returns user mapped to UserDto.</returns>
         public async Task<UsersDto> UpdateUserAsync(UsersDto usersDto)
         {
-            var user = await userRepository.FindByIdDetails(usersDto.UserId);
+            var user = await userRepository.FindByIdDetailsAsync(usersDto.UserId);
             if (user == null)
             {
                 usersDto.isValid = false;

@@ -30,7 +30,7 @@ export default function Home(){
         <Row>
             <Col sm={6}>
             <div className={styles.top}>
-                <h1>Book a company car</h1>
+                <h1>Book a company's car</h1>
                 <p>Find the right car fits to your needs</p>
                 <Button color="primary"><a href='/reserve-car' className={styles.link} style={{textDecoration: 'none', color: 'white'}}> Book a car</a></Button>
             </div>

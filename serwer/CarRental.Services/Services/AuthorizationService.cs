@@ -68,7 +68,7 @@ namespace CarRental.Services.Services
         {
             var new_user = new User(createUserDto.FirstName, createUserDto.LastName, createUserDto.IdentificationNumber,
                 createUserDto.Email, createUserDto.MobileNumber);
-            var check_user = await userRepository.FindByLogin(createUserDto.Email);
+            var check_user = await userRepository.FindByLoginAsync(createUserDto.Email);
             if (check_user == null)
             {
                 userRepository.Create(new_user);
@@ -88,7 +88,7 @@ namespace CarRental.Services.Services
         /// <returns></returns>
         public async Task<bool> SetPasswordAsync(UpdateUserPasswordDto updateUserPassword)
         {
-            var user = await userRepository.FindByCodeOfVerification(updateUserPassword.CodeOfVerification);
+            var user = await userRepository.FindByCodeOfVerificationAsync(updateUserPassword.CodeOfVerification);
             var saltHashPassword = GenerateSaltedHash(16, updateUserPassword.EncodePassword);
             user.SetPassword(saltHashPassword.Hash, saltHashPassword.Salt);
             userRepository.Update(user);
@@ -104,7 +104,7 @@ namespace CarRental.Services.Services
         /// return tokenDto with code 401</returns>
         public async Task<TokenDto> SignInAsync(UserLoginDto userLoginDto)
         {
-            var user = await userRepository.FindByLogin(userLoginDto.Email);
+            var user = await userRepository.FindByLoginAsync(userLoginDto.Email);
             TokenDto tokenDto = new TokenDto();
             if (user == null)
             {
